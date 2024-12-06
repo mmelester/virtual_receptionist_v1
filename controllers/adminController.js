@@ -63,7 +63,7 @@ module.exports = {
         } catch (error) {
             req.flash('errors', [error.message || 'An error occurred while fetching companies.']);
             req.session.save(() => {
-                res.render('admin', { 
+                res.render('admin/index', { 
                     companies: [], 
                     errors: req.flash('errors'), 
                     success: [] 
