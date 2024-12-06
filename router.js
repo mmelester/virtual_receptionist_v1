@@ -3,7 +3,7 @@
 // ********************************************************************************************
 const express = require('express');
 const router = express.Router();
-const clientViewController = require('./controllers/clientViewController');
+const homeController = require('./controllers/homeController');
 const adminController = require('./controllers/adminController');
 const AdminView = require('./models/AdminView'); // Import the AdminView model
 
@@ -11,7 +11,7 @@ module.exports = (db) => {
     const adminView = new AdminView(db); // Initialize AdminView with the database
 
     // Routes
-    router.get('/', clientViewController.home); // Home route
+    router.get('/', homeController.home); // Home route
 
     // Admin routes
     router.get('/admin', (req, res) => adminController.companies(req, res, adminView)); // Fetch companies
