@@ -5,10 +5,10 @@ const express = require('express');
 const router = express.Router();
 const homeController = require('./controllers/homeController');
 const adminController = require('./controllers/adminController');
-const AdminView = require('./models/AdminView'); // Import the AdminView model
+const CompanyModel = require('./models/CompanyModel'); // Import the AdminView model
 
 module.exports = (db) => {
-    const adminView = new AdminView(db); // Initialize AdminView with the database
+    const adminView = new CompanyModel(db); // Initialize AdminView with the database
 
     // Routes
     router.get('/', homeController.home); // Home route
