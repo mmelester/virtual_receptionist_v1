@@ -33,11 +33,11 @@ module.exports = {
             console.error('Error adding company:', error);
             req.flash('errors', ['An unexpected error occurred.']);
             req.session.save(() => {
-                res.render('admin', { 
-                    companies: [], 
-                    errors: req.flash('errors'), 
-                    success: [] 
-                });
+                // res.render('admin', { 
+                //     companies: [], 
+                //     errors: req.flash('errors'), 
+                //     success: [] 
+                // });
             });
         }
     },
@@ -53,7 +53,7 @@ module.exports = {
             console.log('Success message:', success);
      
 
-            res.render('admin', { 
+            res.render('admin/index', { 
                 companies, 
                 errors: errors,
                 success: success
