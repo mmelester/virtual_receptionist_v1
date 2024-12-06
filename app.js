@@ -1,0 +1,52 @@
+// ********************************************************************************************
+// app.js handles the database connection, server initiation and middleware setup.
+// ********************************************************************************************
+const express = require("express");
+const session = require("express-session")
+const MongoStore = require("connect-mongo")
+const { connectDB, client } = require('./db'); // Import the database connection
+const flash = require("connect-flash")
+
+const app = express();
+
+let sessionOptions = session({
+    secret: process.env.CONNECTIONSTRING,
+    store: MongoStore.create({
+        clientPromise: client.connect(),
+        collectionName: 'cookies'
+    }), // Use clientPromise with connect-mongo
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, sameSite: "strict" }
+  })
+
+// Set up view engine
+app.set('views', 'views');
+app.set('view engine', 'ejs');
+
+async function startServer() {
+    try {
+        const db = await connectDB(); // Connect to the database and save in variable db
+
+        // Middleware 
+        app.use(sessionOptions)
+        app.use(flash())
+        app.use(express.static('public'));
+        app.use('/media', express.static('media'));
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
+        
+        // Invoke the exported exposted function from router.js and ass `db` as an argument to router.js
+        const router = require('./router')(db); 
+        app.use('/', router); // Attach router to the app
+
+        // Start the server
+        app.listen(3000, () => {
+            console.log('Server is running on http://localhost:3000');
+        });
+    } catch (error) {
+        console.error('Failed to start the server:', error);
+    }
+}
+
+startServer();

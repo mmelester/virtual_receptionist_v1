@@ -1,0 +1,93 @@
+.add-company-flex-container {
+  justify-content: space-around;
+  gap: 2rem;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  .info {
+    max-width: 600px;
+    width: 50%;
+  }
+}
+
+#drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 500px;
+  width: 50%;
+  height: auto;
+  min-height: 300px;
+  padding: 10px;
+  font-family: sans-serif;
+  margin: 50px 0;
+  padding: 40px 25px 25px 40px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+#drop-area.highlight {
+  border: 2px dashed #00ff00; /* Change border to green */
+  background-color: #f0f8ff; /* Light background color */
+}
+
+.canvas-container {
+  width: 80%;
+  height: auto;
+  margin: auto;
+}
+
+.canvas-container.hidden,
+.form-container.hidden,
+button.delete.hidden {
+  display: none;
+}
+
+#fileSelect {
+  display: inline-block;
+  padding: 8px 16px;
+  /* background-color: #4caf50; */
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+label.form-data {
+  display: block;
+  /* width: 550px; */
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+textarea {
+  resize: none;
+  height: 180px;
+}
+
+button.delete {
+  background: none;
+  border: none; /* Removes the border */
+  cursor: pointer; /* Makes it clear it's clickable */
+  padding: 0; /* Removes default padding */
+  margin: 0; /* Removes default margin */
+}
+button.delete:hover i {
+  color: green;
+}
+
+/* Media Queries */

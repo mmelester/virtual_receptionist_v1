@@ -1,0 +1,75 @@
+<%- include('includes/header') %> 
+<div class="page">
+
+    <h1 class="pt-md-5 pb-md-5 text-center" >Hi, I'm ViVi.  What companies are in your building?</h1>
+
+ 
+    <% if (errors && errors.length > 0) { %>
+        <div class="alert alert-danger">
+            <ul>
+                <% errors.forEach(function(error) { %>
+                    <li><%= error %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+    
+    
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+    <% } %>    
+
+    <div class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
+        <h3 class="text-center">Add a New Company</h3>
+        <div class="d-flex add-company-flex-container align-items-center justify-content-lg-between">
+            <div class="info">
+                <form id="companyForm">
+                    <div class="form-group">
+                        <label class="form-data" for="companyName">Company Name (up to 35 characters):</label>
+                        <input type="text" id="companyName" name="companyName" maxlength="35" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-data" for="introText">Intro Text (up to 160 characters):</label>
+                        <textarea id="introText" name="introText" maxlength="160" required></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div id="drop-area">
+                <div class="form-container">
+                    <form class="upload-form">
+                        <p>Drag and drop an image here</p>
+                        <input type="file" id="fileElem" accept="image/*" style="display:none" onchange="handleFiles(this.files)">
+                        <button type="button" class="btn btn-primary btn-sm" id="fileSelect">Add Logo</button>
+                    </form>
+                </div>
+                
+                <div class="canvas-container hidden" data-crop-width="200" data-crop-height="200">
+                    <!-- <canvas id="canvas" width="500" height="500"></canvas> -->
+                    <canvas id="canvas" width="450" height="500"></canvas>
+                    <button class="delete">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </button>
+                      
+                </div>
+    
+            </div>
+
+        </div>
+
+        <div class="text-center">
+            <button id="save-image" class="btn btn-primary btn-sm">Add Company</button>
+        </div> 
+    </div>
+
+
+
+</div>
+
+<%- include('includes/footer') %>
+
+<!-- <script src="/frontend-js/modules/drag-n-drop.js"></script> -->
+
+
