@@ -25,6 +25,9 @@ class companyModel {
         try {
             // Fetch all companies from the database
             const companies = await this.db.collection('companies').find({}).toArray();
+
+            console.log(companies);
+
             return companies;
         } catch (error) {
             console.error('Database error:', error);

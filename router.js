@@ -11,7 +11,9 @@ module.exports = (db) => {
     const companyList = new CompanyModel(db); // Initialize CompanyModel with the database
 
     // Routes
-    router.get('/', homeController.home); // Home route
+    // router.get('/', homeController.home); // Home route
+    router.get('/', (req, res) => homeController.home(req, res, db)); // Pass db explicitly
+
 
     // Admin routes
     router.get('/admin', (req, res) => adminController.companies(req, res, companyList)); // Fetch companies
