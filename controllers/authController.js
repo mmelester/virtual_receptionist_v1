@@ -24,11 +24,14 @@ module.exports = {
     },
 
     async logout(req, res) {
-                // Clear the user session or token (if used for authentication)
+        // Clear the user session or token (if used for authentication)
+        console.log("***********************************************Being logged out");
         req.session.destroy(err => {
             if (err) {
                 return res.status(500).json({ success: false, message: 'Error logging out.' });
             }
+            console.log('Session destroyed, redirecting to home...');
+            res.clearCookie('connect.sid'); // Clear the session cookie explicitly
             res.redirect('/');
         });
     }
