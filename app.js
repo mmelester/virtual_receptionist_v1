@@ -2,10 +2,12 @@
 // app.js handles the database connection, server initiation and middleware setup.
 // ********************************************************************************************
 const express = require("express");
-const session = require("express-session")
-const MongoStore = require("connect-mongo")
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const { connectDB, client } = require('./db'); // Import the database connection
-const flash = require("connect-flash")
+const flash = require("connect-flash");
+const dotenv = require('dotenv');
+dotenv.config();  // Make .env file available globally
 
 const app = express();
 

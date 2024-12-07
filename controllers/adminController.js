@@ -29,6 +29,7 @@ module.exports = {
     
             req.flash('success', 'Company added successfully!');
             res.status(200).json({ success: true });
+            
         } catch (error) {
             console.error('Error adding company:', error);
             req.flash('errors', ['An unexpected error occurred.']);
