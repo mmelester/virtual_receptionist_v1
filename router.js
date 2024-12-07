@@ -16,7 +16,7 @@ module.exports = (db) => {
     router.get('/', (req, res) => homeController.home(req, res, db)); // Pass db explicitly
 
 
-    // Admin routes
+    // Admin related routes
     router.get('/admin', (req, res) => adminController.companies(req, res, companyList)); // Fetch companies
     router.post('/admin/add', (req, res) => adminController.addCompany(req, res, companyList)); // Add a company
     router.post('/login', authController.verifyAdmin); // Validate admin login
