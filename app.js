@@ -37,6 +37,13 @@ async function startServer() {
         app.use('/media', express.static('media'));
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
+        app.use((req, res, next) => {
+            // Initialize isLoggedIn to not Logged in
+            if (req.session.isLoggedIn === undefined) {
+                req.session.isLoggedIn = false;
+            }
+            next();
+        });
         
         // Invoke the exported exposted function from router.js and ass `db` as an argument to router.js
         const router = require('./router')(db); 

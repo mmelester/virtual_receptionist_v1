@@ -19,21 +19,26 @@
               <h4 class="my-0 font-weight-normal">
                 <a href="/" class="text-white">Vivi, Your Virtual Receptionist</a>
               </h4>
-              
               <!-- Right-aligned form element -->
-              <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
-                <div class="row align-items-center">
-                  <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-                    <input name="username" class="form-control form-control-sm input-dark" type="text" placeholder="Username" autocomplete="off">
+              <% if (isLoggedIn) { %>
+                <!-- Display logout button when user is logged in -->
+                <button onclick="window.location.href='/logout'" class="logout-btn">Logout</button>
+              <% } else { %>
+                <!-- Display login form and signup button when user is not logged in -->
+                <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
+                  <div class="row align-items-center">
+                    <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+                      <input name="username" class="form-control form-control-sm input-dark" type="text" placeholder="Username" autocomplete="off">
+                    </div>
+                    <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+                      <input name="password" class="form-control form-control-sm input-dark" type="password" placeholder="Password">
+                    </div>
+                    <div class="col-md-auto">
+                      <button class="btn btn-primary btn-sm">Sign In</button>
+                    </div>
                   </div>
-                  <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-                    <input name="password" class="form-control form-control-sm input-dark" type="password" placeholder="Password">
-                  </div>
-                  <div class="col-md-auto">
-                    <button class="btn btn-primary btn-sm">Sign In</button>
-                  </div>
-                </div>
-              </form>
+                </form>
+              <% } %>
             </div>
           </header>
           

@@ -20,6 +20,8 @@ module.exports = (db) => {
     router.get('/admin', (req, res) => adminController.companies(req, res, companyList)); // Fetch companies
     router.post('/admin/add', (req, res) => adminController.addCompany(req, res, companyList)); // Add a company
     router.post('/login', authController.verifyAdmin); // Validate admin login
+    router.get('/logout', authController.logout); // Logout
+
 
     return router; // Export the router
 };

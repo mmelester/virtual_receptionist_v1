@@ -13,6 +13,7 @@ module.exports = {
             const isAdmin = AuthModel.validateAdmin(username, password);
 
             if (isAdmin) {
+                req.session.isLoggedIn = true;
                 res.redirect('/admin');
             } else {
                 return res.status(401).json({ success: false, message: 'Invalid username or password.' });
@@ -24,11 +25,11 @@ module.exports = {
 
     async logout(req, res) {
                 // Clear the user session or token (if used for authentication)
-                req.session.destroy(err => {
-                    if (err) {
-                        return res.status(500).json({ success: false, message: 'Error logging out.' });
-                    }
-                    res.redirect('/');
-                });
+        req.session.destroy(err => {
+            if (err) {
+                return res.status(500).json({ success: false, message: 'Error logging out.' });
             }
+            res.redirect('/');
+        });
+    }
 }
