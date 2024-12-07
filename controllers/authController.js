@@ -11,7 +11,7 @@ exports.verifyAdmin = async (req, res) => {
         const isAdmin = AuthModel.validateAdmin(username, password);
 
         if (isAdmin) {
-            return res.status(200).json({ success: true, message: 'Login successful.' });
+            res.redirect('/admin');
         } else {
             return res.status(401).json({ success: false, message: 'Invalid username or password.' });
         }
