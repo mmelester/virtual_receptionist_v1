@@ -11,8 +11,9 @@ exports.login = async (req, res) => {
         });
     } catch (error) {
         req.flash('errors', error); // Store error in flash
-        console.log('Flash errors:', req.flash('errors')); // Debug: Check flash content
+        console.log('Flash errors:', error); // Debug: Check flash content
         req.session.save(() => {
+            console.log('Errors before rendering:', error);
             res.redirect('/'); // Redirect back to the home/login page
         });
     }
