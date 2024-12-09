@@ -44,7 +44,7 @@ async function startServer() {
             if (req.session.isLoggedIn === undefined) {
                 req.session.isLoggedIn = false; // Default to false
             }
-            res.locals.isLoggedIn = req.session.isLoggedIn;
+            // res.locals.isLoggedIn = req.session.isLoggedIn;
             next();
         });
 

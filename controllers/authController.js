@@ -19,7 +19,10 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = function(req, res) {
-    req.session.destroy(function() {
-      res.redirect('/')
+    req.session.destroy( async function () {
+        console.log('Session destroyed, redirecting to home...');
+        await res.clearCookie('connect.sid'); // Clear the session cookie explicitly
+
+        res.redirect('/')
     })
   }
