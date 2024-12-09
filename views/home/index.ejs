@@ -1,5 +1,21 @@
        <%- include('../includes/header') %> 
         <div class="page">
+            <% if (flash('errors').length) { %>
+                <div class="alert alert-danger">
+                  <% flash('errors').forEach(function(error) { %>
+                    <p><%= error %></p>
+                  <% }); %>
+                </div>
+              <% } %>
+              
+              <% if (flash('success').length) { %>
+                <div class="alert alert-success">
+                  <% flash('success').forEach(function(message) { %>
+                    <p><%= message %></p>
+                  <% }); %>
+                </div>
+              <% } %>
+              
             <section class="page-intro-section">
                 <img src="/media/logo.png" width="250" height="250" alt="building logo">
                 <h1>Hi I'm Vivi, Your Virtual Receptionist</h1>

@@ -33,6 +33,10 @@ async function startServer() {
         // Middleware 
         app.use(sessionOptions)
         app.use(flash())
+        app.use((req, res, next) => {
+            res.locals.flash = req.flash.bind(req); // Make flash messages available globally in templates
+            next();
+        });
         app.use(express.static('public'));
         app.use('/media', express.static('media'));
         app.use(express.json());
