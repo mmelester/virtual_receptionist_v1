@@ -33,25 +33,13 @@ module.exports = {
             const companies = await adminView.getCompanies();
             const errors = req.flash('errors');
             const success = req.flash('success');
-
             const isLoggedIn = req.session && req.session.isLoggedIn; // Check login state
 
-            res.render('admin/index', { 
-                companies, 
-                errors, 
-                success, 
-                isLoggedIn // Pass isLoggedIn to the view
-            });
+            res.render('admin/index', { companies, errors, success, isLoggedIn });
         } catch (error) {
             req.flash('errors', [error.message || 'An error occurred while fetching companies.']);
             const isLoggedIn = req.session && req.session.isLoggedIn; // Ensure isLoggedIn is passed even on error
-            req.session.save(() => {
-                res.render('admin/index', { 
-                    companies: [], 
-                    errors: req.flash('errors'), 
-                    success: [], 
-                    isLoggedIn
-                });
+            req.session.save(() => {res.render('admin', { companies: [], errors: req.flash('errors'), success: [], isLoggedIn});
             });
         }
     }

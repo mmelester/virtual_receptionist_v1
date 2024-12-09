@@ -4,54 +4,56 @@
 const express = require("express");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-const { connectDB, client } = require('./db'); // Import the database connection
+const { connectDB, getClient } = require('./db');
 const flash = require("connect-flash");
 const dotenv = require('dotenv');
-dotenv.config();  // Make .env file available globally
+dotenv.config();
 
 const app = express();
 
-let sessionOptions = session({
-    secret: process.env.CONNECTIONSTRING,
-    store: MongoStore.create({
-        clientPromise: client.connect(),
-        collectionName: 'cookies'
-    }), // Use clientPromise with connect-mongo
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, sameSite: "strict" }
-  })
-
-// Set up view engine
-app.set('views', 'views');
-app.set('view engine', 'ejs');
-
 async function startServer() {
     try {
-        const db = await connectDB(); // Connect to the database and save in variable db
+        const db = await connectDB(); // Connect to the database
+        const client = getClient(); // Retrieve the MongoClient instance
 
-        // Middleware 
-        app.use(sessionOptions)
-        app.use(flash())
+        // Session options
+        const sessionOptions = session({
+            secret: process.env.CONNECTIONSTRING,
+            store: MongoStore.create({
+                client, // Use the initialized client
+                collectionName: 'cookies'
+            }),
+            resave: false,
+            saveUninitialized: false,
+            cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, sameSite: "strict" }
+        });
+
+        // Middleware setup
+        app.use(sessionOptions);
+        app.use(flash());
         app.use((req, res, next) => {
-            res.locals.flash = req.flash.bind(req); // Make flash messages available globally in templates
+            res.locals.flash = req.flash.bind(req); // Flash messages globally
             next();
         });
         app.use(express.static('public'));
-        app.use('/media', express.static('media'));
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
+
+        // Pass isLoggedIn globally
         app.use((req, res, next) => {
-            // Initialize isLoggedIn to not Logged in
             if (req.session.isLoggedIn === undefined) {
-                req.session.isLoggedIn = false;
+                req.session.isLoggedIn = false; // Default to false
             }
+            res.locals.isLoggedIn = req.session.isLoggedIn;
             next();
         });
-        
-        // Invoke the exported exposted function from router.js and ass `db` as an argument to router.js
-        const router = require('./router')(db); 
-        app.use('/', router); // Attach router to the app
+
+        app.set('views', 'views'); // Specify the views directory
+        app.set('view engine', 'ejs'); // Set EJS as the default view engine
+
+        // Routes
+        const router = require('./router')(db); // Pass database to router
+        app.use('/', router);
 
         // Start the server
         app.listen(3000, () => {
