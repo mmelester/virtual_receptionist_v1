@@ -1,8 +1,9 @@
        <%- include('../includes/header') %> 
         <div class="page">
-            <% if (flash('errors').length) { %>
+            <% flashErrors = flash('errors')
+            if (flashErrors.length) { %>
                 <div class="alert alert-danger">
-                  <% flash('errors').forEach(function(error) { %>
+                  <% flashErrors.forEach(function(error) { %>
                     <p><%= error %></p>
                   <% }); %>
                 </div>
