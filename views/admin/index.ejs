@@ -69,7 +69,34 @@
         </div> 
     </div>
     </section>
+        <section class="companies-section">
+        <div>
+            <% if (companies.length > 0) { %>
+                <% companies.forEach(company => { %>
 
+                    <div class="company-listing d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
+                        <div class="company-name pr-5">
+                            <%= company.name %>
+                        </div>
+                        <div class="company-intro-text pr-5">
+                            <%= company.intro.slice(0,40) + "  . . .  " %>
+                        </div>
+                        <div class="company-logo pr-5 ">
+                            <img class='text-center' src="<%= company.image %>" alt="<%= company.name %> logo" width="auto" height="50px" />
+                        </div>
+                        <div class="edit-delete  ml-auto">
+                            <i class="fa fa-pencil-square-o pr-3" aria-hidden="true"></i>
+                            <i class="fa fa-trash pr-3" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    
+                <% }); %>
+            <% } else { %>
+                <p>No companies available.</p>
+            <% } %>
+        </div>
+          %>  
+    </section>
 
 
 

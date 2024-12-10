@@ -20,6 +20,13 @@ section.companies-section {
   align-items: center;
 }
 
+.company-name {
+  min-width: 350px;
+}
+.company-intro-text {
+  min-width: 480px;
+}
+
 .add-company-flex-container {
   justify-content: space-around;
   gap: 2rem;
