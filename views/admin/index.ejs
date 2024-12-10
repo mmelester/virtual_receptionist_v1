@@ -1,7 +1,7 @@
 <%- include('../includes/header') %> 
 <div class="page">
 
-    <h1 class="pt-md-5 pb-md-5 text-center" >What companies would you like to add?</h1>
+    <h1 class="pt-md-5 pb-md-5 text-center" >Company Configuration Settings</h1>
  
     <% if (errors && errors.length > 0) { %>
         <div class="alert alert-danger">
@@ -20,7 +20,13 @@
         </div>
     <% } %>    
 
-    <div class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
+    <div id="create-company-btn-container" class="text-center pb-5">
+        <button id="create-company-btn" class="btn btn-primary btn-sm" id="fileSelect">Add New Company</button>
+    </div>
+    
+
+    <section id="add-company-section" class="d-none">
+        <div class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
         <h3 class="text-center">Add a New Company</h3>
         <div class="d-flex add-company-flex-container align-items-center justify-content-lg-between">
             <div class="info">
@@ -62,6 +68,8 @@
             <button id="save-image" class="btn btn-primary btn-sm">Add Company</button>
         </div> 
     </div>
+    </section>
+
 
 
 
