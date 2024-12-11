@@ -1,10 +1,11 @@
 module.exports = {
     async addCompany(req, res, adminView) {
         try {
+
             if (req.body.errors && req.body.errors.length > 0) {
                 req.flash('errors', req.body.errors);
                 return req.session.save(() => {
-                    res.redirect('/admin');
+                    res.redirect('/admin/add');
                 });
             }
     

@@ -7,9 +7,9 @@ class companyModel {
     async addCompany(companyData) {
         const { name, intro, image } = companyData;
 
-        // Validation
-        if (!name || !intro) {
-            return { success: false, message: 'Both name and intro are required.' };
+        // Validation (this code would only get executed if a malicious user bypass client-side validation
+        if (!name || !intro || !image) {
+            return { success: false, message: 'Name, intro text, and logo image are required.' };
         }
 
         try {
