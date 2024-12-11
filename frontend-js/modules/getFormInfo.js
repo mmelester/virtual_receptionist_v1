@@ -44,7 +44,7 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
                 },
                 body: JSON.stringify({ errors }), // Send the errors to the server
             });
-            window.location.reload(); // Force a page refresh
+            window.location.reload(); // Force a page refresh to display flash errors
             return; // Stop further execution since there are errors
         } catch (error) {
             console.error('Error sending errors:', error);

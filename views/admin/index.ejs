@@ -27,6 +27,10 @@
 
     <section id="add-company-section" class="d-none">
         <div class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
+            <div class="d-flex">
+                 <span id="close-btn" class="ml-auto bg-secondary pl-2 pr-2 border rounded text-white font-weight-bold">X</span>
+            </div>
+       
         <h3 class="text-center">Add a New Company</h3>
         <div class="d-flex add-company-flex-container align-items-center justify-content-lg-between">
             <div class="info">
@@ -105,6 +109,11 @@
     setEqualWidths('.company-name');
     setEqualWidths('.company-intro-text');
     setEqualWidths('.company-logo');
+
+    const closeBtn = document.getElementById('close-btn');
+    closeBtn.addEventListener('click', function () {
+        window.location.reload(); // Force a page refresh
+    });
 
     document.querySelectorAll('.fa-trash').forEach((icon) => {
         icon.addEventListener('click', async (event) => {
