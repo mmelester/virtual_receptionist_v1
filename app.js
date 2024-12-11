@@ -35,6 +35,7 @@ async function startServer() {
             res.locals.flash = req.flash.bind(req); // Flash messages globally
             next();
         });
+        app.use('/frontend-js', express.static(__dirname + '/frontend-js'));
         app.use(express.static('public'));
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
