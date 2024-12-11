@@ -27,6 +27,25 @@ module.exports = {
             });
         }
     },
+
+    async deleteCompany(req, res, adminView) {
+        try {
+            const companyId = req.params.id; // Assuming the ID is sent as a URL parameter
+            const result = await adminView.deleteCompany(companyId);
+    
+            if (!result.success) {
+                req.flash('errors', [result.message]);
+                return res.status(400).json({ success: false, message: result.message });
+            }
+    
+            req.flash('success', 'Company deleted successfully!');
+            res.status(200).json({ success: true });
+        } catch (error) {
+            console.error('Error deleting company:', error);
+            req.flash('errors', ['An unexpected error occurred.']);
+            res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
+        }
+    },
     
     async companies(req, res, adminView) {
         try {

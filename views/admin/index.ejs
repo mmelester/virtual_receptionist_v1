@@ -85,7 +85,7 @@
                             </div>
                             <div class="edit-delete ml-auto">
                                 <i class="fa fa-pencil-square-o pr-3" aria-hidden="true"></i>
-                                <i class="fa fa-trash pr-3" aria-hidden="true"></i>
+                                <i class="fa fa-trash pr-3" aria-hidden="true" data-id="<%= company._id %>"></i>
                             </div>
                         </div>
                     <% }); %>
@@ -100,12 +100,38 @@
 
 <script type="module">
     import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
-
     document.addEventListener('DOMContentLoaded', () => {
-        setEqualWidths('.company-name');
-        setEqualWidths('.company-intro-text');
-        setEqualWidths('.company-logo');
+
+    setEqualWidths('.company-name');
+    setEqualWidths('.company-intro-text');
+    setEqualWidths('.company-logo');
+
+    document.querySelectorAll('.fa-trash').forEach((icon) => {
+        icon.addEventListener('click', async (event) => {
+            const companyId = event.target.dataset.id; 
+
+            if (confirm('Are you sure you want to delete this company?')) {
+                try {
+                    const response = await fetch(`/admin/delete/${companyId}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Company deleted successfully.');
+                        location.reload(); // Reload the page to update the list
+                    } else {
+                        alert(result.message || 'Failed to delete the company.');
+                    }
+                } catch (error) {
+                    alert('An unexpected error occurred.');
+                    console.error(error);
+                }
+            }
+        });
     });
+});
 </script>
 
 

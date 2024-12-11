@@ -15,6 +15,7 @@ module.exports = (db) => {
     router.get('/', (req, res) => homeController.home(req, res, db));
     router.get('/admin', (req, res) => adminController.companies(req, res, companyModelInstance));
     router.post('/admin/add', (req, res) => adminController.addCompany(req, res, companyModelInstance));
+    router.delete('/admin/delete/:id', (req, res) => adminController.deleteCompany(req, res, companyModelInstance));
     router.post('/login', authController.login);
     router.get('/logout', authController.logout);
 
