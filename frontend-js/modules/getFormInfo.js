@@ -76,6 +76,7 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
     
         alert(result.message || 'Company added successfully!');
         document.getElementById('companyForm').reset(); // Optionally reset the form
+        window.location.reload(); // Force a page refresh
     } catch (error) {
         console.error('Error submitting form:', error);
         alert('An unexpected error occurred. Please try again.');

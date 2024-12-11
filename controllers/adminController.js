@@ -13,12 +13,17 @@ module.exports = {
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 return req.session.save(() => {
-                    res.redirect('/admin');
+                    // res.redirect('/admin');
+                    res.status(400).json({ success: false, message: result.message });
                 });
             }
     
             req.flash('success', 'Company added successfully!');
-            res.status(200).json({ success: true });
+            // res.status(200).json({ success: true });
+            req.session.save(() => { 
+                res.status(200).json({ success: true, message: 'Company added successfully!' });
+            });
+
         } catch (error) {
             console.error('Error adding company:', error);
             req.flash('errors', ['An unexpected error occurred.']);
