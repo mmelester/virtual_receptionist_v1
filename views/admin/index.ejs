@@ -70,37 +70,60 @@
     </div>
     </section>
         <section class="companies-section">
-        <div>
-            <% if (companies.length > 0) { %>
-                <% companies.forEach(company => { %>
-
-                    <div class="company-listing d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
-                        <div class="company-name pr-5">
-                            <%= company.name %>
+            <div>
+                <% if (companies.length > 0) { %>
+                    <% companies.forEach(company => { %>
+                        <div class="company-listing d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
+                            <div class="company-name pr-5">
+                                <%= company.name %>
+                            </div>
+                            <div class="company-intro-text pr-5">
+                                <%= company.intro.slice(0,40) + "  . . .  " %>
+                            </div>
+                            <div class="company-logo pr-5">
+                                <img class='text-center' src="<%= company.image %>" alt="<%= company.name %> logo" width="auto" height="50px" />
+                            </div>
+                            <div class="edit-delete ml-auto">
+                                <i class="fa fa-pencil-square-o pr-3" aria-hidden="true"></i>
+                                <i class="fa fa-trash pr-3" aria-hidden="true"></i>
+                            </div>
                         </div>
-                        <div class="company-intro-text pr-5">
-                            <%= company.intro.slice(0,40) + "  . . .  " %>
-                        </div>
-                        <div class="company-logo pr-5 ">
-                            <img class='text-center' src="<%= company.image %>" alt="<%= company.name %> logo" width="auto" height="50px" />
-                        </div>
-                        <div class="edit-delete  ml-auto">
-                            <i class="fa fa-pencil-square-o pr-3" aria-hidden="true"></i>
-                            <i class="fa fa-trash pr-3" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                    
-                <% }); %>
-            <% } else { %>
-                <p>No companies available.</p>
-            <% } %>
-        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No companies available.</p>
+                <% } %>
+            </div>
+            
           %>  
     </section>
-
-
-
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const setEqualWidths = (selector) => {
+        const elements = document.querySelectorAll(selector);
+        let maxWidth = 0;
+
+        // Find the maximum width
+        elements.forEach(el => {
+            const width = el.offsetWidth;
+            if (width > maxWidth) {
+                maxWidth = width;
+            }
+        });
+
+        // Apply the maximum width to all elements
+        elements.forEach(el => {
+            el.style.width = `${maxWidth}px`;
+        });
+    };
+
+    // Apply equal widths to specified columns
+    setEqualWidths('.company-name');
+    setEqualWidths('.company-intro-text');
+    setEqualWidths('.company-logo');
+});
+
+</script>
 
 <%- include('../includes/footer') %>
 
