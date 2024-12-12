@@ -6,6 +6,10 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
             const createCompanyButton = document.getElementById('create-company-btn');
             const addCompanySection = document.getElementById('add-company-section');
             const companyForm = document.getElementById('companyForm');
+            const formHeading = document.getElementById('form-heading');
+
+            formHeading.innerHTML = '<h2>Add a New Company</h2>';
+            formHeading.innerHTML = '<h2>Edit Company Information</h2>';
 
             addCompanySection.classList.remove('d-none');
             createCompanyButton.classList.add('d-none');
