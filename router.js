@@ -1,25 +1,37 @@
-// ********************************************************************************************
-// router.js defines routes and initializes AdminView with the database object
-// ********************************************************************************************
 module.exports = (db) => {
     const express = require('express');
     const router = express.Router();
+
+    // Import Controllers
     const homeController = require('./controllers/homeController');
     const adminController = require('./controllers/adminController');
+    const companiesController = require('./controllers/companiesController');
     const authController = require('./controllers/authController');
+
+    // Import Models
+    const AdminModel = require('./models/AdminModel');
     const CompanyModel = require('./models/CompanyModel');
-    
-    const companyModelInstance = new CompanyModel(db); // Pass the database object to CompanyModel
+
+    // Initialize Model Instances
+    const adminModelInstance = new AdminModel(db);
+    const companyModelInstance = new CompanyModel(db);
 
     // Routes
+
+    // Home route
     router.get('/', (req, res) => homeController.home(req, res, db));
-    router.get('/admin', (req, res) => adminController.companies(req, res, companyModelInstance));
-    router.post('/admin/add', (req, res) => adminController.addCompany(req, res, companyModelInstance));
-    router.delete('/admin/delete/:id', (req, res) => adminController.deleteCompany(req, res, companyModelInstance));
+
+    // Admin dashboard route
+    router.get('/admin', (req, res) => adminController.index(req, res, adminModelInstance));
+
+    // Companies routes
+    router.get('/admin/companies', (req, res) => companiesController.getCompanies(req, res, companyModelInstance));
+    router.post('/admin/companies/add', (req, res) => companiesController.addCompany(req, res, companyModelInstance));
+    router.delete('/admin/companies/delete/:id', (req, res) => companiesController.deleteCompany(req, res, companyModelInstance));
+
+    // Authentication routes
     router.post('/login', authController.login);
     router.get('/logout', authController.logout);
 
     return router;
 };
-
-

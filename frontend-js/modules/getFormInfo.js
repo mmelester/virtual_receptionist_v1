@@ -61,7 +61,7 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
     };
 
     try {
-        const response = await fetch('/admin/add', {
+        const response = await fetch('/admin/companies/add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: companyName, intro: introText, image: croppedImage }),
@@ -78,6 +78,7 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
         alert(result.message || 'Company added successfully!');
         document.getElementById('companyForm').reset(); // Optionally reset the form
         window.location.reload(); // Force a page refresh
+        
     } catch (error) {
         console.error('Error submitting form:', error);
         alert('An unexpected error occurred. Please try again.');
