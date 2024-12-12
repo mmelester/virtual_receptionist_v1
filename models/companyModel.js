@@ -11,7 +11,7 @@ class companyModel {
         if (!name || !intro || !image) {
 
             console.log("name intro image", name, intro, image);
-            
+
             return { success: false, message: 'Name, intro text, and logo image are required.' };
         }
 
@@ -40,18 +40,22 @@ class companyModel {
     }
 
     async deleteCompany(companyId) {
-        try {
-            if (!ObjectId.isValid(companyId)) {
-                throw new Error('Invalid ObjectId'); // Validate the ObjectId
-            }
-    
-            const result = await this.db.collection('companies').deleteOne({ _id: new ObjectId(companyId) });
-            return { success: result.deletedCount === 1 };
-        } catch (error) {
-            console.error('Database error:', error);
-            return { success: false, message: 'Failed to delete the company due to a database error.' };
+    try {
+        if (!ObjectId.isValid(companyId)) {
+            throw new Error('Invalid ObjectId'); // Validate the ObjectId
         }
+
+        // Use createFromHexString instead of new ObjectId
+        const objectId = ObjectId.createFromHexString(companyId);
+        const result = await this.db.collection('companies').deleteOne({ _id: objectId });
+
+        return { success: result.deletedCount === 1 };
+    } catch (error) {
+        console.error('Database error:', error);
+        return { success: false, message: 'Failed to delete the company due to a database error.' };
     }
+}
+
 
 }
 
