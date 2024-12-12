@@ -21,9 +21,11 @@ module.exports = {
                 return req.session.save(() => res.redirect('/admin/companies/add'));
             }
 
-            const result = await companyModel.addCompany(req.body); // Aligns with CompanyModel's method name
+            const result = await companyModel.addCompany(req.body);
             if (!result.success) {
                 req.flash('errors', [result.message]);
+                console.log("Results failed");
+
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
 

@@ -35,9 +35,10 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
 
     // If there are errors, display them and stop execution
     if (errors.length > 0) {
+
         try {
             // Send the errors to the server
-            await fetch('/admin/add', {
+            await fetch('/admin/companies/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

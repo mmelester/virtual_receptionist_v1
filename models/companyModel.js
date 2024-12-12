@@ -9,6 +9,9 @@ class companyModel {
 
         // Validation (this code would only get executed if a malicious user bypass client-side validation
         if (!name || !intro || !image) {
+
+            console.log("name intro image", name, intro, image);
+            
             return { success: false, message: 'Name, intro text, and logo image are required.' };
         }
 
