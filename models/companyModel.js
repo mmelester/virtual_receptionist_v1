@@ -40,21 +40,38 @@ class companyModel {
     }
 
     async deleteCompany(companyId) {
-    try {
-        if (!ObjectId.isValid(companyId)) {
-            throw new Error('Invalid ObjectId'); // Validate the ObjectId
+        try {
+            if (!ObjectId.isValid(companyId)) {
+                throw new Error('Invalid ObjectId'); // Validate the ObjectId
+            }
+
+            // Use createFromHexString instead of new ObjectId
+            const objectId = ObjectId.createFromHexString(companyId);
+            const result = await this.db.collection('companies').deleteOne({ _id: objectId });
+
+            return { success: result.deletedCount === 1 };
+        } catch (error) {
+            console.error('Database error:', error);
+            return { success: false, message: 'Failed to delete the company due to a database error.' };
         }
-
-        // Use createFromHexString instead of new ObjectId
-        const objectId = ObjectId.createFromHexString(companyId);
-        const result = await this.db.collection('companies').deleteOne({ _id: objectId });
-
-        return { success: result.deletedCount === 1 };
-    } catch (error) {
-        console.error('Database error:', error);
-        return { success: false, message: 'Failed to delete the company due to a database error.' };
     }
-}
+
+    async editCompany(companyId) {
+        try {
+            if (!ObjectId.isValid(companyId)) {
+                throw new Error('Invalid ObjectId'); // Validate the ObjectId
+            }
+
+            // Use createFromHexString instead of new ObjectId
+            const objectId = ObjectId.createFromHexString(companyId);
+            const result = await this.db.collection('companies').deleteOne({ _id: objectId });
+
+            return { success: result.deletedCount === 1 };
+        } catch (error) {
+            console.error('Database error:', error);
+            return { success: false, message: 'Failed to delete the company due to a database error.' };
+        }
+    }
 
 
 }
