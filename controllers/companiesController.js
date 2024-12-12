@@ -42,15 +42,15 @@ module.exports = {
             const result = await companyModel.deleteCompany(companyId); // Aligns with CompanyModel's method name
             if (!result.success) {
                 req.flash('errors', [result.message]);
-                return req.session.save(() => res.redirect('/admin/companies'));
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
 
             req.flash('success', 'Company deleted successfully!');
-            req.session.save(() => res.redirect('/admin/companies'));
+            req.session.save(() => res.status(200).json({ success: true, message: 'Company deleted successfully!' }));
         } catch (error) {
             console.error('Error deleting company:', error);
             req.flash('errors', ['Failed to delete company.']);
-            req.session.save(() => res.redirect('/admin/companies'));
+            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred while deleting the company.' }));
         }
     }
 };
