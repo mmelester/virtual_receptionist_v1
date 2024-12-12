@@ -54,5 +54,26 @@ module.exports = {
             req.flash('errors', ['Failed to delete company.']);
             req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred while deleting the company.' }));
         }
+    },
+
+    async editCompany(req, res, companyModel) {
+        try {
+            const companyId = req.params.id;
+    
+            // Fetch the company details
+            const company = await companyModel.getCompanyById(companyId);
+    
+            if (!company) {
+                return res.status(404).json({ success: false, message: 'Company not found or invalid ID.' });
+            }
+    
+            // Return the company details
+            res.status(200).json({ success: true, data: company });
+        } catch (error) {
+            console.error('Error fetching company data:', error);
+            res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
+        }
     }
+    
+    
 };

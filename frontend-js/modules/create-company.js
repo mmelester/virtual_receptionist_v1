@@ -5,7 +5,7 @@ const addCompanySection = document.getElementById('add-company-section');
 // Add click event listener to the button
 createCompanyButton.addEventListener('click', function () {
   // Hide the button
-  createCompanyButton.style.display = 'none';
+  createCompanyButton.classList.add('d-none');
 
   // Remove the 'd-none' class from the section
   addCompanySection.classList.remove('d-none');

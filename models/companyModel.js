@@ -56,23 +56,36 @@ class companyModel {
         }
     }
 
-    async editCompany(companyId) {
+    async editCompany(req, res, companyModel) {
         try {
-            if (!ObjectId.isValid(companyId)) {
-                throw new Error('Invalid ObjectId'); // Validate the ObjectId
+            const companyId = req.params.id;
+            const company = await companyModel.getCompanyById(companyId); // Fetch company by ID
+    
+            if (!company) {
+                return res.status(404).json({ success: false, message: 'Company not found.' });
             }
-
-            // Use createFromHexString instead of new ObjectId
-            const objectId = ObjectId.createFromHexString(companyId);
-            const result = await this.db.collection('companies').deleteOne({ _id: objectId });
-
-            return { success: result.deletedCount === 1 };
+    
+            res.status(200).json({ success: true, data: company });
         } catch (error) {
-            console.error('Database error:', error);
-            return { success: false, message: 'Failed to delete the company due to a database error.' };
+            console.error('Error fetching company data:', error);
+            res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
         }
     }
-
+    
+    async getCompanyById(companyId) {
+        try {
+            if (!ObjectId.isValid(companyId)) {
+                throw new Error('Invalid ObjectId');
+            }
+    
+            const objectId = ObjectId.createFromHexString(companyId);
+            return await this.db.collection('companies').findOne({ _id: objectId });
+        } catch (error) {
+            console.error('Database error:', error);
+            throw new Error('Failed to retrieve company data.');
+        }
+    }
+    
 
 }
 

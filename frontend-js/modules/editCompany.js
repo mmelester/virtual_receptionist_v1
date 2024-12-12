@@ -1,20 +1,25 @@
-document.querySelectorAll('#editCompany').forEach((icon) => {
+document.querySelectorAll('.editCompany').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
-        const companyId = event.target.dataset.id; 
+        const companyId = event.target.dataset.id;
 
-        if (confirm('Are you sure you want to delete this company?')) {
+        if (confirm('Do you want to edit this company information?')) {
+            const createCompanyButton = document.getElementById('create-company-btn');
+            const addCompanySection = document.getElementById('add-company-section');
+            const companyForm = document.getElementById('companyForm');
+
+            addCompanySection.classList.remove('d-none');
+            createCompanyButton.classList.add('d-none');
+
             try {
-                const response = await fetch(`/admin/companies/delete/${companyId}`, {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
+                const response = await fetch(`/admin/companies/edit/${companyId}`);
                 const result = await response.json();
+
                 if (result.success) {
-                    alert('Company deleted successfully.');
-                    location.reload(); // Reload the page to update the list
+                    const { name, intro } = result.data;
+                    companyForm.elements['companyName'].value = name;
+                    companyForm.elements['introText'].value = intro;
                 } else {
-                    alert(result.message || 'Failed to delete the company.');
+                    alert(result.message || 'Failed to fetch company information.');
                 }
             } catch (error) {
                 alert('An unexpected error occurred.');
