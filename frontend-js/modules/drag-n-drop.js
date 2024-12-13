@@ -181,7 +181,7 @@ function drawSavedImage() {
     }, false);
 });
 
-// Handle dropped files (uses Drag and Drop API)
+// Handle drag and dropped files (uses Drag and Drop API)
 dropArea.addEventListener('drop', (e) => {
     let dt = e.dataTransfer;
     let files = dt.files;
