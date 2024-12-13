@@ -57,6 +57,7 @@ section.companies-section {
 }
 
 .canvas-container {
+  display: block;
   width: 80%;
   height: auto;
   margin: auto;

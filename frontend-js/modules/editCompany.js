@@ -1,3 +1,5 @@
+import { previewFile } from './drag-n-drop'
+
 document.querySelectorAll('.editCompany').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
         const companyId = event.target.dataset.id;
@@ -26,20 +28,16 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
                     if (image) {
                         const img = new Image();
                         img.src = image; // Assuming `image` contains the Base64 or URL
-                        img.onload = function () {
-                            const canvas = document.getElementById('canvas');
-                            const ctx = canvas.getContext('2d');
-
-                            // Set canvas dimensions based on image
-                            canvas.width = img.width;
-                            canvas.height = img.height;
-
-                            // Draw the image onto the canvas
-                            ctx.drawImage(img, 0, 0, img.width, img.height);
-
-                            // Unhide the canvas and hide the form container
-                            document.querySelector('.canvas-container').classList.remove('hidden');
-                            document.querySelector('.form-container').classList.add('hidden');
+                        img.onload = async function () {
+                            // Fetch the image data
+                            const response = await fetch(img.src);
+                            const blob = await response.blob(); // Convert to Blob
+                        
+                            // Create a File object from the Blob if needed
+                            const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
+                        
+                            // Call the previewFile function with the File
+                            previewFile(file);
                         };
                     }
                 } else {

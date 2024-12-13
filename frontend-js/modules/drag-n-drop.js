@@ -34,10 +34,6 @@ function preventDefaults(e) {
 function handleFiles(files) {
     let file = files[0];
     if (file && file.type.startsWith('image/')) {
-
-        deleteBtn.classList.remove('hidden');
-        canvasContainer.classList.remove('hidden');
-        formContainer.classList.add('hidden');
         previewFile(file);
         
     } else {
@@ -49,14 +45,28 @@ function handleFiles(files) {
 
 function previewFile(file) {
 
+    deleteBtn.classList.remove('hidden');
+    canvasContainer.classList.remove('hidden');
+    formContainer.classList.add('hidden');
+    console.log("File =", file);
+
     img = new Image();
     img.src = URL.createObjectURL(file);
+
+    console.log("img.src = ", img.src);
 
     img.onload = function () {
         const originalAspectRatio = img.width / img.height;
 
+        console.log("Image = ", img.width, img.height)
+
         // Get the container's width
         const containerWidth = canvasContainer.offsetWidth;
+
+        console.log("Canvas Container = ", canvasContainer.offsetWidth);
+
+        console.log("*",canvasContainer.style.display); // Should not be 'none'
+        console.log("**", canvasContainer.offsetWidth);  // Should be greater than 0        
 
         // Set canvas dimensions based on container width while maintaining aspect ratio
         let canvasWidth = containerWidth;
@@ -65,11 +75,15 @@ function previewFile(file) {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
+        console.log(canvas.width, canvas.height);
+
         // Center the crop box
         cropWidth = Math.min(cropWidth, canvasWidth); // Ensure cropWidth is not larger than canvas
         cropHeight = (cropWidth / originalAspectRatio); // Keep aspect ratio
         cropX = (canvas.width - cropWidth) / 2;
         cropY = (canvas.height - cropHeight) / 2;
+
+        console.log(cropWidth, cropHeight, cropX, cropY);
 
         // Draw image and crop box
         drawCanvas();
@@ -295,5 +309,6 @@ deleteBtn.addEventListener('click', function () {
 
 module.exports = {
     drawSavedImage,
+    previewFile,
     getImg: () => img, // Getter function for img
 };
