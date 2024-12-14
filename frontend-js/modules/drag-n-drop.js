@@ -56,15 +56,8 @@ function previewFile(file) {
     img.onload = function () {
         const originalAspectRatio = img.width / img.height;
 
-        console.log("Image = ", img.width, img.height)
-
         // Get the container's width
         const containerWidth = canvasContainer.offsetWidth;
-
-        console.log("Canvas Container = ", canvasContainer.offsetWidth);
-
-        console.log("*",canvasContainer.style.display); // Should not be 'none'
-        console.log("**", canvasContainer.offsetWidth);  // Should be greater than 0        
 
         // Set canvas dimensions based on container width while maintaining aspect ratio
         let canvasWidth = containerWidth;
@@ -73,15 +66,11 @@ function previewFile(file) {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        console.log(canvas.width, canvas.height);
-
         // Center the crop box
         cropWidth = canvasWidth
         cropHeight = (cropWidth / originalAspectRatio); // Keep aspect ratio
         cropX = (canvas.width - cropWidth) / 2;
         cropY = (canvas.height - cropHeight) / 2;
-
-        console.log(cropWidth, cropHeight, cropX, cropY);
 
         // Draw image and crop box
         drawCanvas();
