@@ -7,6 +7,7 @@ const uploadForm = document.querySelector('.upload-form');
 let saveImage = document.getElementById('save-image');
 let deleteBtn = document.getElementsByClassName('delete')[0];
 let img;
+let cropWidth;
 // Get the canvas element and its context
 const canvasContainer = document.querySelector('.canvas-container');
 const canvas = document.getElementById('canvas');
