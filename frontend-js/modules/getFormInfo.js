@@ -76,7 +76,7 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
             return;
         }
     
-        alert(result.message || 'Company added successfully!');
+        // alert(result.message || 'Company added successfully!');
         document.getElementById('companyForm').reset(); // Optionally reset the form
         window.location.reload(); // Force a page refresh
         

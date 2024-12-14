@@ -11,7 +11,7 @@ document.querySelectorAll('.fa-trash').forEach((icon) => {
 
                 const result = await response.json();
                 if (result.success) {
-                    alert('Company deleted successfully.');
+                    // alert('Company deleted successfully.');
                     location.reload(); // Reload the page to update the list
                 } else {
                     alert(result.message || 'Failed to delete the company.');
