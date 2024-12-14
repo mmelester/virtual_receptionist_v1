@@ -15,8 +15,6 @@ const ctx = canvas.getContext('2d');
 // Set initial crop box dimensions
 let isDragging = false;
 let cropX, cropY; // X and Y positions of the crop box
-let cropWidth = parseInt(canvasContainer.dataset.cropWidth); // Read crop width from data attribute
-let cropHeight = parseInt(canvasContainer.dataset.cropHeight); // Read crop height from data attribute
 let startX, startY; // Starting mouse coordinates for dragging
 let isResizing = false; // Flag to track if resizing is active
 let resizeDirection = ''; // Track the direction of resize (e.g., 'right', 'bottom', etc.)
@@ -78,7 +76,7 @@ function previewFile(file) {
         console.log(canvas.width, canvas.height);
 
         // Center the crop box
-        cropWidth = Math.min(cropWidth, canvasWidth); // Ensure cropWidth is not larger than canvas
+        cropWidth = canvasWidth
         cropHeight = (cropWidth / originalAspectRatio); // Keep aspect ratio
         cropX = (canvas.width - cropWidth) / 2;
         cropY = (canvas.height - cropHeight) / 2;
