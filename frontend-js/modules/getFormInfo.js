@@ -10,8 +10,11 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
     const companyName = document.getElementById('companyName').value.trim();
     const introText = document.getElementById('introText').value.trim();
 
-    // Retrieve the companyId from localStorage
+    // Retrieve the companyId and editFlag from localStorage
     const companyId = localStorage.getItem('editCompanyId');
+    const editFlag = localStorage.getItem('editFlag');
+
+    console.log("edit flag = ", editFlag);
 
     alert(companyId);
 

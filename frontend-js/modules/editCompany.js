@@ -10,8 +10,9 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
             const companyForm = document.getElementById('companyForm');
             const formHeading = document.getElementById('form-heading');
 
-            // Store the companyId in localStorage
+            // Store the companyId and editFlag in localStorage
             localStorage.setItem('editCompanyId', companyId);
+            localStorage.setItem('editFlag', 'e');
 
             formHeading.innerHTML = '<h2>Edit Company Information</h2>';
 

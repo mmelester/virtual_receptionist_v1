@@ -21,6 +21,8 @@ let isResizing = false; // Flag to track if resizing is active
 let resizeDirection = ''; // Track the direction of resize (e.g., 'right', 'bottom', etc.)
 const handleSize = 10; // Size of the resize handles
 
+localStorage.setItem('editFlag', 'c');
+
 // Expose handleFiles globally
 window.handleFiles = handleFiles;
 
