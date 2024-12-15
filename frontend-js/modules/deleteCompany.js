@@ -1,4 +1,4 @@
-document.querySelectorAll('.fa-trash').forEach((icon) => {
+document.querySelectorAll('.delete-company-btn').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
         const companyId = event.target.dataset.id; 
 
