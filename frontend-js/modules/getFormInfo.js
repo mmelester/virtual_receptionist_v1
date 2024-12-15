@@ -10,6 +10,11 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
     const companyName = document.getElementById('companyName').value.trim();
     const introText = document.getElementById('introText').value.trim();
 
+    // Retrieve the companyId from localStorage
+    const companyId = localStorage.getItem('editCompanyId');
+
+    alert(companyId);
+
     // Validate the inputs
     if (!companyName) {
         errors.push('Company name is required.');

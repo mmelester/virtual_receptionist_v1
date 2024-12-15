@@ -86,7 +86,6 @@ class companyModel {
         }
     }
     
-
 }
 
 module.exports = companyModel;
