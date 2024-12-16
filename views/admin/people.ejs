@@ -20,18 +20,18 @@
         </div>
     <% } %>    
 
-    <div id="create-company-btn-container" class="text-center pb-5">
-        <button id="create-company-btn" class="btn btn-primary btn-sm" id="fileSelect">Add New Staff Member</button>
+    <div id="create-people-btn-container" class="text-center pb-5">
+        <button id="create-people-btn" class="btn btn-primary btn-sm" id="fileSelect">Add New Staff Member</button>
     </div>
     
 
-    <section id="add-company-section" class="d-none">
+    <section id="add-people-section" class="d-none">
         <div class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
             <div class="d-flex">
                  <span id="close-btn" class="ml-auto bg-secondary pl-2 pr-2 border rounded text-white font-weight-bold">X</span>
             </div>
        
-        <h3 id="form-heading" class="text-center pb-3">Add a New Staff Member</h3>
+        <h3 id="people-form-heading" class="text-center pb-3">Add a New Staff Member</h3>
         <div class="d-flex add-company-flex-container align-items-center justify-content-lg-between">
             <div class="info">
                 <form id="companyForm">
@@ -101,9 +101,10 @@
         %>  
     </section>
 </div>
-
+<!-- Load explicitly because DOM may not be available before main.js executes -->
+<script type="module" src="../frontend-js/modules/create-people.js"></script>
 <script type="module">
-    import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
+    import { setEqualWidths } from '../frontend-js/modules/setEqualWidths.js';
     document.addEventListener('DOMContentLoaded', () => {
 
     setEqualWidths('.people-name');
@@ -117,7 +118,6 @@
 
 });
 </script>
-
 
 <%- include('../includes/footer') %>
 

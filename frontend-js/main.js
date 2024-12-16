@@ -1,5 +1,6 @@
 import DragNDrop from './modules/drag-n-drop'
 import GetFormInfor from './modules/getFormInfo'
 import CreateCompany from './modules/create-company'
+import CreatePeople from './modules/create-people'
 import EditCompany from './modules/editCompany'
 import DeleteItem from './modules/deleteItem'
