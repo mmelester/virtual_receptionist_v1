@@ -76,27 +76,25 @@ module.exports = {
     },
     
     async updateCompany(req, res, companyModel) {
+        const { name, intro, image } = req.body;
+    
+        // Input Validation
+        if (!name || !intro || !image) {
+            console.error('Validation failed:', { name, intro, image });
+            return res.status(400).json({ success: false, message: 'Name, intro, and image are required.' });
+        }
+    
         try {
-            const companyId = req.params.id;
-            const { name, intro, image } = req.body;
-    
-            if (!name || !intro || !image) {
-                console.error('Validation failed:', { name, intro, image });
-                return res.status(400).json({ success: false, message: 'Name, intro, and image are required.' });
-            }
-    
-            const result = await companyModel.updateCompany(companyId, { name, intro, image });
+            const result = await companyModel.updateCompany(req.params.id, { name, intro, image });
             if (!result.success) {
-                console.error('Update failed. Result:', result);
                 return res.status(400).json({ success: false, message: result.message });
             }
     
             res.status(200).json({ success: true, message: 'Company updated successfully!' });
         } catch (error) {
-            console.error('Error in updateCompany:', error);
+            console.error('Error updating company:', error);
             res.status(500).json({ success: false, message: 'Failed to update company.' });
         }
-    }
-    
+    }    
     
 };

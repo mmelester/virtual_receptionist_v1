@@ -87,25 +87,22 @@ class companyModel {
     }
     
     async updateCompany(companyId, companyData) {
-        try {
-            if (!ObjectId.isValid(companyId)) {
-                throw new Error('Invalid ObjectId');
-            }
-    
-            const objectId = ObjectId.createFromHexString(companyId);
-            const { name, intro, image } = companyData;
-    
-            const result = await this.db.collection('companies').updateOne(
-                { _id: objectId },
-                { $set: { name, intro, image } }
-            );
-    
-            return { success: result.matchedCount > 0 };
-        } catch (error) {
-            console.error('Database error:', error);
-            return { success: false, message: 'Failed to update the company due to a database error.' };
+        if (!ObjectId.isValid(companyId)) {
+            throw new Error('Invalid ObjectId');
         }
-    }
+    
+        // Business logic validation (optional)
+        if (!companyData.name || !companyData.intro || !companyData.image) {
+            return { success: false, message: 'Invalid data for update.' };
+        }
+    
+        const result = await this.db.collection('companies').updateOne(
+            { _id: ObjectId.createFromHexString(companyId) },
+            { $set: companyData }
+        );
+    
+        return { success: result.matchedCount > 0 };
+    }    
     
 }
 
