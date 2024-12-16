@@ -36,12 +36,14 @@ class BaseModel {
 
     async delete(id) {
         try {
-            return await this.collection.deleteOne({ _id: new ObjectId(id) });
+            const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
+            return { success: result.deletedCount > 0 }; // Ensure success is based on deletedCount
         } catch (error) {
             console.error('Error deleting data:', error);
             return { success: false, message: 'Database error.' };
         }
     }
+    
 
     async update(id, data) {
         try {
