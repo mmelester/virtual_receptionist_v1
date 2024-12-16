@@ -38,10 +38,10 @@ module.exports = {
         }
     },
 
-    async deleteCompany(req, res, CompanyModel) {
+    async deleteItem(req, res, CompanyModel) {
         try {
             const companyId = req.params.id;
-            const result = await CompanyModel.deleteCompany(companyId); // Aligns with CompanyModel's method name
+            const result = await CompanyModel.deleteItem(companyId); // Aligns with CompanyModel's method name
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));

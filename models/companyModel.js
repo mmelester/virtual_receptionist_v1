@@ -31,7 +31,7 @@ class CompanyModel extends BaseModel {
         }
     }
 
-    async deleteCompany(companyId) {
+    async deleteItem(companyId) {
         if (!ObjectId.isValid(companyId)) {
             return { success: false, message: 'Invalid ObjectId.' };
         }
