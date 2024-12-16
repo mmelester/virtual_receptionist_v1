@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb'); // Import ObjectId for MongoDB operations
-class companyModel {
+class CompanyModel {
     constructor(database) {
         this.db = database;
     }
@@ -56,10 +56,10 @@ class companyModel {
         }
     }
 
-    async editCompany(req, res, companyModel) {
+    async editCompany(req, res, CompanyModel) {
         try {
             const companyId = req.params.id;
-            const company = await companyModel.getCompanyById(companyId); // Fetch company by ID
+            const company = await CompanyModel.getCompanyById(companyId); // Fetch company by ID
     
             if (!company) {
                 return res.status(404).json({ success: false, message: 'Company not found.' });
@@ -114,4 +114,4 @@ class companyModel {
     
 }
 
-module.exports = companyModel;
+module.exports = CompanyModel;
