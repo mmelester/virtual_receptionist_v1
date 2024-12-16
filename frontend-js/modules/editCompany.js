@@ -9,12 +9,22 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
             const addCompanySection = document.getElementById('add-company-section');
             const companyForm = document.getElementById('companyForm');
             const formHeading = document.getElementById('form-heading');
+            const deleteIcon = document.getElementById('delete-icon')
 
             // Store the companyId and editFlag in localStorage
             localStorage.setItem('editCompanyId', companyId);
             localStorage.setItem('editFlag', 'e');
 
+            // Modify form for edit
             formHeading.innerHTML = '<h2>Edit Company Information</h2>';
+            // Get the delete button parent element
+            if (deleteIcon) {
+                const parent = deleteIcon.parentElement;
+                if (parent) {
+                    // Replace the current content with a new element
+                    parent.innerHTML = `<i class="delete-image-btn fa fa-pencil-square-o" aria-hidden="true"></i>`;
+                }
+            }
 
             addCompanySection.classList.remove('d-none');
             createCompanyButton.classList.add('d-none');

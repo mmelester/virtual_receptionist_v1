@@ -87,21 +87,29 @@ class companyModel {
     }
     
     async updateCompany(companyId, companyData) {
-        if (!ObjectId.isValid(companyId)) {
-            throw new Error('Invalid ObjectId');
+
+        try {
+            if (!ObjectId.isValid(companyId)) {
+                throw new Error('Invalid ObjectId');
+            }
+        
+            // Business logic validation (optional)
+            if (!companyData.name || !companyData.intro || !companyData.image) {
+                return { success: false, message: 'Invalid data for update.' };
+            }
+        
+            const result = await this.db.collection('companies').updateOne(
+                { _id: ObjectId.createFromHexString(companyId) },
+                { $set: companyData }
+            );
+        
+            return { success: result.matchedCount > 0 };
         }
-    
-        // Business logic validation (optional)
-        if (!companyData.name || !companyData.intro || !companyData.image) {
-            return { success: false, message: 'Invalid data for update.' };
+        catch(error) {
+            // Handle unexpected errors
+            return { success: false, message: `Error updating company: ${error.message}` };
         }
-    
-        const result = await this.db.collection('companies').updateOne(
-            { _id: ObjectId.createFromHexString(companyId) },
-            { $set: companyData }
-        );
-    
-        return { success: result.matchedCount > 0 };
+        
     }    
     
 }
