@@ -14,8 +14,6 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
     const companyId = localStorage.getItem('editCompanyId');
     const flag = localStorage.getItem('editFlag');
 
-    alert(companyId);
-
     // Validate the inputs
     if (!companyName) {
         errors.push('Company name is required.');
@@ -92,10 +90,34 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
             alert('An unexpected error occurred. Please try again.');
         }
     } else {
-        alert("Insert code here");
-    }
-
+        try {
+            const response = await fetch(`/admin/companies/edit/${companyId}`, {
+                method: 'PUT', // Use the PUT method for updates
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: companyName,
+                    intro: introText,
+                    image: croppedImage, // Send updated image data
+                }),
+            });
     
+            const result = await response.json();
+    
+            if (!response.ok) {
+                // Handle server-side errors
+                alert(result.message || 'An error occurred while updating the company.');
+                return;
+            }
+    
+            alert(result.message || 'Company updated successfully!');
+            window.location.reload(); // Refresh the page
+        } catch (error) {
+            console.error('Error updating company:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    }
     
 });
 

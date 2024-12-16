@@ -73,6 +73,29 @@ module.exports = {
             console.error('Error fetching company data:', error);
             res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
         }
+    },
+    
+    async updateCompany(req, res, companyModel) {
+        try {
+            const companyId = req.params.id;
+            const { name, intro, image } = req.body;
+    
+            if (!name || !intro || !image) {
+                console.error('Validation failed:', { name, intro, image });
+                return res.status(400).json({ success: false, message: 'Name, intro, and image are required.' });
+            }
+    
+            const result = await companyModel.updateCompany(companyId, { name, intro, image });
+            if (!result.success) {
+                console.error('Update failed. Result:', result);
+                return res.status(400).json({ success: false, message: result.message });
+            }
+    
+            res.status(200).json({ success: true, message: 'Company updated successfully!' });
+        } catch (error) {
+            console.error('Error in updateCompany:', error);
+            res.status(500).json({ success: false, message: 'Failed to update company.' });
+        }
     }
     
     

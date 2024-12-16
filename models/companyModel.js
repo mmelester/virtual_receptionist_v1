@@ -86,6 +86,27 @@ class companyModel {
         }
     }
     
+    async updateCompany(companyId, companyData) {
+        try {
+            if (!ObjectId.isValid(companyId)) {
+                throw new Error('Invalid ObjectId');
+            }
+    
+            const objectId = ObjectId.createFromHexString(companyId);
+            const { name, intro, image } = companyData;
+    
+            const result = await this.db.collection('companies').updateOne(
+                { _id: objectId },
+                { $set: { name, intro, image } }
+            );
+    
+            return { success: result.matchedCount > 0 };
+        } catch (error) {
+            console.error('Database error:', error);
+            return { success: false, message: 'Failed to update the company due to a database error.' };
+        }
+    }
+    
 }
 
 module.exports = companyModel;

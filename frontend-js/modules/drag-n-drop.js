@@ -131,9 +131,6 @@ function previewFile(file) {
         cropX = (canvas.width - cropWidth) / 2;
         cropY = (canvas.height - cropHeight) / 2;
 
-        console.log("canvasWidth = ", canvasWidth, "Height = ", canvasHeight);
-        console.log("cropX = ", cropX, "cropY = ", cropY);
-
         // Draw image and crop box
         drawCanvas();
     };
@@ -212,8 +209,6 @@ function drawSavedImage() {
     // Calculate the scaling ratio between the original image and canvas
     const scaleX = img.width / canvas.width;
     const scaleY = img.height / canvas.height;
-
-    console.log("Scaling ", scaleX, scaleY);
 
     // Calculate the exact position and size of the crop area from the original image
     const sourceX = cropX * scaleX;
