@@ -12,9 +12,7 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
 
     // Retrieve the companyId and editFlag from localStorage
     const companyId = localStorage.getItem('editCompanyId');
-    const editFlag = localStorage.getItem('editFlag');
-
-    console.log("edit flag = ", editFlag);
+    const flag = localStorage.getItem('editFlag');
 
     alert(companyId);
 
@@ -69,29 +67,34 @@ document.getElementById('save-image').addEventListener('click', async (event) =>
         image: croppedImage, // Add the Base64 image data
     };
 
-    try {
-        const response = await fetch('/admin/companies/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: companyName, intro: introText, image: croppedImage }),
-        });
-    
-        const result = await response.json();
-    
-        if (!response.ok) {
-            // Display server-side validation errors
-            alert(result.message || 'An error occurred while adding the company.');
-            return;
-        }
-    
-        // alert(result.message || 'Company added successfully!');
-        document.getElementById('companyForm').reset(); // Optionally reset the form
-        window.location.reload(); // Force a page refresh
+    if (flag === 'c') {
+        try {
+            const response = await fetch('/admin/companies/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: companyName, intro: introText, image: croppedImage }),
+            });
         
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('An unexpected error occurred. Please try again.');
+            const result = await response.json();
+        
+            if (!response.ok) {
+                // Display server-side validation errors
+                alert(result.message || 'An error occurred while adding the company.');
+                return;
+            }
+        
+            // alert(result.message || 'Company added successfully!');
+            document.getElementById('companyForm').reset(); // Optionally reset the form
+            window.location.reload(); // Force a page refresh
+            
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    } else {
+        alert("Insert code here");
     }
+
     
     
 });
