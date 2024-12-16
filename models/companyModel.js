@@ -1,24 +1,21 @@
+const BaseModel = require('./BaseModel');
 const { ObjectId } = require('mongodb'); // Import ObjectId for MongoDB operations
-class CompanyModel {
+
+class CompanyModel extends BaseModel {
     constructor(database) {
-        this.db = database;
+        super(database, 'companies'); // Pass the database and collection name to BaseModel
     }
 
     async addCompany(companyData) {
         const { name, intro, image } = companyData;
 
-        // Validation (this code would only get executed if a malicious user bypass client-side validation
+        // Validation
         if (!name || !intro || !image) {
-
-            console.log("name intro image", name, intro, image);
-
             return { success: false, message: 'Name, intro text, and logo image are required.' };
         }
 
         try {
-            // Insert into the database
-            const result = await this.db.collection('companies').insertOne({ name, intro, image });
-            return { success: true, result };
+            return await this.add({ name, intro, image }); // Use BaseModel's `add` method
         } catch (error) {
             console.error('Database error:', error);
             return { success: false, message: 'Failed to add the company due to a database error.' };
@@ -27,12 +24,7 @@ class CompanyModel {
 
     async getCompanies() {
         try {
-            // Fetch all companies from the database
-            const companies = await this.db.collection('companies').find({}).toArray();
-
-            // console.log(companies);
-
-            return companies;
+            return await this.getAll(); // Use BaseModel's `getAll` method
         } catch (error) {
             console.error('Database error:', error);
             throw new Error('Failed to retrieve companies.');
@@ -40,78 +32,47 @@ class CompanyModel {
     }
 
     async deleteCompany(companyId) {
+        if (!ObjectId.isValid(companyId)) {
+            return { success: false, message: 'Invalid ObjectId.' };
+        }
+
         try {
-            if (!ObjectId.isValid(companyId)) {
-                throw new Error('Invalid ObjectId'); // Validate the ObjectId
-            }
-
-            // Use createFromHexString instead of new ObjectId
-            const objectId = ObjectId.createFromHexString(companyId);
-            const result = await this.db.collection('companies').deleteOne({ _id: objectId });
-
-            return { success: result.deletedCount === 1 };
+            return await this.delete(companyId); // Use BaseModel's `delete` method
         } catch (error) {
             console.error('Database error:', error);
             return { success: false, message: 'Failed to delete the company due to a database error.' };
         }
     }
 
-    async editCompany(req, res, CompanyModel) {
-        try {
-            const companyId = req.params.id;
-            const company = await CompanyModel.getCompanyById(companyId); // Fetch company by ID
-    
-            if (!company) {
-                return res.status(404).json({ success: false, message: 'Company not found.' });
-            }
-    
-            res.status(200).json({ success: true, data: company });
-        } catch (error) {
-            console.error('Error fetching company data:', error);
-            res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
-        }
-    }
-    
     async getCompanyById(companyId) {
+        if (!ObjectId.isValid(companyId)) {
+            throw new Error('Invalid ObjectId.');
+        }
+
         try {
-            if (!ObjectId.isValid(companyId)) {
-                throw new Error('Invalid ObjectId');
-            }
-    
-            const objectId = ObjectId.createFromHexString(companyId);
-            return await this.db.collection('companies').findOne({ _id: objectId });
+            return await this.getById(companyId); // Use BaseModel's `getById` method
         } catch (error) {
             console.error('Database error:', error);
             throw new Error('Failed to retrieve company data.');
         }
     }
-    
+
     async updateCompany(companyId, companyData) {
+        if (!ObjectId.isValid(companyId)) {
+            return { success: false, message: 'Invalid ObjectId.' };
+        }
+
+        if (!companyData.name || !companyData.intro || !companyData.image) {
+            return { success: false, message: 'Invalid data for update.' };
+        }
 
         try {
-            if (!ObjectId.isValid(companyId)) {
-                throw new Error('Invalid ObjectId');
-            }
-        
-            // Business logic validation (optional)
-            if (!companyData.name || !companyData.intro || !companyData.image) {
-                return { success: false, message: 'Invalid data for update.' };
-            }
-        
-            const result = await this.db.collection('companies').updateOne(
-                { _id: ObjectId.createFromHexString(companyId) },
-                { $set: companyData }
-            );
-        
-            return { success: result.matchedCount > 0 };
-        }
-        catch(error) {
-            // Handle unexpected errors
+            return await this.update(companyId, companyData); // Use BaseModel's `update` method
+        } catch (error) {
+            console.error('Database error:', error);
             return { success: false, message: `Error updating company: ${error.message}` };
         }
-        
-    }    
-    
+    }
 }
 
 module.exports = CompanyModel;

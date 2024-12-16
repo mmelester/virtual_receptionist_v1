@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 class BaseModel {
     constructor(database, collectionName) {
         this.db = database;
@@ -31,6 +32,7 @@ class BaseModel {
             throw new Error('Database error.');
         }
     }
+    
 
     async delete(id) {
         try {
@@ -53,4 +55,6 @@ class BaseModel {
             return { success: false, message: 'Database error.' };
         }
     }
+
 }
+module.exports = BaseModel; 
