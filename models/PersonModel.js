@@ -22,7 +22,7 @@ class PersonModel extends BaseModel {
         }
     }
 
-    async getPerson() {
+    async getPeople() {
         try {
             return await this.getAll(); // Use BaseModel's `getAll` method
         } catch (error) {
