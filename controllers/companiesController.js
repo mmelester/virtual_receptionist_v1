@@ -1,7 +1,7 @@
 module.exports = {
-    async getCompanies(req, res, companyModel) {
+    async getCompanies(req, res, CompanyModel) {
         try {
-            const companies = await companyModel.getCompanies(); // Aligns with CompanyModel's method name
+            const companies = await CompanyModel.getCompanies(); // Aligns with CompanyModel's method name
             const errors = req.flash('errors');
             const success = req.flash('success');
             const isLoggedIn = req.session && req.session.isLoggedIn;
@@ -14,14 +14,14 @@ module.exports = {
         }
     },
 
-    async addCompany(req, res, companyModel) {
+    async addCompany(req, res, CompanyModel) {
         try {
             if (!req.body.name || !req.body.intro || !req.body.image) {
                 req.flash('errors', ['Name, intro, and image are required.']);
                 return req.session.save(() => res.redirect('/admin/companies/add'));
             }
 
-            const result = await companyModel.addCompany(req.body);
+            const result = await CompanyModel.addCompany(req.body);
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 console.log("Results failed");
@@ -38,10 +38,10 @@ module.exports = {
         }
     },
 
-    async deleteCompany(req, res, companyModel) {
+    async deleteCompany(req, res, CompanyModel) {
         try {
             const companyId = req.params.id;
-            const result = await companyModel.deleteCompany(companyId); // Aligns with CompanyModel's method name
+            const result = await CompanyModel.deleteCompany(companyId); // Aligns with CompanyModel's method name
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
@@ -56,12 +56,12 @@ module.exports = {
         }
     },
 
-    async editCompany(req, res, companyModel) {
+    async editCompany(req, res, CompanyModel) {
         try {
             const companyId = req.params.id;
     
             // Fetch the company details
-            const company = await companyModel.getCompanyById(companyId);
+            const company = await CompanyModel.getCompanyById(companyId);
     
             if (!company) {
                 return res.status(404).json({ success: false, message: 'Company not found or invalid ID.' });
@@ -75,7 +75,7 @@ module.exports = {
         }
     },
     
-    async updateCompany(req, res, companyModel) {
+    async updateCompany(req, res, CompanyModel) {
         const { name, intro, image } = req.body;
     
         // Input Validation
@@ -85,7 +85,7 @@ module.exports = {
         }
     
         try {
-            const result = await companyModel.updateCompany(req.params.id, { name, intro, image });
+            const result = await CompanyModel.updateCompany(req.params.id, { name, intro, image });
             if (!result.success) {
                 return res.status(400).json({ success: false, message: result.message });
             }
