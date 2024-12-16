@@ -1,10 +1,11 @@
-document.querySelectorAll('.delete-company-btn').forEach((icon) => {
+document.querySelectorAll('.delete-btn').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
-        const companyId = event.target.dataset.id; 
+        const id = event.target.dataset.id;
+        const deleteRoute = event.target.dataset.route; // Get the route from a data attribute
 
-        if (confirm('Are you sure you want to delete this company?')) {
+        if (confirm('Are you sure you want to delete this item?')) {
             try {
-                const response = await fetch(`/admin/companies/delete/${companyId}`, {
+                const response = await fetch(`${deleteRoute}/${id}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
                 });
@@ -14,10 +15,10 @@ document.querySelectorAll('.delete-company-btn').forEach((icon) => {
                 console.log(result);
 
                 if (result.success) {
-                    alert('Company deleted successfully.');
+                    alert('Item deleted successfully.');
                     location.reload(); // Reload the page to update the list
                 } else {
-                    alert(result.message || 'Failed to delete the company.');
+                    alert(result.message || 'Failed to delete item.');
                 }
             } catch (error) {
                 alert('An unexpected error occurred.');
