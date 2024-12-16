@@ -35,14 +35,70 @@ function preventDefaults(e) {
 function handleFiles(files) {
     let file = files[0];
     if (file && file.type.startsWith('image/')) {
-        previewFile(file);
-        
+        if (file.type === 'image/svg+xml') {
+            fixSvgDim(file);
+        }
+        previewFile(file); // Use your existing logic for other image types
     } else {
         alert('Please upload a valid image file.');
-         // Allow the user to keep the file explorer open
-         fileInput.value = '';  // Reset the input so the user can try again
+        fileInput.value = ''; // Reset the input so the user can try again
     }
-};
+}
+
+function fixSvgDim(file) {
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const svgText = event.target.result;
+
+        // Parse the SVG as an XML document
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
+        const svgElement = svgDoc.documentElement;
+
+        // Check if the width attribute is missing
+        if (!svgElement.hasAttribute("width")) {
+            const viewBox = svgElement.getAttribute("viewBox");
+
+            if (viewBox) {
+                // Extract the width from the viewBox (e.g., "0 0 512 512")
+                const viewBoxValues = viewBox.split(" ").map(Number);
+
+                if (viewBoxValues.length === 4) {
+                    const [, , viewBoxWidth] = viewBoxValues;
+
+                    // Set the width attribute using the viewBox width
+                    svgElement.setAttribute("width", `${viewBoxWidth}px`);
+                } else {
+                    console.error("Invalid viewBox format.");
+                }
+            } else {
+                console.error("SVG is missing both width and viewBox attributes.");
+            }
+        }
+
+        // Serialize the modified SVG back to a string
+        const serializer = new XMLSerializer();
+        const modifiedSvg = serializer.serializeToString(svgElement);
+
+        // Create a new Blob and URL
+        const blob = new Blob([modifiedSvg], { type: "image/svg+xml" });
+
+        // Create a new File object with the updated Blob
+        const updatedFile = new File([blob], file.name, { type: file.type });
+
+        // Pass the updatedFile to further processing (e.g., preview or other functions)
+        previewFile(updatedFile);
+    };
+
+    reader.onerror = function (error) {
+        console.error("Error reading the file:", error);
+    };
+
+    // Read the SVG file as text
+    reader.readAsText(file);
+}
+
 
 function previewFile(file) {
 
@@ -74,6 +130,9 @@ function previewFile(file) {
         cropHeight = (cropWidth / originalAspectRatio); // Keep aspect ratio
         cropX = (canvas.width - cropWidth) / 2;
         cropY = (canvas.height - cropHeight) / 2;
+
+        console.log("canvasWidth = ", canvasWidth, "Height = ", canvasHeight);
+        console.log("cropX = ", cropX, "cropY = ", cropY);
 
         // Draw image and crop box
         drawCanvas();
@@ -153,6 +212,8 @@ function drawSavedImage() {
     // Calculate the scaling ratio between the original image and canvas
     const scaleX = img.width / canvas.width;
     const scaleY = img.height / canvas.height;
+
+    console.log("Scaling ", scaleX, scaleY);
 
     // Calculate the exact position and size of the crop area from the original image
     const sourceX = cropX * scaleX;
