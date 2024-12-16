@@ -24,31 +24,29 @@ class BaseModel {
         }
     }
 
-    async getById(id) {
-        try {
-            return await this.collection.findOne({ _id: new ObjectId(id) });
-        } catch (error) {
-            console.error('Error fetching data by ID:', error);
-            throw new Error('Database error.');
-        }
-    }
-    
-
     async delete(id) {
         try {
-            const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
-            return { success: result.deletedCount > 0 }; // Ensure success is based on deletedCount
+            const result = await this.collection.deleteOne({ _id: ObjectId.createFromHexString(id) });
+            return { success: result.deletedCount > 0 };
         } catch (error) {
             console.error('Error deleting data:', error);
             return { success: false, message: 'Database error.' };
         }
     }
     
-
+    async getById(id) {
+        try {
+            return await this.collection.findOne({ _id: ObjectId.createFromHexString(id) });
+        } catch (error) {
+            console.error('Error fetching data by ID:', error);
+            throw new Error('Database error.');
+        }
+    }
+    
     async update(id, data) {
         try {
             const result = await this.collection.updateOne(
-                { _id: new ObjectId(id) },
+                { _id: ObjectId.createFromHexString(id) },
                 { $set: data }
             );
             return { success: result.modifiedCount > 0 };
@@ -57,6 +55,6 @@ class BaseModel {
             return { success: false, message: 'Database error.' };
         }
     }
-
+    
 }
 module.exports = BaseModel; 
