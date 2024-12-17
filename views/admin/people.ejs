@@ -41,24 +41,24 @@
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="responseText">Response Text (up to 50 characters):</label>
-                        <textarea id="responseText" name="introText" maxlength="50" required></textarea>
+                        <textarea id="responseText" name="responseText" maxlength="50" required></textarea>
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="mobile">Mobile:</label>
-                        <textarea id="mobile" name="introText" maxlength="24" required></textarea>
+                        <input type="text" id="mobile" name="mobile" maxlength="11" required>
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="email">Email:</label>
-                        <textarea id="introText" name="introText" maxlength="24"></textarea>
+                        <input type="text" id="email" name="email" maxlength="24" required>
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="mobile">Outlet:</label>
-                        <textarea id="outlet" name="outlet" maxlength="24"></textarea>
+                        <input type="text" id="outlet" name="outlet" maxlength="24" required>
                     </div>
                 </form>
             </div>
 
-            <div id="drop-area">
+            <div id="headshot-drop-area">
                 <div class="form-container">
                     <form class="upload-form">
                         <p>Drag and drop an image here</p>
@@ -71,7 +71,7 @@
                     <!-- <canvas id="canvas" width="500" height="500"></canvas> -->
                     <canvas id="canvas" width="450" height="500"></canvas>
                     <button class="delete">
-                        <i id="delete-icon" class="delete-image-btn fa fa-trash" aria-hidden="true"></i>
+                        <i id="headshot-delete-icon" class="delete-image-btn fa fa-trash" aria-hidden="true"></i>
                       </button>
                       
                 </div>
@@ -81,7 +81,7 @@
         </div>
 
         <div class="text-center">
-            <button id="save-image" class="btn btn-primary btn-sm pr-4 pl-4 pt-2 pb-2">Save</button>
+            <button id="save-image" class="save-img-btn btn btn-primary btn-sm pr-4 pl-4 pt-2 pb-2">Save</button>
         </div> 
     </div>
     </section>
