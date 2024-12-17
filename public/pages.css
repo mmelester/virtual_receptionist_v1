@@ -20,7 +20,8 @@ section.companies-section {
   align-items: center;
 }
 
-.add-company-flex-container {
+.add-company-flex-container,
+.add-people-flex-container {
   justify-content: space-around;
   gap: 2rem;
   flex-wrap: wrap;

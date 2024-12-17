@@ -26,22 +26,34 @@
     
 
     <section id="add-people-section" class="d-none">
-        <div class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
+        <div class="add-peopele-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
             <div class="d-flex">
                  <span id="close-btn" class="ml-auto bg-secondary pl-2 pr-2 border rounded text-white font-weight-bold">X</span>
             </div>
        
         <h3 id="people-form-heading" class="text-center pb-3">Add a New Staff Member</h3>
-        <div class="d-flex add-company-flex-container align-items-center justify-content-lg-between">
+        <div class="d-flex add-people-flex-container align-items-center justify-content-lg-between">
             <div class="info">
-                <form id="companyForm">
+                <form id="personForm">
                     <div class="form-group">
-                        <label class="form-data" for="companyName">Name (up to 35 characters):</label>
-                        <input type="text" id="companyName" name="companyName" maxlength="35" required>
+                        <label class="form-data" for="personName">Name (up to 35 characters):</label>
+                        <input type="text" id="personName" name="personName" maxlength="35" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-data" for="introText">Intro Text (up to 160 characters):</label>
-                        <textarea id="introText" name="introText" maxlength="160" required></textarea>
+                        <label class="form-data" for="responseText">Response Text (up to 50 characters):</label>
+                        <textarea id="responseText" name="introText" maxlength="50" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-data" for="mobile">Mobile:</label>
+                        <textarea id="mobile" name="introText" maxlength="24" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-data" for="email">Email:</label>
+                        <textarea id="introText" name="introText" maxlength="24"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-data" for="mobile">Outlet:</label>
+                        <textarea id="outlet" name="outlet" maxlength="24"></textarea>
                     </div>
                 </form>
             </div>
@@ -76,19 +88,19 @@
     <section class="companies-section">
         <div>
             <% if (people.length > 0) { %>
-                <% people.forEach(company => { %>
-                    <div class="company-listing d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
-                        <div class="company-name pr-5">
+                <% people.forEach(person => { %>
+                    <div class="person-listing d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
+                        <div class="person-name pr-5">
                             <%= people.name %>
                         </div>
-                        <div class="company-intro-text pr-5">
+                        <div class="person-response-text pr-5">
                             <%= people.intro.slice(0,40) + "  . . .  " %>
                         </div>
-                        <div class="company-logo pr-5">
+                        <div class="person-headshot pr-5">
                             <img class='text-center' src="<%= people.image %>" alt="<%= people.name %> logo" width="auto" height="50px" />
                         </div>
                         <div class="edit-delete ml-auto">
-                            <i class="editCompany fa fa-pencil-square-o pr-3" aria-hidden="true" data-id="<%= people._id %>"></i>
+                            <i class="editPerson fa fa-pencil-square-o pr-3" aria-hidden="true" data-id="<%= people._id %>"></i>
                             <i class="delete-btn fa fa-trash pr-3" aria-hidden="true" data-route="/admin/people/delete" data-id="<%= people._id %>"></i>
                         </div>
                     </div>
