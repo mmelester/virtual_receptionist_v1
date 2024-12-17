@@ -15,7 +15,7 @@ document.querySelectorAll('.delete-btn').forEach((icon) => {
                 console.log(result);
 
                 if (result.success) {
-                    alert('Item deleted successfully.');
+                    // alert('Item deleted successfully.');
                     location.reload(); // Reload the page to update the list
                 } else {
                     alert(result.message || 'Failed to delete item.');
