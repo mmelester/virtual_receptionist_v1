@@ -1,6 +1,5 @@
 let dropArea = document.getElementsByClassName('drop-area')[0];
 let formContainer = document.getElementsByClassName('form-container')[0];
-// let fileInput = document.getElementById('fileElem');
 let fileInput = document.getElementsByClassName('file-element')[0]
 const fileSelect = document.getElementsByClassName('file-select')[0];
 let deleteBtn = document.getElementsByClassName('delete')[0];
@@ -8,7 +7,8 @@ let img;
 let cropWidth;
 // Get the canvas element and its context
 const canvasContainer = document.querySelector('.canvas-container');
-const canvas = document.getElementById('canvas');
+// const canvas = document.getElementById('canvas');
+const canvas = document.getElementsByClassName('canvas')[0];
 const ctx = canvas.getContext('2d');
 
 // Set initial crop box dimensions
