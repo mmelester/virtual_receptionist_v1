@@ -32,7 +32,7 @@ section.companies-section {
   }
 }
 
-#drop-area,
+.drop-area,
 #headshot-drop-area {
   border: 2px dashed #ccc;
   border-radius: 10px;
@@ -53,7 +53,7 @@ section.companies-section {
   display: inline-block;
   overflow: hidden;
 }
-#drop-area.highlight,
+.drop-area.highlight,
 #headshot-drop-area.highlight {
   border: 2px dashed #00ff00; /* Change border to green */
   background-color: #f0f8ff; /* Light background color */

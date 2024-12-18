@@ -1,4 +1,5 @@
-let dropArea = document.getElementById('drop-area');
+// let dropArea = document.getElementById('drop-area');
+let dropArea = document.getElementsByClassName('drop-area')[0];
 let formContainer = document.getElementsByClassName('form-container')[0];
 let fileInput = document.getElementById('fileElem');
 const fileSelect = document.getElementById('fileSelect');
