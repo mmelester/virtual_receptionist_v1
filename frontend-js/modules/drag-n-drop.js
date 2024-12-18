@@ -3,9 +3,9 @@ let formContainer = document.getElementsByClassName('form-container')[0];
 let fileInput = document.getElementById('fileElem');
 const fileSelect = document.getElementById('fileSelect');
 const fileElem = document.getElementById('fileElem');
-const uploadForm = document.querySelector('.upload-form');
+// const uploadForm = document.querySelector('.upload-form');
 // let saveImage = document.getElementById('save-image');
-let saveImage = document.querySelectorAll('.save-img-btn');
+// let saveImage = document.querySelectorAll('.save-img-btn');
 let deleteBtn = document.getElementsByClassName('delete')[0];
 let img;
 let cropWidth;
@@ -342,17 +342,6 @@ deleteBtn.addEventListener('click', function () {
     img = undefined;
     console.log("Image ", img);
 });
-
-// Save the cropped image
-// saveImage.addEventListener('click', function () {
-//     const croppedCanvas = drawSavedImage()
-//     const croppedImage = croppedCanvas.toDataURL('image/png');
-//     const link = document.createElement('a');
-//     link.href = croppedImage;
-//     link.download = 'cropped-image.png';
-//     link.click();
-//     console.log("Cropped Image Saved");
-// });
 
 module.exports = {
     drawSavedImage,
