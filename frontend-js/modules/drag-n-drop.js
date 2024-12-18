@@ -247,7 +247,8 @@ dropArea.addEventListener('drop', (e) => {
 }, false);
 
 // Fallback to file input
-document.getElementById('fileSelect').onclick = function () {
+// document.getElementBy('fileSelect').onclick = function () {
+document.getElementsByClassName('file-select')[0].onclick = function () {
     console.log("File Select");
     fileInput.click();
 };
