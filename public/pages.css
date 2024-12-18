@@ -72,7 +72,7 @@ button.delete.hidden {
   display: none;
 }
 
-#fileSelect {
+.file-select {
   display: inline-block;
   padding: 8px 16px;
   /* background-color: #4caf50; */

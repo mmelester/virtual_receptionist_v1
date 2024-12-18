@@ -1,12 +1,8 @@
-// let dropArea = document.getElementById('drop-area');
 let dropArea = document.getElementsByClassName('drop-area')[0];
 let formContainer = document.getElementsByClassName('form-container')[0];
-let fileInput = document.getElementById('fileElem');
-const fileSelect = document.getElementById('fileSelect');
-const fileElem = document.getElementById('fileElem');
-// const uploadForm = document.querySelector('.upload-form');
-// let saveImage = document.getElementById('save-image');
-// let saveImage = document.querySelectorAll('.save-img-btn');
+// let fileInput = document.getElementById('fileElem');
+let fileInput = document.getElementsByClassName('file-element')[0]
+const fileSelect = document.getElementsByClassName('file-select')[0];
 let deleteBtn = document.getElementsByClassName('delete')[0];
 let img;
 let cropWidth;
