@@ -1,6 +1,6 @@
 import { drawSavedImage, getImg } from './drag-n-drop';
 
-document.getElementById('save-image').addEventListener('click', async (event) => {
+document.getElementsByClassName('save-img-btn')[0].addEventListener('click', async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
 
     // Initialize the errors array
