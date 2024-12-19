@@ -1,6 +1,6 @@
 // Get the button and section elements
 const createCompanyButton = document.getElementsByClassName('create-company-btn')[0];
-const addCompanySection = document.getElementsByClassName('add-company-section')[0];
+const addCompanySection = document.getElementsByClassName('add-item-section')[0];
 const formHeading = document.getElementById('form-heading');
 
 // Add click event listener to the button
