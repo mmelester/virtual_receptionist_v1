@@ -2,7 +2,7 @@ import { previewFile } from './drag-n-drop'
 
 document.querySelectorAll('.editCompany').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
-        const companyId = event.target.dataset.id;
+        const Id = event.target.dataset.id;
 
         if (confirm('Do you want to edit this company information?')) {
             const createCompanyButton = document.getElementsByClassName('create-company-btn')[0];
@@ -12,8 +12,8 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
             // const deleteIcon = document.getElementById('delete-icon')
             const deleteIcon = document.getElementsByClassName('delete-image-btn')[0];
 
-            // Store the companyId and editFlag in localStorage
-            localStorage.setItem('editCompanyId', companyId);
+            // Store the Id and editFlag in localStorage
+            localStorage.setItem('editId', Id);
             localStorage.setItem('editFlag', 'e');
 
             // Modify form for edit
@@ -31,7 +31,7 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
             createCompanyButton.classList.add('d-none');
 
             try {
-                const response = await fetch(`/admin/companies/edit/${companyId}`);
+                const response = await fetch(`/admin/companies/edit/${Id}`);
                 const result = await response.json();
 
                 if (result.success) {

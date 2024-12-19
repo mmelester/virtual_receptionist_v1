@@ -7,20 +7,23 @@ document.getElementsByClassName('save-img-btn')[0].addEventListener('click', asy
     let errors = [];
 
     // Collect form data
-    const companyName = document.getElementById('companyName').value.trim();
-    const introText = document.getElementById('introText').value.trim();
+    const personName = document.getElementById('personName').value.trim();
+    const responseText = document.getElementById('responseText').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const outlet = document.getElementById('outlet').value.trim();
 
-    // Retrieve the company Id and editFlag from localStorage
-    const Id = localStorage.getItem('editId');
+    // Retrieve the companyId and editFlag from localStorage
+    const personId = localStorage.getItem('editId');
     const flag = localStorage.getItem('editFlag');
 
     // Validate the inputs
-    if (!companyName) {
-        errors.push('Company name is required.');
+    if (!personName) {
+        errors.push("Person's name is required.");
     }
 
-    if (!introText) {
-        errors.push('Intro text is required.');
+    if (!responseText) {
+        errors.push('Response text is required.');
     }
 
     // Get the current value of img
@@ -60,8 +63,8 @@ document.getElementsByClassName('save-img-btn')[0].addEventListener('click', asy
 
     // Prepare the data object to send to the server
     const companyData = {
-        name: companyName,
-        intro: introText,
+        name: personName,
+        intro: responseText,
         image: croppedImage, // Add the Base64 image data
     };
 
@@ -70,7 +73,7 @@ document.getElementsByClassName('save-img-btn')[0].addEventListener('click', asy
             const response = await fetch('/admin/companies/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: companyName, intro: introText, image: croppedImage }),
+                body: JSON.stringify({ name: personName, intro: responseText, image: croppedImage }),
             });
         
             const result = await response.json();
@@ -91,14 +94,14 @@ document.getElementsByClassName('save-img-btn')[0].addEventListener('click', asy
         }
     } else {
         try {
-            const response = await fetch(`/admin/companies/edit/${Id}`, {
+            const response = await fetch(`/admin/companies/edit/${companyId}`, {
                 method: 'PUT', // Use the PUT method for updates
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: companyName,
-                    intro: introText,
+                    name: personName,
+                    intro: responseText,
                     image: croppedImage, // Send updated image data
                 }),
             });
