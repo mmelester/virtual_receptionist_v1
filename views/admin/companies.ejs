@@ -86,8 +86,19 @@
                             <img class='text-center' src="<%= company.image %>" alt="<%= company.name %> logo" width="auto" height="50px" />
                         </div>
                         <div class="edit-delete ml-auto">
-                            <i class="editCompany fa fa-pencil-square-o pr-3" aria-hidden="true" data-id="<%= company._id %>"></i>
-                            <i class="delete-btn fa fa-trash pr-3" aria-hidden="true" data-route="/admin/companies/delete" data-id="<%= company._id %>"></i>
+                            <i 
+                                class="editCompany fa fa-pencil-square-o pr-3" 
+                                aria-hidden="true" 
+                                data-id="<%= company._id %>"
+                                data-section-id="add-company-section"
+                                data-form-id="companyForm"
+                                data-heading-id="form-heading">
+                            </i>
+                            <i 
+                                class="delete-btn fa fa-trash pr-3" 
+                                aria-hidden="true" 
+                                data-route="/admin/companies/delete" 
+                                data-id="<%= company._id %>"></i>
                         </div>
                     </div>
                 <% }); %>
