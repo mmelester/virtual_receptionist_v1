@@ -5,7 +5,7 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
         const companyId = event.target.dataset.id;
 
         if (confirm('Do you want to edit this company information?')) {
-            const createCompanyButton = document.getElementById('create-company-btn');
+            const createCompanyButton = document.getElementsByClassName('create-company-btn')[0];
             const addCompanySection = document.getElementById('add-company-section');
             const companyForm = document.getElementById('companyForm');
             const formHeading = document.getElementById('form-heading');
