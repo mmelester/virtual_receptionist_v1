@@ -1,13 +1,13 @@
 // Get the button and section elements
 const createPersonButton = document.getElementById('create-person-btn');
 const addPersonSection = document.getElementById('add-person-section');
-const formHeading = document.getElementById('people-form-heading');
+const formHeading = document.getElementById('person-form-heading');
 
 // Add click event listener to the button
 document.addEventListener('DOMContentLoaded', () => {
   const createPersonButton = document.getElementById('create-person-btn');
   const addPersonSection = document.getElementById('add-person-section');
-  const formHeading = document.getElementById('people-form-heading');
+  const formHeading = document.getElementById('person-form-heading');
 
   if (createPersonButton && addPersonSection && formHeading) {
       createPersonButton.addEventListener('click', () => {
