@@ -1,4 +1,5 @@
-section.companies-section {
+section.companies-section,
+section.people-section {
   margin-bottom: 5rem;
 }
 
@@ -21,7 +22,7 @@ section.companies-section {
 }
 
 .add-company-flex-container,
-.add-people-flex-container {
+.add-person-flex-container {
   justify-content: space-around;
   gap: 2rem;
   flex-wrap: wrap;
