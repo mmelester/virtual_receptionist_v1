@@ -7,8 +7,8 @@ let img;
 let cropWidth;
 // Get the canvas element and its context
 const canvasContainer = document.querySelector('.canvas-container');
-// const canvas = document.getElementById('canvas');
-const canvas = document.getElementsByClassName('canvas')[0];
+const canvas = document.getElementById('canvas');
+// const canvas = document.getElementsByClassName('canvas')[0];
 const ctx = canvas.getContext('2d');
 
 // Set initial crop box dimensions
