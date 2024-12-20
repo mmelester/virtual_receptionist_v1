@@ -83,7 +83,7 @@ export async function handlePersonFormSubmission(event) {
             }
         
             // alert(result.message || 'Company added successfully!');
-            document.getElementById('companyForm').reset(); // Optionally reset the form
+            document.getElementById('personForm').reset(); // Optionally reset the form
             window.location.reload(); // Force a page refresh
             
         } catch (error) {
