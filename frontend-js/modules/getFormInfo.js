@@ -7,7 +7,7 @@ const Id = localStorage.getItem('editId');
 const flag = localStorage.getItem('editFlag');
 
 // Define a function to handle form submission logic
-async function handleFormSubmission(event) {
+async function handleCompanyFormSubmission(event) {
     event.preventDefault(); // Prevent default form submission behavior
 
     // Collect form data
@@ -77,6 +77,6 @@ async function handleFormSubmission(event) {
 }
 
 // Attach the function to the button click event
-document.getElementsByClassName('save-img-btn')[0].addEventListener('click', handleFormSubmission);
+document.getElementsByClassName('save-img-btn')[0].addEventListener('click', handleCompanyFormSubmission);
 
 
