@@ -90,10 +90,10 @@
             <% if (people.length > 0) { %>
                 <% people.forEach(person => { %>
                     <div class="d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
-                        <div class="person-name pr-5"><%= people.name %></div>
-                        <div class="person-response-text pr-5"><%= people.intro.slice(0,40) + "  . . .  " %></div>
+                        <div class="person-name pr-5"><%= person.name %></div>
+                        <div class="person-response-text pr-5"><%= person.intro.slice(0,40) + "  . . .  " %></div>
                         <div class="person-headshot pr-5">
-                            <img class='text-center' src="<%= people.image %>" alt="<%= people.name %> logo" width="auto" height="50px" />
+                            <img class='text-center' src="<%= person.image %>" alt="<%= person.name %> logo" width="auto" height="50px" />
                         </div>
                         <div class="edit-delete ml-auto">
                             <i 
@@ -109,7 +109,7 @@
                             class="delete-btn fa fa-trash pr-3" 
                             aria-hidden="true" 
                             data-route="/admin/companies/people/delete" 
-                            data-id="<%= people._id %>">
+                            data-id="<%= person._id %>">
                         </i>
                         </div>
                     </div>
