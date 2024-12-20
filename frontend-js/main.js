@@ -1,5 +1,5 @@
 import DragNDrop from './modules/drag-n-drop'
 import GetFormInfo from './modules/getFormInfo'
 // import CreateCompany from './modules/create-company'
-import EditItem from './modules/editItem'
+import EditCompany from './modules/editCompany'
 import DeleteItem from './modules/deleteItem'
