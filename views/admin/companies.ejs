@@ -1,5 +1,5 @@
 <%- include('../includes/header') %> 
-<div class="page">
+<div id="companyPage" class="page">
 
     <h1 class="pt-md-5 pb-md-5 text-center" >Company Configuration Settings</h1>
  
@@ -67,7 +67,7 @@
         </div>
 
         <div class="text-center">
-            <button class="save-img-btn btn btn-primary btn-sm pr-4 pl-4 pt-2 pb-2">Save</button>
+            <button id="save-logo-btn" class="save-img-btn btn btn-primary btn-sm pr-4 pl-4 pt-2 pb-2">Save</button>
         </div> 
     </div>
     </section>
@@ -112,6 +112,7 @@
 </div>
 <!-- Load explicitly because DOM may not be available before main.js executes -->
 <script type="module" src="../frontend-js/modules/create-company.js"></script>
+<!-- <script type="module" src="../frontend-js/modules/getFormInfo.js"></script> -->
 <script type="module">
     import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
     document.addEventListener('DOMContentLoaded', () => {
