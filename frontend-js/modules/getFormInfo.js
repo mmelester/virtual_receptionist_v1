@@ -1,4 +1,5 @@
 import { handleCompanyFormSubmission } from './handleCompanyFormSubmission';
+import { handlePersonFormSubmission } from './handlePersonFormSubmission';
 
 const idMap = {
     companyPage: {
@@ -7,35 +8,37 @@ const idMap = {
     personPage: {
         btnId: "save-headshot-btn"
     }
-}
+};
 
 // Find the div with the page ID
 const pageDiv = document.querySelector("div[id='companyPage'], div[id='personPage']");
-
-console.log("Page DIV = ", pageDiv)
-
 const pageId = pageDiv ? pageDiv.id : null; // e.g., "companyPage" or "personPage"
-
-console.log("page ID = ", pageId)
 
 // Helper function to get the element by logical name
 function getElement(genericId) {
     if (!pageId || !idMap[pageId]) {
-      console.error("Page ID or mapping not found");
-      return null;
+        console.error("Page ID or mapping not found");
+        return null;
     }
     const actualId = idMap[pageId][genericId];
     return document.getElementById(actualId);
-  }
+}
 
-  const buttonElement = getElement("btnId");
-  if (buttonElement) {
+// Handle button click events based on the page
+const buttonElement = getElement("btnId");
+
+if (buttonElement) {
     console.log("Button found:", buttonElement);
-  
-    // Attach the function to the button click event
-    buttonElement.addEventListener('click', handleCompanyFormSubmission);
-  }
 
-
-
-
+    if (pageId === 'companyPage') {
+        // Attach the company-specific function
+        buttonElement.addEventListener('click', handleCompanyFormSubmission);
+    } else if (pageId === 'personPage') {
+        // Attach the person-specific function
+        buttonElement.addEventListener('click', handlePersonFormSubmission);
+    } else {
+        console.log("No valid handler for this page.");
+    }
+} else {
+    console.error("Button element not found for the current page.");
+}

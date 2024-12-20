@@ -1,6 +1,6 @@
 import { drawSavedImage, getImg } from './drag-n-drop';
 
-export async function handleCompanyFormSubmission(event) {
+export async function handlePersonFormSubmission(event) {
     // Initialize the errors array
     let errors = [];
 
