@@ -18,7 +18,7 @@ module.exports = {
         try {
             if (!req.body.name || !req.body.intro || !req.body.image) {
                 req.flash('errors', ['Name, intro, and image are required.']);
-                return req.session.save(() => res.redirect('/admin/people/add'));
+                return req.session.save(() => res.redirect('/admin/companies/people/add'));
             }
 
             const result = await PersonModel.addPerson(req.body);

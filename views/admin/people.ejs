@@ -108,7 +108,7 @@
                             <i 
                             class="delete-btn fa fa-trash pr-3" 
                             aria-hidden="true" 
-                            data-route="/admin/people/delete" 
+                            data-route="/admin/companies/people/delete" 
                             data-id="<%= people._id %>">
                         </i>
                         </div>
@@ -123,9 +123,9 @@
     </section>
 </div>
 <!-- Load explicitly because DOM may not be available before main.js executes -->
-<script type="module" src="../frontend-js/modules/create-person.js"></script>
+<script type="module" src="/frontend-js/modules/create-person.js"></script>
 <script type="module">
-    import { setEqualWidths } from '../frontend-js/modules/setEqualWidths.js';
+    import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
     document.addEventListener('DOMContentLoaded', () => {
 
     setEqualWidths('.people-name');

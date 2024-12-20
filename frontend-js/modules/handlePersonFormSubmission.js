@@ -68,7 +68,7 @@ export async function handlePersonFormSubmission(event) {
 
     if (flag === 'c') {
         try {
-            const response = await fetch('/admin/companies/add', {
+            const response = await fetch('/admin/companies/people/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: personName, intro: responseText, image: croppedImage }),
