@@ -1,9 +1,11 @@
 document.querySelectorAll('.delete-btn').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
         const id = event.target.dataset.id;
+
         const deleteRoute = event.target.dataset.route; // Get the route from a data attribute
 
         if (confirm('Are you sure you want to delete this item?')) {
+
             try {
                 const response = await fetch(`${deleteRoute}/${id}`, {
                     method: 'DELETE',

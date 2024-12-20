@@ -38,10 +38,12 @@ module.exports = {
         }
     },
 
-    async deletePerson(req, res, PersonModel) {
+    async deleteItem(req, res, PersonModel) {
+
         try {
             const personId = req.params.id;
-            const result = await PersonModel.deletePerson(personId); // Aligns with Person Model's method name
+
+            const result = await PersonModel.deleteItem(personId); // Aligns with Person Model's method name
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
