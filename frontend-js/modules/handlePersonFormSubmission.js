@@ -1,8 +1,6 @@
 import { drawSavedImage, getImg } from './drag-n-drop';
 
-document.getElementsByClassName('save-img-btn')[0].addEventListener('click', async (event) => {
-    event.preventDefault(); // Prevent the default form submission behavior
-
+export async function handleCompanyFormSubmission(event) {
     // Initialize the errors array
     let errors = [];
 
@@ -121,6 +119,5 @@ document.getElementsByClassName('save-img-btn')[0].addEventListener('click', asy
             alert('An unexpected error occurred. Please try again.');
         }
     }
-    
-});
+}
 
