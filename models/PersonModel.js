@@ -35,7 +35,7 @@ class PersonModel extends BaseModel {
 
         console.log(`Deleting ID in model: ${personId}`); // Log the ID received in the model
 
-        if (!ObjectId.isValid(companyId)) {
+        if (!ObjectId.isValid(personId)) {
             return { success: false, message: 'Invalid ObjectId.' };
         }
 
