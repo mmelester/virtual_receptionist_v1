@@ -42,6 +42,7 @@ module.exports = {
 
         try {
             const personId = req.params.id;
+            console.log(`Received ID in backend: ${personId}`); // Log the received ID
 
             const result = await PersonModel.deleteItem(personId); // Aligns with Person Model's method name
             if (!result.success) {

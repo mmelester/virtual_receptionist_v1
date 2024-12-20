@@ -1,8 +1,13 @@
 document.querySelectorAll('.delete-btn').forEach((icon) => {
+
     icon.addEventListener('click', async (event) => {
-        const id = event.target.dataset.id;
+
+        const id = event.currentTarget.dataset.id;
+        console.log(`Delete ID: ${id}`);
 
         const deleteRoute = event.target.dataset.route; // Get the route from a data attribute
+
+        console.log("delete route = ", deleteRoute);
 
         if (confirm('Are you sure you want to delete this item?')) {
 

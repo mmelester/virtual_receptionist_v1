@@ -32,6 +32,9 @@ class PersonModel extends BaseModel {
     }
 
     async deleteItem(personId) {
+
+        console.log(`Deleting ID in model: ${personId}`); // Log the ID received in the model
+
         if (!ObjectId.isValid(companyId)) {
             return { success: false, message: 'Invalid ObjectId.' };
         }
