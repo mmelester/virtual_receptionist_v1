@@ -38,9 +38,12 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
                 const result = await response.json();
 
                 if (result.success) {
-                    const { name, reply, image } = result.data;
+                    const { name, reply, mobile, email, outlet, image } = result.data;
                     personForm.elements['personName'].value = name;
                     personForm.elements['replyText'].value = reply;
+                    personForm.elements['mobile'].value = mobile;
+                    personForm.elements['email'].value = email;
+                    personForm.elements['outlet'].value = outlet;
 
                     // Add more here ************************************
 
