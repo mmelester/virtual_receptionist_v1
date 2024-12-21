@@ -40,8 +40,8 @@
                         <input type="text" id="personName" name="personName" maxlength="35" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-data" for="responseText">Response Text (up to 50 characters):</label>
-                        <textarea id="responseText" name="responseText" maxlength="50" required></textarea>
+                        <label class="form-data" for="replyText">Response Text (up to 50 characters):</label>
+                        <textarea id="replyText" name="replyText" maxlength="50" required></textarea>
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="mobile">Mobile:</label>
@@ -91,7 +91,7 @@
                 <% people.forEach(person => { %>
                     <div class="d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
                         <div class="person-name pr-5"><%= person.name %></div>
-                        <div class="person-response-text pr-5"><%= person.intro.slice(0,40) + "  . . .  " %></div>
+                        <div class="person-reply-text pr-5"><%= person.intro.slice(0,40) + "  . . .  " %></div>
                         <div class="person-headshot pr-5">
                             <img class='text-center' src="<%= person.image %>" alt="<%= person.name %> logo" width="auto" height="50px" />
                         </div>

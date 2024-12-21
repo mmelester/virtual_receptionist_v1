@@ -6,7 +6,7 @@ export async function handlePersonFormSubmission(event) {
 
     // Collect form data
     const personName = document.getElementById('personName').value.trim();
-    const responseText = document.getElementById('responseText').value.trim();
+    const replyText = document.getElementById('replyText').value.trim();
     const mobile = document.getElementById('mobile').value.trim();
     const email = document.getElementById('email').value.trim();
     const outlet = document.getElementById('outlet').value.trim();
@@ -20,7 +20,7 @@ export async function handlePersonFormSubmission(event) {
         errors.push("Person's name is required.");
     }
 
-    if (!responseText) {
+    if (!replyText) {
         errors.push('Response text is required.');
     }
 
@@ -62,7 +62,7 @@ export async function handlePersonFormSubmission(event) {
     // Prepare the data object to send to the server
     const companyData = {
         name: personName,
-        intro: responseText,
+        reply: replyText,
         image: croppedImage, // Add the Base64 image data
     };
 
@@ -71,7 +71,7 @@ export async function handlePersonFormSubmission(event) {
             const response = await fetch('/admin/companies/people/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: personName, intro: responseText, image: croppedImage }),
+                body: JSON.stringify({ name: personName, reply: replyText, image: croppedImage }),
             });
         
             const result = await response.json();
@@ -99,7 +99,7 @@ export async function handlePersonFormSubmission(event) {
                 },
                 body: JSON.stringify({
                     name: personName,
-                    intro: responseText,
+                    reply: replyText,
                     image: croppedImage, // Send updated image data
                 }),
             });
