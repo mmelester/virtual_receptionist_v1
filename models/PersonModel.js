@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb'); // Import ObjectId for MongoDB operatio
 
 class PersonModel extends BaseModel {
     constructor(database) {
-        super(database, 'people'); // Pass the database and collection name to BaseModel
+        super(database, 'companies'); // Pass the database and collection name to BaseModel
     }
 
     async addPerson(personData) {
@@ -31,6 +31,28 @@ class PersonModel extends BaseModel {
         }
     }
 
+    async getPeopleByCompanyId(companyId) {
+        if (!ObjectId.isValid(companyId)) {
+            throw new Error('Invalid company ID.');
+        }
+    
+        try {
+            const company = await this.collection.findOne(
+                { _id: ObjectId.createFromHexString(companyId) },
+                { projection: { people: 1, _id: 0 } } // Only fetch the "people" field
+            );
+    
+            if (!company) {
+                throw new Error('Company not found.');
+            }
+    
+            return company.people || [];
+        } catch (error) {
+            console.error('Database error:', error);
+            throw new Error('Failed to retrieve people for the specified company.');
+        }
+    }
+        
     async deleteItem(personId) {
 
         console.log(`Deleting ID in model: ${personId}`); // Log the ID received in the model

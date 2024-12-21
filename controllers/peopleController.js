@@ -14,6 +14,23 @@ module.exports = {
         }
     },
 
+    async getPeopleByCompanyId(req, res, PersonModel) {
+        try {
+            const companyId = req.params.companyId;
+            const people = await PersonModel.getPeopleByCompanyId(companyId);
+    
+            const errors = req.flash('errors');
+            const success = req.flash('success');
+            const isLoggedIn = req.session && req.session.isLoggedIn;
+    
+            res.render('admin/people', { people, errors, success, isLoggedIn });
+        } catch (error) {
+            console.error('Error fetching people:', error);
+            req.flash('errors', ['Failed to retrieve people for the company.']);
+            req.session.save(() => res.redirect('/admin'));
+        }
+    },
+    
     async addPerson(req, res, PersonModel) {
         try {
             if (!req.body.name || !req.body.reply || !req.body.image) {
