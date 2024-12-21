@@ -16,8 +16,8 @@ module.exports = {
 
     async addPerson(req, res, PersonModel) {
         try {
-            if (!req.body.name || !req.body.intro || !req.body.image) {
-                req.flash('errors', ['Name, intro, and image are required.']);
+            if (!req.body.name || !req.body.reply || !req.body.image) {
+                req.flash('errors', ['Name, reply, and reply are required.']);
                 return req.session.save(() => res.redirect('/admin/companies/people/add'));
             }
 
@@ -79,16 +79,16 @@ module.exports = {
     },
     
     async updatePerson(req, res, PersonModel) {
-        const { name, intro, image } = req.body;
+        const { name, reply, image } = req.body;
     
         // Input Validation
-        if (!name || !intro || !image) {
-            console.error('Validation failed:', { name, intro, image });
-            return res.status(400).json({ success: false, message: 'Name, intro, and image are required.' });
+        if (!name || !reply || !image) {
+            console.error('Validation failed:', { name, reply, image });
+            return res.status(400).json({ success: false, message: 'Name, reply, and image are required.' });
         }
     
         try {
-            const result = await PersonModel.updatePerson(req.params.id, { name, intro, image });
+            const result = await PersonModel.updatePerson(req.params.id, { name, reply, mobile, email, outlet, image });
             if (!result.success) {
                 return res.status(400).json({ success: false, message: result.message });
             }

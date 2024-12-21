@@ -2,7 +2,7 @@ import { drawSavedImage, getImg } from './drag-n-drop';
 
 export async function handlePersonFormSubmission(event) {
 
-    console.log("handlPersonFormSubmission called");
+    console.log("handlePersonFormSubmission called");
 
     // Initialize the errors array
     let errors = [];
