@@ -7,15 +7,15 @@ class PersonModel extends BaseModel {
     }
 
     async addPerson(personData) {
-        const { name, intro, image } = personData;
+        const { name, reply, mobile, email, outlet, image } = personData;
 
         // Validation
-        if (!name || !intro || !image) {
-            return { success: false, message: 'Name, intro text, and logo image are required.' };
+        if (!name || !reply || !image) {
+            return { success: false, message: 'Name, reply, and logo image are required.' };
         }
 
         try {
-            return await this.add({ name, intro, image }); // Use BaseModel's `add` method
+            return await this.add({ name, reply, mobile, email, outlet, image }); // Use BaseModel's `add` method
         } catch (error) {
             console.error('Database error:', error);
             return { success: false, message: 'Failed to add the person due to a database error.' };
