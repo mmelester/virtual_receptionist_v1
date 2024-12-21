@@ -23,6 +23,9 @@ export async function handlePersonFormSubmission(event) {
     if (!replyText) {
         errors.push('Response text is required.');
     }
+    if (!mobile) {
+        errors.push('Mobile number is required.');
+    }
 
     // Get the current value of img
     const img = getImg();
@@ -43,7 +46,7 @@ export async function handlePersonFormSubmission(event) {
 
         try {
             // Send the errors to the server
-            await fetch('/admin/companies/add', {
+            await fetch('/admin/companies/people/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,6 +66,9 @@ export async function handlePersonFormSubmission(event) {
     const companyData = {
         name: personName,
         reply: replyText,
+        mobile: mobile,
+        email: email,
+        outlet: outlet,
         image: croppedImage, // Add the Base64 image data
     };
 
@@ -71,7 +77,7 @@ export async function handlePersonFormSubmission(event) {
             const response = await fetch('/admin/companies/people/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: personName, reply: replyText, image: croppedImage }),
+                body: JSON.stringify({ name: personName, reply: replyText, mobile: mobile, email: email, outlet: outlet, image: croppedImage }),
             });
         
             const result = await response.json();
