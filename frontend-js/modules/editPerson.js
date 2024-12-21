@@ -6,6 +6,9 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
 
         if (confirm("Do you want to edit this person's information?")) {
             const createPersonButton = document.getElementsByClassName('create-person-btn')[0];
+
+            console.log('createPersonButton', createPersonButton)
+
             const addPersonSection = document.getElementById('add-person-section');
             const personForm = document.getElementById('personForm');
             const formHeading = document.getElementById('person-form-heading');
