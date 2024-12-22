@@ -17,7 +17,12 @@ module.exports = {
     async getPeopleByCompanyId(req, res, PersonModel) {
         try {
             const companyId = req.params.companyId;
+
+            console.log("companyId from the controller", companyId);
+
             const people = await PersonModel.getPeopleByCompanyId(companyId);
+
+            console.log('Fetched people:', people); // Log the value of "people"
     
             const errors = req.flash('errors');
             const success = req.flash('success');
