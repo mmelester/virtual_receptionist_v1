@@ -31,6 +31,19 @@ class PersonModel extends BaseModel {
         }
     }
 
+    async getCompanyById(companyId) {
+        if (!ObjectId.isValid(companyId)) {
+            throw new Error('Invalid ObjectId.');
+        }
+
+        try {
+            return await this.getById(companyId); // Use BaseModel's `getById` method
+        } catch (error) {
+            console.error('Database error:', error);
+            throw new Error('Failed to retrieve company data.');
+        }
+    }
+
     async getPeopleByCompanyId(companyId) {
         if (!ObjectId.isValid(companyId)) {
             throw new Error('Invalid company ID.');

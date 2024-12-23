@@ -20,9 +20,18 @@ module.exports = {
 
             console.log("companyId from the controller", companyId);
 
-            const people = await PersonModel.getPeopleByCompanyId(companyId);
+            // const people = await PersonModel.getPeopleByCompanyId(companyId);
+            
+            const company = await PersonModel.getCompanyById(companyId);
+            let people = company.people;
 
-            console.log('Fetched people:', people); // Log the value of "people"
+            if (people == undefined) {
+                people = [];
+            }
+
+            console.log("People: ", people);
+
+            // console.log('Fetched company:', company); // Log the value of "people"
     
             const errors = req.flash('errors');
             const success = req.flash('success');

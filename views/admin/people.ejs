@@ -87,7 +87,7 @@
     </section>
     <section class="people-section">
         <div>
-            <% if (people.length > 0) { %>
+            <% if (people && people.length > 0) { %>
                 <% people.forEach(person => { %>
                     <div class="d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
                         <div class="person-name pr-5"><%= person.name %></div>
