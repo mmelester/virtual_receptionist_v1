@@ -49,6 +49,7 @@ export async function handleCompanyFormSubmission(event) {
         name: companyName,
         intro: introText,
         image: croppedImage,
+        people: []
     };
 
     try {

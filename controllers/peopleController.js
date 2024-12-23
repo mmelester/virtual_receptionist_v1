@@ -14,24 +14,24 @@ module.exports = {
         }
     },
 
-    async getCompanyById(req, res, PersonModel) {
-        try {
-            const companyId = req.params.id;
+    // async getCompanyById(req, res, PersonModel) {
+    //     try {
+    //         const companyId = req.params.id;
     
-            // Fetch the company details
-            const company = await Model.getCompanyById(companyId);
+    //         // Fetch the company details
+    //         const company = await Model.getCompanyById(companyId);
     
-            if (!company) {
-                return res.status(404).json({ success: false, message: 'Company not found or invalid ID.' });
-            }
+    //         if (!company) {
+    //             return res.status(404).json({ success: false, message: 'Company not found or invalid ID.' });
+    //         }
     
-            // Return the company details
-            res.status(200).json({ success: true, data: company });
-        } catch (error) {
-            console.error('Error fetching company data:', error);
-            res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
-        }
-    },
+    //         // Return the company details
+    //         res.status(200).json({ success: true, data: company });
+    //     } catch (error) {
+    //         console.error('Error fetching company data:', error);
+    //         res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
+    //     }
+    // },
 
     async getPeopleByCompanyId(req, res, PersonModel) {
         try {
@@ -49,7 +49,8 @@ module.exports = {
             const isLoggedIn = req.session && req.session.isLoggedIn;
     
             // Render the view with the people data
-            res.render('admin/people', { people, errors, success, isLoggedIn });
+            res.status(200).json({ success: true, data: people });
+            
         } catch (error) {
             console.error('Error fetching people for company:', error);
             req.flash('errors', ['Failed to retrieve people for the company.']);

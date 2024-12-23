@@ -45,21 +45,21 @@ class PersonModel extends BaseModel {
         }
     }
 
-    async getCompanyById(companyId) {
+    // async getCompanyById(companyId) {
 
-        console.log("companyId from PersonModel, getCompanyId", companyId);
+    //     console.log("companyId from PersonModel, getCompanyId", companyId);
 
-        if (!ObjectId.isValid(companyId)) {
-            throw new Error('Invalid ObjectId.');
-        }
+    //     if (!ObjectId.isValid(companyId)) {
+    //         throw new Error('Invalid ObjectId.');
+    //     }
 
-        try {
-            return await this.getById(companyId); // Use BaseModel's `getById` method
-        } catch (error) {
-            console.error('Database error:', error);
-            throw new Error('Failed to retrieve company data.');
-        }
-    }
+    //     try {
+    //         return await this.getById(companyId); // Use BaseModel's `getById` method
+    //     } catch (error) {
+    //         console.error('Database error:', error);
+    //         throw new Error('Failed to retrieve company data.');
+    //     }
+    // }
 
         
     async deleteItem(personId) {

@@ -7,7 +7,7 @@ class CompanyModel extends BaseModel {
     }
 
     async addCompany(companyData) {
-        const { name, intro, image } = companyData;
+        const { name, intro, image, people } = companyData;
 
         // Validation
         if (!name || !intro || !image) {
@@ -15,7 +15,7 @@ class CompanyModel extends BaseModel {
         }
 
         try {
-            return await this.add({ name, intro, image }); // Use BaseModel's `add` method
+            return await this.add({ name, intro, image, people }); // Use BaseModel's `add` method
         } catch (error) {
             console.error('Database error:', error);
             return { success: false, message: 'Failed to add the company due to a database error.' };
