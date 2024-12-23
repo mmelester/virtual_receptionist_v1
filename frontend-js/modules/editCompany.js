@@ -32,7 +32,12 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
 
             try {
                 const response = await fetch(`/admin/companies/edit/${Id}`);
+
+                console.log("editCompany.js response = ", response);
+
                 const result = await response.json();
+
+                console.log("result = ", result);
 
                 if (result.success) {
                     const { name, intro, image } = result.data;
