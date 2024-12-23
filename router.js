@@ -37,7 +37,11 @@ module.exports = (db) => {
     // People routes
     router.get('/admin/companies/:id/people', (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
-    );
+    ); // Route for rendering people.ejs template in browser
+    router.get('/api/companies/:id/people', (req, res) =>
+        peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
+    );  // API route for fetching JSON data (fetch API request in client-side js)
+    
     router.post('/admin/companies/people/add', (req, res) =>
         peopleController.addPerson(req, res, peopleModelInstance));
     router.delete('/admin/companies/people/delete/:id', (req, res) =>

@@ -32,8 +32,7 @@ module.exports = {
     //         res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
     //     }
     // },
-
-    async getPeopleByCompanyId(req, res, PersonModel) {
+    async getPeopleByCompanyId(req, res, PersonModel, isApiRequest = false) {
         try {
             const companyId = req.params.id;
     
@@ -44,15 +43,21 @@ module.exports = {
     
             console.log('People fetched:', people);
     
+            if (isApiRequest) {
+                // Respond with JSON for API requests
+                return res.status(200).json({ success: true, data: people });
+            }
+    
+            // Render the EJS template for browser requests
             const errors = req.flash('errors');
             const success = req.flash('success');
             const isLoggedIn = req.session && req.session.isLoggedIn;
-    
-            // Render the view with the people data
-            res.status(200).json({ success: true, data: people });
-            
+            res.render('admin/people', { people, errors, success, isLoggedIn });
         } catch (error) {
             console.error('Error fetching people for company:', error);
+            if (isApiRequest) {
+                return res.status(500).json({ success: false, message: 'Failed to fetch people.' });
+            }
             req.flash('errors', ['Failed to retrieve people for the company.']);
             req.session.save(() => res.redirect('/admin'));
         }
