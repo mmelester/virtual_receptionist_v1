@@ -31,7 +31,24 @@ class PersonModel extends BaseModel {
         }
     }
 
+    async getCompanyPeople(companyId) {
+        if (!ObjectId.isValid(companyId)) {
+            throw new Error('Invalid ObjectId.');
+        }
+    
+        try {
+            const company = await this.getById(companyId); // Fetch the company by ID
+            return company && company.people ? company.people : []; // Return 'people' or an empty array
+        } catch (error) {
+            console.error('Error fetching company people:', error);
+            throw new Error('Database error.');
+        }
+    }
+
     async getCompanyById(companyId) {
+
+        console.log("companyId from PersonModel, getCompanyId", companyId);
+
         if (!ObjectId.isValid(companyId)) {
             throw new Error('Invalid ObjectId.');
         }
@@ -44,27 +61,6 @@ class PersonModel extends BaseModel {
         }
     }
 
-    async getPeopleByCompanyId(companyId) {
-        if (!ObjectId.isValid(companyId)) {
-            throw new Error('Invalid company ID.');
-        }
-    
-        try {
-            const company = await this.collection.findOne(
-                { _id: ObjectId.createFromHexString(companyId) },
-                { projection: { people: 1, _id: 0 } } // Only fetch the "people" field
-            );
-    
-            if (!company) {
-                throw new Error('Company not found.');
-            }
-    
-            return company.people || [];
-        } catch (error) {
-            console.error('Database error:', error);
-            throw new Error('Failed to retrieve people for the specified company.');
-        }
-    }
         
     async deleteItem(personId) {
 

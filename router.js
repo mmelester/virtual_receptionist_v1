@@ -32,18 +32,20 @@ module.exports = (db) => {
     router.post('/admin/companies/add', (req, res) => companiesController.addCompany(req, res, companyModelInstance));
     router.delete('/admin/companies/delete/:id', (req, res) => companiesController.deleteItem(req, res, companyModelInstance));
     router.get('/admin/companies/edit/:id', (req, res) => companiesController.editCompany(req, res, companyModelInstance));
-    router.put('/admin/companies/edit/:id', (req, res) => 
-        companiesController.updateCompany(req, res, companyModelInstance)
-    );
+    router.put('/admin/companies/edit/:id', (req, res) => companiesController.updateCompany(req, res, companyModelInstance));
 
     // People routes
-    router.get('/admin/companies/:companyId/people', (req, res) =>
-        peopleController.getCompanyById(req, res, peopleModelInstance)
-    );    
-    router.post('/admin/companies/people/add', (req, res) => peopleController.addPerson(req, res, peopleModelInstance));
-    router.delete('/admin/companies/people/delete/:id', (req, res) => peopleController.deleteItem(req, res, peopleModelInstance));
-    router.get('/admin/companies/people/edit/:id', (req, res) => peopleController.editPerson(req, res, peopleModelInstance));
-    router.put('/admin/companies/people/edit/:id', (req, res) => peopleController.updatePerson(req, res, peopleModelInstance));
+    router.get('/admin/companies/:id/people', (req, res) =>
+        peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
+    );
+    router.post('/admin/companies/people/add', (req, res) =>
+        peopleController.addPerson(req, res, peopleModelInstance));
+    router.delete('/admin/companies/people/delete/:id', (req, res) =>
+        peopleController.deleteItem(req, res, peopleModelInstance));
+    router.get('/admin/companies/people/edit/:id', (req, res) =>
+        peopleController.editPerson(req, res, peopleModelInstance));
+    router.put('/admin/companies/people/edit/:id', (req, res) =>
+        peopleController.updatePerson(req, res, peopleModelInstance));
 
     // Authentication routes
     router.post('/login', authController.login);

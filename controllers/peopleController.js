@@ -14,45 +14,44 @@ module.exports = {
         }
     },
 
-     async getCompanyById(companyId) {
-            if (!ObjectId.isValid(companyId)) {
-                throw new Error('Invalid ObjectId.');
+    async getCompanyById(req, res, PersonModel) {
+        try {
+            const companyId = req.params.id;
+    
+            // Fetch the company details
+            const company = await Model.getCompanyById(companyId);
+    
+            if (!company) {
+                return res.status(404).json({ success: false, message: 'Company not found or invalid ID.' });
             }
     
-            try {
-                return await this.getById(companyId); // Use BaseModel's `getById` method
-            } catch (error) {
-                console.error('Database error:', error);
-                throw new Error('Failed to retrieve company data.');
-            }
-        },
+            // Return the company details
+            res.status(200).json({ success: true, data: company });
+        } catch (error) {
+            console.error('Error fetching company data:', error);
+            res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
+        }
+    },
 
     async getPeopleByCompanyId(req, res, PersonModel) {
         try {
-            const companyId = req.params.companyId;
-
-            console.log("companyId from the controller", companyId);
-
-            // const people = await PersonModel.getPeopleByCompanyId(companyId);
-            
-            const company = await PersonModel.getCompanyById(companyId);
-            let people = company.people;
-
-            if (people == undefined) {
-                people = [];
-            }
-
-            console.log("People: ", people);
-
-            // console.log('Fetched company:', company); // Log the value of "people"
+            const companyId = req.params.id;
+    
+            console.log('Fetching people for company ID:', companyId);
+    
+            // Fetch the people array for the company
+            const people = await PersonModel.getCompanyPeople(companyId);
+    
+            console.log('People fetched:', people);
     
             const errors = req.flash('errors');
             const success = req.flash('success');
             const isLoggedIn = req.session && req.session.isLoggedIn;
     
+            // Render the view with the people data
             res.render('admin/people', { people, errors, success, isLoggedIn });
         } catch (error) {
-            console.error('Error fetching people:', error);
+            console.error('Error fetching people for company:', error);
             req.flash('errors', ['Failed to retrieve people for the company.']);
             req.session.save(() => res.redirect('/admin'));
         }

@@ -2,9 +2,6 @@ document.querySelectorAll('.showPeople').forEach((icon) => {
 
     icon.addEventListener('click', async (event) => {
 
-        const CompanyId = event.currentTarget.dataset.id;
-        console.log(`Company ID: ${CompanyId}`);
-
         const companyId = event.target.getAttribute('data-id');
 
         try {
