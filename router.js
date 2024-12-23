@@ -38,7 +38,7 @@ module.exports = (db) => {
 
     // People routes
     router.get('/admin/companies/:companyId/people', (req, res) =>
-        peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
+        peopleController.getCompanyById(req, res, peopleModelInstance)
     );    
     router.post('/admin/companies/people/add', (req, res) => peopleController.addPerson(req, res, peopleModelInstance));
     router.delete('/admin/companies/people/delete/:id', (req, res) => peopleController.deleteItem(req, res, peopleModelInstance));
