@@ -27,7 +27,11 @@ export async function handlePersonFormSubmission(event) {
     }
 
     const croppedImage = croppedCanvas.toDataURL('image/png');
+
+    // Generate a unique ID for the person
+    const personId = crypto.randomUUID(); // Ensure browser support for this function
     const personData = {
+        id: personId,
         name: personName,
         reply: replyText,
         mobile: mobile,
@@ -36,7 +40,7 @@ export async function handlePersonFormSubmission(event) {
         image: croppedImage,
     };
 
-    console.log("client side ", companyId, personData);
+    // console.log("client side ", companyId, personData);
 
     try {
         const response = await fetch(`/api/companies/${companyId}/people`, {
