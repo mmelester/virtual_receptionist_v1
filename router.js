@@ -58,10 +58,12 @@ module.exports = (db) => {
         peopleController.addPerson(req, res, peopleModelInstance)
     );
       
-    router.delete('/admin/companies/people/delete/:id', (req, res) =>
-        peopleController.deleteItem(req, res, peopleModelInstance)
-    );
-
+    router.delete('/admin/companies/:companyId/people/delete/:personId', (req, res) => {
+        const { companyId, personId } = req.params;
+        console.log("From router: ", companyId, personId);
+        peopleController.deletePerson(req, res, peopleModelInstance, companyId, personId);
+    });
+    
     router.put('/api/companies/:id/people', (req, res) =>
         peopleController.addPerson(req, res, peopleModelInstance)
     );

@@ -44,22 +44,51 @@ class PersonModel extends BaseModel {
             throw new Error('Database error.');
         }
     }
-        
-    async deleteItem(personId) {
 
-        console.log(`Deleting ID in model: ${personId}`); // Log the ID received in the model
-
+    async deletePersonFromCompany(companyId, personId) {
+        console.log('Company ID:', companyId);
+        console.log('Person ID:', personId);
+    
+        if (!ObjectId.isValid(companyId)) {
+            console.error('Invalid Company ID');
+            return { success: false, message: 'Invalid Company ID.' };
+        }
+    
         if (!ObjectId.isValid(personId)) {
-            return { success: false, message: 'Invalid ObjectId.' };
+            console.error('Invalid Person ID');
+            return { success: false, message: 'Invalid Person ID.' };
         }
-
+    
         try {
-            return await this.delete(personId); // Use BaseModel's `delete` method
+            const result = await this.collection.updateOne(
+                { _id: ObjectId.createFromHexString(companyId) },
+                { $pull: { people: { id: personId } } }
+            );
+    
+            console.log('Database Update Result:', result);
+    
+            return { success: result.modifiedCount > 0 };
         } catch (error) {
-            console.error('Database error:', error);
-            return { success: false, message: 'Failed to delete the person due to a database error.' };
+            console.error('Database Error:', error);
+            return { success: false, message: 'Failed to delete person.' };
         }
-    }
+    }    
+        
+    // async deleteItem(personId) {
+
+    //     console.log(`Deleting ID in model: ${personId}`); // Log the ID received in the model
+
+    //     if (!ObjectId.isValid(personId)) {
+    //         return { success: false, message: 'Invalid ObjectId.' };
+    //     }
+
+    //     try {
+    //         return await this.delete(personId); // Use BaseModel's `delete` method
+    //     } catch (error) {
+    //         console.error('Database error:', error);
+    //         return { success: false, message: 'Failed to delete the person due to a database error.' };
+    //     }
+    // }
 
     async getPersonById(personId) {
         if (!ObjectId.isValid(personId)) {

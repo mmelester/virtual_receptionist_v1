@@ -97,20 +97,20 @@
                         </div>
                         <div class="edit-delete ml-auto">
                             <i 
-                            class="editPerson fa fa-pencil-square-o pr-3" 
-                            aria-hidden="true" 
-                            data-id="<%= person._id %>" 
-                            data-section-id="add-person-section"
-                            data-form-id="personForm"
-                            data-heading-id="person-form-heading"></i>
-                        </i>
+                                class="editPerson fa fa-pencil-square-o pr-3" 
+                                aria-hidden="true" 
+                                data-id="<%= person._id %>" 
+                                data-section-id="add-person-section"
+                                data-form-id="personForm"
+                                data-heading-id="person-form-heading">
+                            </i>
                             <i 
-                            class="delete-btn fa fa-trash pr-3" 
-                            aria-hidden="true" 
-                            data-route="/admin/companies/people/delete" 
-                            data-id="<%= person._id %>">
-                        </i>
-                        
+                                class="delete-person-btn fa fa-trash pr-3" 
+                                aria-hidden="true"  
+                                data-route="/admin/companies" 
+                                data-company-id="<%= companyId %>" 
+                                data-id="<%= person.id %>">
+                            </i>
                         </div>
                     </div>
                 <% }); %>

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.addEventListener('click', async (event) => {
     
             const id = event.currentTarget.dataset.id;
-            console.log(`Delete ID: ${id}`);
+            console.log(`DeleteItem Called, Delete ID: ${id}`);
     
             const deleteRoute = event.target.dataset.route; // Get the route from a data attribute
     

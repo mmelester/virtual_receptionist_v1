@@ -41,8 +41,6 @@ module.exports = {
             // Fetch the people array for the company
             const people = await PersonModel.getCompanyPeople(companyId);
     
-            console.log('People fetched:', people);
-    
             if (isApiRequest) {
                 // Respond with JSON for API requests
                 return res.status(200).json({ success: true, data: people });
@@ -52,7 +50,7 @@ module.exports = {
             const errors = req.flash('errors');
             const success = req.flash('success');
             const isLoggedIn = req.session && req.session.isLoggedIn;
-            res.render('admin/people', { people, errors, success, isLoggedIn });
+            res.render('admin/people', { people, errors, success, isLoggedIn, companyId }); // Pass companyId here
         } catch (error) {
             console.error('Error fetching people for company:', error);
             if (isApiRequest) {
@@ -86,24 +84,20 @@ module.exports = {
         }
 },
     
-    async deleteItem(req, res, PersonModel) {
+    async deletePerson(req, res, peopleModelInstance, companyId, personId) {
+        console.log('Controller - Company ID:', companyId);
+        console.log('Controller - Person ID:', personId);
 
         try {
-            const personId = req.params.id;
-            console.log(`Received ID in backend: ${personId}`); // Log the received ID
-
-            const result = await PersonModel.deleteItem(personId); // Aligns with Person Model's method name
-            if (!result.success) {
-                req.flash('errors', [result.message]);
-                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
+            const result = await peopleModelInstance.deletePersonFromCompany(companyId, personId);
+            if (result.success) {
+                res.status(200).json({ success: true, message: 'Person deleted successfully.' });
+            } else {
+                res.status(400).json({ success: false, message: result.message });
             }
-
-            req.flash('success', 'Person deleted successfully!');
-            req.session.save(() => res.status(200).json({ success: true, message: 'Person deleted successfully!' }));
         } catch (error) {
-            console.error('Error deleting person:', error);
-            req.flash('errors', ['Failed to delete person.']);
-            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred while deleting the person.' }));
+            console.error('Controller Error:', error);
+            res.status(500).json({ success: false, message: 'An internal server error occurred.' });
         }
     },
 
