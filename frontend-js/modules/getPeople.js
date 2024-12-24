@@ -3,6 +3,10 @@ document.querySelectorAll('.showPeople').forEach((icon) => {
         const companyId = event.target.getAttribute('data-id');
         console.log("getPeople.js being executed; companyId = ", companyId);
 
+        // Store the Id and editFlag in localStorage
+        localStorage.setItem('addId', companyId);
+        localStorage.setItem('editFlag', 'c');
+
         try {
             // Fetch the data from the API
             const response = await fetch(`/api/companies/${companyId}/people`);

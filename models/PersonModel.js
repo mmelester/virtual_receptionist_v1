@@ -44,23 +44,6 @@ class PersonModel extends BaseModel {
             throw new Error('Database error.');
         }
     }
-
-    // async getCompanyById(companyId) {
-
-    //     console.log("companyId from PersonModel, getCompanyId", companyId);
-
-    //     if (!ObjectId.isValid(companyId)) {
-    //         throw new Error('Invalid ObjectId.');
-    //     }
-
-    //     try {
-    //         return await this.getById(companyId); // Use BaseModel's `getById` method
-    //     } catch (error) {
-    //         console.error('Database error:', error);
-    //         throw new Error('Failed to retrieve company data.');
-    //     }
-    // }
-
         
     async deleteItem(personId) {
 
@@ -91,22 +74,40 @@ class PersonModel extends BaseModel {
         }
     }
 
-    async updatePerson(personId, personData) {
-        if (!ObjectId.isValid(personId)) {
-            return { success: false, message: 'Invalid ObjectId.' };
-        }
+    // async updatePerson(personId, personData) {
+    //     if (!ObjectId.isValid(personId)) {
+    //         return { success: false, message: 'Invalid ObjectId.' };
+    //     }
 
-        if (!personData.name || !personData.intro || !personData.image) {
-            return { success: false, message: 'Invalid data for update.' };
-        }
+    //     if (!personData.name || !personData.intro || !personData.image) {
+    //         return { success: false, message: 'Invalid data for update.' };
+    //     }
 
+    //     try {
+    //         return await this.update(personId, personData); // Use BaseModel's `update` method
+    //     } catch (error) {
+    //         console.error('Database error:', error);
+    //         return { success: false, message: `Error updating person: ${error.message}` };
+    //     }
+    // }
+
+    async updateCompanyPeople(companyId, personData) {
+        if (!ObjectId.isValid(companyId)) {
+            throw new Error('Invalid ObjectId.');
+        }
+    
         try {
-            return await this.update(personId, personData); // Use BaseModel's `update` method
+            const result = await this.collection.updateOne(
+                { _id: ObjectId.createFromHexString(companyId) }, // Match the company by its ID
+                { $push: { people: personData } } // Push the new person into the `people` array
+            );
+            return { success: result.modifiedCount > 0 };
         } catch (error) {
-            console.error('Database error:', error);
-            return { success: false, message: `Error updating person: ${error.message}` };
+            console.error('Error updating company people:', error);
+            return { success: false, message: 'Failed to update people.' };
         }
     }
+    
 }
 
 module.exports = PersonModel;

@@ -64,29 +64,28 @@ module.exports = {
     },
     
     async addPerson(req, res, PersonModel) {
+
         try {
-            if (!req.body.name || !req.body.reply || !req.body.image) {
-                req.flash('errors', ['Name, reply, and reply are required.']);
-                return req.session.save(() => res.redirect('/admin/companies/people/add'));
+            const { person } = req.body;
+            const companyId = req.params.id;
+    
+            if (!person || !companyId) {
+                return res.status(400).json({ success: false, message: 'Invalid data or missing company ID.' });
             }
-
-            const result = await PersonModel.addPerson(req.body);
+    
+            const result = await PersonModel.updateCompanyPeople(companyId, person);
+    
             if (!result.success) {
-                req.flash('errors', [result.message]);
-                console.log("Results failed");
-
-                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
+                return res.status(500).json({ success: false, message: 'Failed to add person to the company.' });
             }
-
-            req.flash('success', 'Person added successfully!');
-            req.session.save(() => res.status(200).json({ success: true, message: 'Person added successfully!' }));
+    
+            res.status(200).json({ success: true, message: 'Person added successfully!' });
         } catch (error) {
             console.error('Error adding person:', error);
-            req.flash('errors', ['Failed to add person.']);
-            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' }));
+            res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' });
         }
-    },
-
+},
+    
     async deleteItem(req, res, PersonModel) {
 
         try {
