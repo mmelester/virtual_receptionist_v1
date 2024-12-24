@@ -54,11 +54,6 @@ class PersonModel extends BaseModel {
             return { success: false, message: 'Invalid Company ID.' };
         }
     
-        if (!ObjectId.isValid(personId)) {
-            console.error('Invalid Person ID');
-            return { success: false, message: 'Invalid Person ID.' };
-        }
-    
         try {
             const result = await this.collection.updateOne(
                 { _id: ObjectId.createFromHexString(companyId) },
