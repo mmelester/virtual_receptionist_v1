@@ -101,22 +101,20 @@ module.exports = {
         }
     },
 
-    async editPerson(req, res, PersonModel) {
+    async editPerson(req, res, peopleModelInstance, companyId, personId) {
+        console.log('Controller - Company ID:', companyId);
+        console.log('Controller - Person ID:', personId);
+
         try {
-            const personId = req.params.id;
-    
-            // Fetch the person details
-            const person = await PersonModel.getPersonById(personId);
-    
-            if (!person) {
-                return res.status(404).json({ success: false, message: 'Person not found or invalid ID.' });
+            const result = await peopleModelInstance.editPersonFromCompany(companyId, personId);
+            if (result.success) {
+                res.status(200).json({ success: true, message: 'Person edited successfully.' });
+            } else {
+                res.status(400).json({ success: false, message: result.message });
             }
-    
-            // Return the person details
-            res.status(200).json({ success: true, data: person });
         } catch (error) {
-            console.error("Error fetching person's data:", error);
-            res.status(500).json({ success: false, message: "Failed to fetch person's data." });
+            console.error('Controller Error:', error);
+            res.status(500).json({ success: false, message: 'An internal server error occurred.' });
         }
     },
     

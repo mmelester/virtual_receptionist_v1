@@ -2,7 +2,9 @@ import { previewFile } from './drag-n-drop'
 
 document.querySelectorAll('.editPerson').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
-        const Id = event.target.dataset.id;
+        const personId = event.currentTarget.dataset.id;
+        const companyId = event.currentTarget.dataset.companyId;
+        const editRoute = event.currentTarget.dataset.route;
 
         if (confirm("Do you want to edit this person's information?")) {
             const createPersonButton = document.getElementsByClassName('create-person-btn')[0];
@@ -12,21 +14,16 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
             const addPersonSection = document.getElementById('add-person-section');
             const personForm = document.getElementById('personForm');
             const formHeading = document.getElementById('person-form-heading');
-            // const deleteIcon = document.getElementById('delete-icon')
-            const deleteIcon = document.getElementsByClassName('delete-image-btn')[0];
-
-            // Store the Id and editFlag in localStorage
-            localStorage.setItem('editId', Id);
-            localStorage.setItem('editFlag', 'e');
+            const editIcon = document.getElementsByClassName('edit-person')[0];
 
             // Modify form for edit
             formHeading.innerHTML = "<h2>Edit Person's Information</h2>";
             // Get the delete button parent element
-            if (deleteIcon) {
-                const parent = deleteIcon.parentElement;
+            if (editIcon) {
+                const parent = editIcon.parentElement;
                 if (parent) {
                     // Replace the current content with a new element
-                    parent.innerHTML = `<i class="delete-image-btn fa fa-pencil-square-o" aria-hidden="true"></i>`;
+                    parent.innerHTML = `<i class="editPerson fa fa-pencil-square-o pr-3" aria-hidden="true"></i>`;
                 }
             }
 
@@ -34,7 +31,7 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
             createPersonButton.classList.add('d-none');
 
             try {
-                const response = await fetch(`/admin/companies/people/edit/${Id}`);
+                const response = await fetch(`${editRoute}/${companyId}/people/edit/${personId}`);
                 const result = await response.json();
 
                 if (result.success) {

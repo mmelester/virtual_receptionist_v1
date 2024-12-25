@@ -68,23 +68,29 @@ class PersonModel extends BaseModel {
             return { success: false, message: 'Failed to delete person.' };
         }
     }    
+
+    async editPersonFromCompany(companyId, personId) {
+        console.log('Company ID:', companyId);
+        console.log('Person ID:', personId);
+    
+        if (!ObjectId.isValid(companyId)) {
+            console.error('Invalid Company ID');
+            return { success: false, message: 'Invalid Company ID.' };
+        }
+    
+        try {
+            
+            // Insert code to update person in database
+    
+            console.log('Database Update Result:', result);
+    
+            return { success: result.modifiedCount > 0 };
+        } catch (error) {
+            console.error('Database Error:', error);
+            return { success: false, message: 'Failed to delete person.' };
+        }
+    }    
         
-    // async deleteItem(personId) {
-
-    //     console.log(`Deleting ID in model: ${personId}`); // Log the ID received in the model
-
-    //     if (!ObjectId.isValid(personId)) {
-    //         return { success: false, message: 'Invalid ObjectId.' };
-    //     }
-
-    //     try {
-    //         return await this.delete(personId); // Use BaseModel's `delete` method
-    //     } catch (error) {
-    //         console.error('Database error:', error);
-    //         return { success: false, message: 'Failed to delete the person due to a database error.' };
-    //     }
-    // }
-
     async getPersonById(personId) {
         if (!ObjectId.isValid(personId)) {
             throw new Error('Invalid ObjectId.');
@@ -98,22 +104,6 @@ class PersonModel extends BaseModel {
         }
     }
 
-    // async updatePerson(personId, personData) {
-    //     if (!ObjectId.isValid(personId)) {
-    //         return { success: false, message: 'Invalid ObjectId.' };
-    //     }
-
-    //     if (!personData.name || !personData.intro || !personData.image) {
-    //         return { success: false, message: 'Invalid data for update.' };
-    //     }
-
-    //     try {
-    //         return await this.update(personId, personData); // Use BaseModel's `update` method
-    //     } catch (error) {
-    //         console.error('Database error:', error);
-    //         return { success: false, message: `Error updating person: ${error.message}` };
-    //     }
-    // }
 
     async updateCompanyPeople(companyId, personData) {
         if (!ObjectId.isValid(companyId)) {

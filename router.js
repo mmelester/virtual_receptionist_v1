@@ -31,14 +31,18 @@ module.exports = (db) => {
     router.get('/admin/companies', (req, res) =>
         companiesController.getCompanies(req, res, companyModelInstance)
     );
+
     router.post('/admin/companies/add', (req, res) =>
         companiesController.addCompany(req, res, companyModelInstance)
     );
+
     router.delete('/admin/companies/delete/:id', (req, res) => companiesController.deleteItem(req, res, companyModelInstance)
     );
+
     router.get('/admin/companies/edit/:id', (req, res) =>
         companiesController.editCompany(req, res, companyModelInstance)
     );
+    
     router.put('/admin/companies/edit/:id', (req, res) =>
         companiesController.updateCompany(req, res, companyModelInstance)
     );
@@ -47,12 +51,16 @@ module.exports = (db) => {
     router.get('/admin/companies/:id/people', (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
     ); // Route for rendering people.ejs template in browser
+
     router.get('/api/companies/:id/people', (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
     );  // API route for fetching JSON data (fetch API request in client-side js)
-    router.get('/admin/companies/people/edit/:id', (req, res) =>
-        peopleController.editPerson(req, res, peopleModelInstance)
-    );
+
+    router.get('/admin/companies/:companyId/people/edit/:personId', (req, res) => {
+        const { companyId, personId } = req.params;
+        console.log("From router: ", companyId, personId);
+        peopleController.editPerson(req, res, peopleModelInstance, companyId, personId);
+    });
 
     router.post('/admin/companies/people/add', (req, res) =>
         peopleController.addPerson(req, res, peopleModelInstance)
