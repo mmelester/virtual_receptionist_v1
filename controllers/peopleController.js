@@ -109,7 +109,7 @@ module.exports = {
             const result = await peopleModelInstance.editPersonFromCompany(companyId, personId);
 
             if (result.success) {
-                res.status(200).json({ success: true, data: result, message: 'Person edited successfully.' });
+                res.status(200).json({ success: true, data: result.data, message: 'Person edited successfully.' });
             } else {
                 res.status(400).json({ success: false, message: result.message });
             }

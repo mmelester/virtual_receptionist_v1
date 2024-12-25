@@ -32,10 +32,21 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
                 const response = await fetch(`${editRoute}/${companyId}/people/edit/${personId}`);
                 const result = await response.json();
 
-                console.log("result = ", result.data);
+                console.log("Full result: ", result);
+                console.log("result.data: ", result.data);
+                if (result.success) {
+                    console.log("Keys in result.data:", Object.keys(result.data));
+                }
 
                 if (result.success) {
-                    const { name, reply, mobile, email, outlet, image } = result.data;
+
+                    const name = result.data.name;
+                    const reply = result.data.reply;
+                    const mobile = result.data.mobile;
+                    const email = result.data.email;
+                    const outlet = result.data.outlet;
+                    const image = result.data.image;
+                    
                     personForm.elements['personName'].value = name;
                     personForm.elements['replyText'].value = reply;
                     personForm.elements['mobile'].value = mobile;

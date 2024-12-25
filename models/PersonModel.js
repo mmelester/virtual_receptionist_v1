@@ -46,8 +46,6 @@ class PersonModel extends BaseModel {
     }
 
     async deletePersonFromCompany(companyId, personId) {
-        console.log('Company ID:', companyId);
-        console.log('Person ID:', personId);
     
         if (!ObjectId.isValid(companyId)) {
             console.error('Invalid Company ID');
@@ -60,8 +58,6 @@ class PersonModel extends BaseModel {
                 { $pull: { people: { id: personId } } }
             );
     
-            console.log('Database Update Result:', result);
-    
             return { success: result.modifiedCount > 0 };
         } catch (error) {
             console.error('Database Error:', error);
@@ -70,8 +66,6 @@ class PersonModel extends BaseModel {
     }    
 
     async editPersonFromCompany(companyId, personId) {
-        console.log('Company ID:', companyId);
-        console.log('Person ID:', personId);
     
         if (!ObjectId.isValid(companyId)) {
             console.error('Invalid Company ID');
