@@ -79,17 +79,23 @@ class PersonModel extends BaseModel {
         }
     
         try {
-            
-            // Insert code to update person in database
+            const company = await this.getById(companyId); // Fetch the company by its ID
+            if (!company || !company.people) {
+                return { success: false, message: 'Company or people not found.' };
+            }
     
-            console.log('Database Update Result:', result);
+            const person = company.people.find(p => p.id === personId); // Locate the person by ID
+
+            if (!person) {
+                return { success: false, message: 'Person not found.' };
+            }
     
-            return { success: result.modifiedCount > 0 };
+            return { success: true, data: person }; // Return the person's data
         } catch (error) {
             console.error('Database Error:', error);
-            return { success: false, message: 'Failed to delete person.' };
+            return { success: false, message: 'Failed to fetch person data.' };
         }
-    }    
+    }     
         
     async getPersonById(personId) {
         if (!ObjectId.isValid(personId)) {

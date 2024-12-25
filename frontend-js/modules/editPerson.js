@@ -9,15 +9,13 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
         if (confirm("Do you want to edit this person's information?")) {
             const createPersonButton = document.getElementsByClassName('create-person-btn')[0];
 
-            console.log('createPersonButton', createPersonButton)
-
             const addPersonSection = document.getElementById('add-person-section');
             const personForm = document.getElementById('personForm');
             const formHeading = document.getElementById('person-form-heading');
             const editIcon = document.getElementsByClassName('edit-person')[0];
-
+            
             // Modify form for edit
-            formHeading.innerHTML = "<h2>Edit Person's Information</h2>";
+            formHeading.innerHTML = "<h2>Edit Staff Member's Information</h2>";
             // Get the delete button parent element
             if (editIcon) {
                 const parent = editIcon.parentElement;
@@ -34,6 +32,8 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
                 const response = await fetch(`${editRoute}/${companyId}/people/edit/${personId}`);
                 const result = await response.json();
 
+                console.log("result = ", result.data);
+
                 if (result.success) {
                     const { name, reply, mobile, email, outlet, image } = result.data;
                     personForm.elements['personName'].value = name;
@@ -41,8 +41,6 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
                     personForm.elements['mobile'].value = mobile;
                     personForm.elements['email'].value = email;
                     personForm.elements['outlet'].value = outlet;
-
-                    // Add more here ************************************
 
                     // Preload image into the canvas
                     if (image) {
