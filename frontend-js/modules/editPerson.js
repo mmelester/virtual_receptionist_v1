@@ -12,16 +12,16 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
             const addPersonSection = document.getElementById('add-person-section');
             const personForm = document.getElementById('personForm');
             const formHeading = document.getElementById('person-form-heading');
-            const editIcon = document.getElementsByClassName('edit-person')[0];
+            const deleteIcon = document.getElementsByClassName('delete-image-btn')[0];
             
             // Modify form for edit
             formHeading.innerHTML = "<h2>Edit Staff Member's Information</h2>";
             // Get the delete button parent element
-            if (editIcon) {
-                const parent = editIcon.parentElement;
+            if (deleteIcon) {
+                const parent = deleteIcon.parentElement;
                 if (parent) {
                     // Replace the current content with a new element
-                    parent.innerHTML = `<i class="editPerson fa fa-pencil-square-o pr-3" aria-hidden="true"></i>`;
+                    parent.innerHTML = `<i class="delete-image-btn fa fa-pencil-square-o" aria-hidden="true"></i>`;
                 }
             }
 
