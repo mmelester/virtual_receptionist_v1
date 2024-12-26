@@ -104,7 +104,6 @@ class PersonModel extends BaseModel {
         }
     }
 
-
     async updateCompanyPeople(companyId, personData) {
         if (!ObjectId.isValid(companyId)) {
             throw new Error('Invalid ObjectId.');
