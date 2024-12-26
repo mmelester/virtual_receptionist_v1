@@ -1,16 +1,17 @@
 import { drawSavedImage, getImg } from './drag-n-drop';
 
 export async function handlePersonFormSubmission(event) {
-    console.log("handlePersonFormSubmission called");
-
     let errors = [];
+    let personId;
     const personName = document.getElementById('personName').value.trim();
     const replyText = document.getElementById('replyText').value.trim();
     const mobile = document.getElementById('mobile').value.trim();
     const email = document.getElementById('email').value.trim();
     const outlet = document.getElementById('outlet').value.trim();
+    const companyId = localStorage.getItem('editId');
+    const flag = localStorage.getItem('editFlag');
+    console.log("handlePersonFormSubmission called", companyId, flag);
 
-    const companyId = localStorage.getItem('addId');
 
     if (!personName) errors.push("Person's name is required.");
     if (!replyText) errors.push('Response text is required.');
@@ -27,9 +28,19 @@ export async function handlePersonFormSubmission(event) {
     }
 
     const croppedImage = croppedCanvas.toDataURL('image/png');
+    
+    if (flag === 'c') {
+        // Generate a unique ID for the person
+        personId = crypto.randomUUID(); // Ensure browser support for this function
 
-    // Generate a unique ID for the person
-    const personId = crypto.randomUUID(); // Ensure browser support for this function
+    } else {
+        
+        personId = await localStorage.getItem('personId');
+    }
+
+    console.log("PID is ", personId)
+
+    
     const personData = {
         id: personId,
         name: personName,

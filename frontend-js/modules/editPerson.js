@@ -8,11 +8,15 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
 
         if (confirm("Do you want to edit this person's information?")) {
             const createPersonButton = document.getElementsByClassName('create-person-btn')[0];
-
             const addPersonSection = document.getElementById('add-person-section');
             const personForm = document.getElementById('personForm');
             const formHeading = document.getElementById('person-form-heading');
             const deleteIcon = document.getElementsByClassName('delete-image-btn')[0];
+
+            // Store the Ids and editFlag in localStorage
+            localStorage.setItem('editId', companyId);
+            localStorage.setItem('personId', personId);
+            localStorage.setItem('editFlag', 'e');
             
             // Modify form for edit
             formHeading.innerHTML = "<h2>Edit Staff Member's Information</h2>";
