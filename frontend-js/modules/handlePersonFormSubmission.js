@@ -29,17 +29,8 @@ export async function handlePersonFormSubmission(event) {
 
     const croppedImage = croppedCanvas.toDataURL('image/png');
     
-    if (flag === 'c') {
-        // Generate a unique ID for the person
-        personId = crypto.randomUUID(); // Ensure browser support for this function
-
-    } else {
-        
-        personId = await localStorage.getItem('personId');
-    }
-
+    personId = flag === 'c' ? personId = crypto.randomUUID() : await localStorage.getItem('personId');
     console.log("PID is ", personId)
-
     
     const personData = {
         id: personId,
