@@ -76,7 +76,7 @@ module.exports = (db) => {
         peopleController.addPerson(req, res, peopleModelInstance)
     );
  
-    router.put('/admin/companies/people/edit/:id', (req, res) =>
+    router.put('/admin/companies/:companyId/people/edit/:id', (req, res) =>
         peopleController.updatePerson(req, res, peopleModelInstance)
     );
 

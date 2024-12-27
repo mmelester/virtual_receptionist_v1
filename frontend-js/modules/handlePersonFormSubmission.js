@@ -44,7 +44,10 @@ export async function handlePersonFormSubmission(event) {
     // console.log("client side ", companyId, personData);
 
     try {
-        const url = flag === 'c' ? `/api/companies/${companyId}/people` : `/api/companies/${companyId}/people`;
+        const url = flag === 'c' ? `/api/companies/${companyId}/people` : `/admin/companies/${companyId}/people/edit/${personData.id}`;
+
+        console.log("URL/flg", url, "/", flag);
+
         const response = await fetch(url, {
             method: 'PUT', // Use PUT for updating
             headers: { 'Content-Type': 'application/json' },

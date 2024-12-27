@@ -108,7 +108,7 @@ class PersonModel extends BaseModel {
 
     async updateCompanyPeople(companyId, personData) {
 
-        console.log("From PersonModel.updateCompanyPeople ", companyId, personData);
+        console.log("From PersonModel.update ", companyId);
 
         if (!ObjectId.isValid(companyId)) {
             throw new Error('Invalid ObjectId.');
@@ -127,22 +127,31 @@ class PersonModel extends BaseModel {
         }
     }
 
-    async updatePerson(personId, personData) {
-        if (!ObjectId.isValid(personId)) {
-            return { success: false, message: 'Invalid ObjectId.' };
+    async updatePerson(companyId, personId, personData) {
+        console.log("PersonModel.updatePerson called", companyId, personId, personData.name);
+    
+        if (!ObjectId.isValid(companyId)) {
+            return { success: false, message: 'Invalid Company ID.' };
         }
-
-        if (!personData.name || !personData.intro || !personData.image) {
+    
+        if (!personData.name || !personData.reply || !personData.image) {
             return { success: false, message: 'Invalid data for update.' };
         }
-
+    
         try {
-            return await this.update(personId, personData); // Use BaseModel's `update` method
+            // Perform a nested update directly in PersonModel
+            const result = await this.collection.updateOne(
+                { _id: ObjectId.createFromHexString(companyId), 'people.id': personId },
+                { $set: { 'people.$': personData } } // `$` refers to the matched element in the array
+            );
+    
+            return { success: result.modifiedCount > 0 };
         } catch (error) {
-            console.error('Database error:', error);
-            return { success: false, message: `Error updating person: ${error.message}` };
+            console.error('Error updating person in company:', error);
+            return { success: false, message: 'Failed to update person due to a database error.' };
         }
     }
+    
     
 }
 

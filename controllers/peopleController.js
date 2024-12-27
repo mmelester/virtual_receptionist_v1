@@ -14,24 +14,6 @@ module.exports = {
         }
     },
 
-    // async getCompanyById(req, res, PersonModel) {
-    //     try {
-    //         const companyId = req.params.id;
-    
-    //         // Fetch the company details
-    //         const company = await Model.getCompanyById(companyId);
-    
-    //         if (!company) {
-    //             return res.status(404).json({ success: false, message: 'Company not found or invalid ID.' });
-    //         }
-    
-    //         // Return the company details
-    //         res.status(200).json({ success: true, data: company });
-    //     } catch (error) {
-    //         console.error('Error fetching company data:', error);
-    //         res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
-    //     }
-    // },
     async getPeopleByCompanyId(req, res, PersonModel, isApiRequest = false) {
         try {
             const companyId = req.params.id;
@@ -62,18 +44,18 @@ module.exports = {
     },
     
     async addPerson(req, res, PersonModel) {
-
         try {
-            const { person } = req.body;
-            const companyId = req.params.id;
-
-            console.log("addPerson from controller ", companyId)
+            const { id: companyId } = req.params; // Retrieve companyId from route parameters
+            const { people } = req.body; // Retrieve person data from request body
     
-            if (!person || !companyId) {
+            console.log('Request Body:', req.body); // Debugging: Log the request body
+            console.log('Company ID:', companyId);  // Debugging: Log the companyId
+    
+            if (!people || !companyId) {
                 return res.status(400).json({ success: false, message: 'Invalid data or missing company ID.' });
             }
     
-            const result = await PersonModel.updateCompanyPeople(companyId, person);
+            const result = await PersonModel.updateCompanyPeople(companyId, people);
     
             if (!result.success) {
                 return res.status(500).json({ success: false, message: 'Failed to add person to the company.' });
@@ -84,7 +66,7 @@ module.exports = {
             console.error('Error adding person:', error);
             res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' });
         }
-},
+    },
     
     async deletePerson(req, res, peopleModelInstance, companyId, personId) {
         console.log('Controller - Company ID:', companyId);
@@ -122,16 +104,19 @@ module.exports = {
     },
     
     async updatePerson(req, res, PersonModel) {
-        const { name, reply, image } = req.body;
+        const { companyId, id: personId } = req.params; // Extract IDs
+        const personData = req.body.people; // Extract person data from the request body
+    
+        console.log("Controller.updatePerson called", companyId, personId, personData);
     
         // Input Validation
-        if (!name || !reply || !image) {
-            console.error('Validation failed:', { name, reply, image });
+        if (!personData.name || !personData.reply || !personData.image) {
+            console.error('Validation failed:', { personData });
             return res.status(400).json({ success: false, message: 'Name, reply, and image are required.' });
         }
     
         try {
-            const result = await PersonModel.updatePerson(req.params.id, { name, reply, mobile, email, outlet, image });
+            const result = await PersonModel.updatePerson(companyId, personId, personData);
             if (!result.success) {
                 return res.status(400).json({ success: false, message: result.message });
             }
@@ -141,6 +126,7 @@ module.exports = {
             console.error('Error updating person:', error);
             res.status(500).json({ success: false, message: 'Failed to update person.' });
         }
-    }    
+    }
+      
     
 };
