@@ -1,6 +1,9 @@
 document.querySelectorAll('.showPeople').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
         const companyId = event.target.getAttribute('data-id');
+
+        localStorage.setItem('editId', companyId);
+
         console.log("getPeople.js being executed; companyId = ", companyId);
 
         // Store the Id and editFlag in localStorage

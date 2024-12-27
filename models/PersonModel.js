@@ -9,6 +9,8 @@ class PersonModel extends BaseModel {
     async addPerson(personData) {
         const { name, reply, mobile, email, outlet, image } = personData;
 
+        console.log("addPerson ", name);
+
         // Validation
         if (!name || !reply || !image) {
             return { success: false, message: 'Name, reply, and logo image are required.' };
@@ -105,6 +107,9 @@ class PersonModel extends BaseModel {
     }
 
     async updateCompanyPeople(companyId, personData) {
+
+        console.log("From PersonModel.updateCompanyPeople ", companyId, personData);
+
         if (!ObjectId.isValid(companyId)) {
             throw new Error('Invalid ObjectId.');
         }
@@ -114,10 +119,28 @@ class PersonModel extends BaseModel {
                 { _id: ObjectId.createFromHexString(companyId) }, // Match the company by its ID
                 { $push: { people: personData } } // Push the new person into the `people` array
             );
+
             return { success: result.modifiedCount > 0 };
         } catch (error) {
             console.error('Error updating company people:', error);
             return { success: false, message: 'Failed to update people.' };
+        }
+    }
+
+    async updatePerson(personId, personData) {
+        if (!ObjectId.isValid(personId)) {
+            return { success: false, message: 'Invalid ObjectId.' };
+        }
+
+        if (!personData.name || !personData.intro || !personData.image) {
+            return { success: false, message: 'Invalid data for update.' };
+        }
+
+        try {
+            return await this.update(personId, personData); // Use BaseModel's `update` method
+        } catch (error) {
+            console.error('Database error:', error);
+            return { success: false, message: `Error updating person: ${error.message}` };
         }
     }
     

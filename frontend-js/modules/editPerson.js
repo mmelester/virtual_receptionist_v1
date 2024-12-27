@@ -2,6 +2,7 @@ import { previewFile } from './drag-n-drop'
 
 document.querySelectorAll('.editPerson').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
+
         const personId = event.currentTarget.dataset.id;
         const companyId = event.currentTarget.dataset.companyId;
         const editRoute = event.currentTarget.dataset.route;
@@ -12,7 +13,7 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
             const personForm = document.getElementById('personForm');
             const formHeading = document.getElementById('person-form-heading');
             const deleteIcon = document.getElementsByClassName('delete-image-btn')[0];
-
+            
             // Store the Ids and editFlag in localStorage
             localStorage.setItem('editId', companyId);
             localStorage.setItem('personId', personId);

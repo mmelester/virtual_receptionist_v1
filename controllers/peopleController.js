@@ -66,6 +66,8 @@ module.exports = {
         try {
             const { person } = req.body;
             const companyId = req.params.id;
+
+            console.log("addPerson from controller ", companyId)
     
             if (!person || !companyId) {
                 return res.status(400).json({ success: false, message: 'Invalid data or missing company ID.' });

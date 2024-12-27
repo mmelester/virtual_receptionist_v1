@@ -12,7 +12,6 @@ export async function handlePersonFormSubmission(event) {
     const flag = localStorage.getItem('editFlag');
     console.log("handlePersonFormSubmission called", companyId, flag);
 
-
     if (!personName) errors.push("Person's name is required.");
     if (!replyText) errors.push('Response text is required.');
     if (!mobile && !email) errors.push('Mobile number and/or email is required.');
@@ -45,7 +44,8 @@ export async function handlePersonFormSubmission(event) {
     // console.log("client side ", companyId, personData);
 
     try {
-        const response = await fetch(`/api/companies/${companyId}/people`, {
+        const url = flag === 'c' ? `/api/companies/${companyId}/people` : `/api/companies/${companyId}/people`;
+        const response = await fetch(url, {
             method: 'PUT', // Use PUT for updating
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ person: personData }),
