@@ -47,9 +47,20 @@ module.exports = {
         try {
             const { id: companyId } = req.params; // Retrieve companyId from route parameters
             const { people } = req.body; // Retrieve person data from request body
-    
-            console.log('Request Body:', req.body); // Debugging: Log the request body
+            const personId = people.id
+
+            console.log('Person ID: ', personId);    
+            console.log('Request Body:', people); // Debugging: Log the request body
             console.log('Company ID:', companyId);  // Debugging: Log the companyId
+
+            if (!req.body.people.name || !req.body.people.reply || !req.body.people.image) {
+                req.flash('errors', ['Name, reply, and image are required.']);
+                return req.session.save(() => res.redirect('/admin/companies/add'));
+            }
+            if (!req.body.people.mobile || !req.body.people.email || !req.body.people.outlet) {
+                req.flash('errors', ['At least mobile number, email address or outlet address is required']);
+                return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
+            }
     
             if (!people || !companyId) {
                 return res.status(400).json({ success: false, message: 'Invalid data or missing company ID.' });

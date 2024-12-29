@@ -14,7 +14,7 @@ export async function handlePersonFormSubmission(event) {
 
     if (!personName) errors.push("Person's name is required.");
     if (!replyText) errors.push('Response text is required.');
-    if (!mobile && !email) errors.push('Mobile number and/or email is required.');
+    if (!mobile && !email && !outlet) errors.push('Either mobile number, email address or outlet address is required.');
     const img = getImg();
     if (!img) errors.push('An image is required. Please add an image.');
 
@@ -51,7 +51,7 @@ export async function handlePersonFormSubmission(event) {
         const response = await fetch(url, {
             method: 'PUT', // Use PUT for updating
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ person: personData }),
+            body: JSON.stringify({ people: personData }),
         });
 
         const result = await response.json();
