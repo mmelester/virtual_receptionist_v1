@@ -79,8 +79,9 @@ module.exports = {
             req.session.save(() => res.status(200).json({ success: true, message: 'Company added successfully!' }));
     
         } catch (error) {
-            console.error('Error adding person:', error);
-            res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' });
+            console.error('Error adding company:', error);
+            req.flash('errors', ['Failed to add company.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' }));
         }
     },
     
