@@ -25,7 +25,6 @@ module.exports = {
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 console.log("Results failed");
-
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
 

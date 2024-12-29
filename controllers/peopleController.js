@@ -55,7 +55,7 @@ module.exports = {
 
             if (!req.body.people.name || !req.body.people.reply || !req.body.people.image) {
                 req.flash('errors', ['Name, reply, and image are required.']);
-                return req.session.save(() => res.redirect('/admin/companies/add'));
+                return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
             }
             if (!req.body.people.mobile || !req.body.people.email || !req.body.people.outlet) {
                 req.flash('errors', ['At least mobile number, email address or outlet address is required']);
@@ -63,16 +63,21 @@ module.exports = {
             }
     
             if (!people || !companyId) {
-                return res.status(400).json({ success: false, message: 'Invalid data or missing company ID.' });
+                req.flash('errors', ['Invalid database entry or missing company ID.']);
+                return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
             }
     
             const result = await PersonModel.updateCompanyPeople(companyId, people);
     
             if (!result.success) {
-                return res.status(500).json({ success: false, message: 'Failed to add person to the company.' });
+                req.flash('errors', [result.message]);
+                console.log("Results failed");
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
+
+            req.flash('success', 'Person added/updated successfully!');
+            req.session.save(() => res.status(200).json({ success: true, message: 'Company added successfully!' }));
     
-            res.status(200).json({ success: true, message: 'Person added successfully!' });
         } catch (error) {
             console.error('Error adding person:', error);
             res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' });
