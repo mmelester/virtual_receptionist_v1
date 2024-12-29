@@ -92,9 +92,11 @@ module.exports = {
         try {
             const result = await peopleModelInstance.deletePersonFromCompany(companyId, personId);
             if (result.success) {
+                req.flash('success', 'Staff member deleted successfully!');
                 res.status(200).json({ success: true, message: 'Person deleted successfully.' });
             } else {
-                res.status(400).json({ success: false, message: result.message });
+                req.flash('errors', [result.message]);
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
         } catch (error) {
             console.error('Controller Error:', error);

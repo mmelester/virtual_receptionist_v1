@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const result = await response.json();
 
                     if (result.success) {
-                        alert('Person deleted successfully!');
-                        location.reload();
+                          location.reload();
                     } else {
                         alert(result.message || 'Failed to delete the person.');
                     }

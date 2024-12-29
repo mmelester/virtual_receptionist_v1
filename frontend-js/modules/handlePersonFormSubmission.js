@@ -61,7 +61,6 @@ export async function handlePersonFormSubmission(event) {
             return;
         }
 
-        alert('Person added successfully!');
         window.location.reload();
     } catch (error) {
         console.error('Error updating company:', error);
