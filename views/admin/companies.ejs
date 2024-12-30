@@ -80,7 +80,7 @@
                             <%= company.name %>
                         </div>
                         <div class="company-intro-text pr-5">
-                            <%= company.intro.slice(0,40) + "  . . .  " %>
+                            <%= company.intro.length > 30 ? company.intro.slice(0, 30) + "  . . .  " : company.intro %>
                         </div>
                         <div class="company-logo pr-5">
                             <img class='text-center' src="<%= company.image %>" alt="<%= company.name %> logo" width="auto" height="50px" />

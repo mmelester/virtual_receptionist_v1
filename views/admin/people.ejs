@@ -91,7 +91,9 @@
                 <% people.forEach(person => { %>
                     <div class="d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
                         <div class="person-name pr-5"><%= person.name %></div>
-                        <div class="person-reply-text pr-5"><%= person.reply.slice(0,40) + "  . . .  " %></div>
+                        <div class="person-reply-text pr-5">
+                            <%= person.reply.length > 30 ? person.reply.slice(0, 30) + "  . . .  " : person.reply %>
+                        </div>
                         <div class="person-headshot pr-5">
                             <img class='text-center' src="<%= person.image %>" alt="<%= person.name %> logo" width="auto" height="50px" />
                         </div>
