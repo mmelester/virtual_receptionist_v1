@@ -40,8 +40,8 @@
                         <input type="text" id="personName" name="personName" maxlength="35" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-data" for="replyText">Response Text (up to 50 characters):</label>
-                        <textarea id="replyText" name="replyText" maxlength="50" required></textarea>
+                        <label class="form-data" for="replyText">Response Text (up to 150 characters):</label>
+                        <textarea class="reply-box" id="replyText" name="replyText" maxlength="150" required></textarea>
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="mobile">Mobile:</label>
@@ -89,14 +89,17 @@
         <div>
             <% if (people && people.length > 0) { %>
                 <% people.forEach(person => { %>
-                    <div class="d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
-                        <div class="person-name pr-5"><%= person.name %></div>
-                        <div class="person-reply-text pr-5">
-                            <%= person.reply.length > 30 ? person.reply.slice(0, 30) + "  . . .  " : person.reply %>
-                        </div>
-                        <div class="person-headshot pr-5">
+                    <div class="align-items-center d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
+                        <div class="person-headshot flex-half">
                             <img class='text-center' src="<%= person.image %>" alt="<%= person.name %> logo" width="auto" height="50px" />
                         </div>
+                        <div class="person-name flex-equal"><%= person.name %></div>
+                        <div class="person-reply-text flex-equal">
+                            <%= person.reply.length > 15 ? person.reply.slice(0, 15) + "  . . .  " : person.reply %>
+                        </div>
+                        <div class="person-mobile flex-equal"><%= person.mobile.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3') %></div>
+                        <div class="person-email flex-equal"><%= person.email %></div>
+                        <div class="person-outlet flex-equal">Outlet: <%= person.outlet %></div>
                         <div class="edit-delete ml-auto">
                             <i 
                                 class="editPerson fa fa-pencil-square-o pr-3" 
@@ -122,9 +125,8 @@
                 <p>No people available.</p>
             <% } %>
         </div>
-        
-        %>  
     </section>
+    
 </div>
 <!-- Load explicitly because DOM may not be available before main.js executes -->
 <script type="module" src="/frontend-js/modules/create-person.js"></script>

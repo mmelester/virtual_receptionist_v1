@@ -33,6 +33,40 @@ section.people-section {
   }
 }
 
+.people-section .d-flex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch; /* Ensure children stretch to the same height */
+}
+
+.flex-equal {
+  flex: 1; /* Make all flex items the same size */
+  text-align: left; /* Center-align the content */
+  padding: 0 10px; /* Add some padding for spacing */
+}
+
+.flex-half {
+  width: 2rem;
+  flex: 0.5;
+  text-align: left; /* Center-align the content */
+  padding: 0 1.5rem 0 0.5rem; /* Add some padding for spacing */
+}
+.person-headshot img {
+  height: 2rem;
+  display: block;
+}
+
+.edit-delete {
+  padding-left: 1rem;
+}
+.person-name,
+.person-outlet,
+.person-mobile {
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow text if it exceeds the container width */
+  text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+}
+
 .drop-area,
 #headshot-drop-area {
   border: 2px dashed #ccc;
@@ -105,6 +139,9 @@ textarea {
 textarea {
   resize: none;
   height: 180px;
+}
+textarea.reply-box {
+  height: 4rem;
 }
 
 button.delete {
