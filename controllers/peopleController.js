@@ -75,7 +75,7 @@ module.exports = {
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
 
-            req.flash('success', 'Person added/updated successfully!');
+            req.flash('success', 'Staff member added/updated successfully!');
             req.session.save(() => res.status(200).json({ success: true, message: 'Company added successfully!' }));
     
         } catch (error) {

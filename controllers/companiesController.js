@@ -80,7 +80,8 @@ module.exports = {
         // Input Validation
         if (!name || !intro || !image) {
             console.error('Validation failed:', { name, intro, image });
-            return res.status(400).json({ success: false, message: 'Name, intro, and image are required.' });
+            req.flash('errors', ['Name, intro, and image are required.']);
+            return req.session.save(() => res.status(400).json({ success: false, message: 'Name, intro, and image are required.' }));
         }
     
         try {
