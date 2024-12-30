@@ -69,8 +69,9 @@ module.exports = {
             // Return the company details
             res.status(200).json({ success: true, data: company });
         } catch (error) {
-            console.error('Error fetching company data:', error);
-            res.status(500).json({ success: false, message: 'Failed to fetch company data.' });
+            console.error('Error editing staff member:', error);
+            req.flash('errors', ['Failed to edit staff member.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch company information from database.' }));
         }
     },
     
@@ -87,14 +88,16 @@ module.exports = {
         try {
             const result = await CompanyModel.updateCompany(req.params.id, { name, intro, image });
             if (!result.success) {
-                return res.status(400).json({ success: false, message: result.message });
+                req.flash('errors', [result.message]);
+                console.log("Results failed");
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
-    
-            res.status(200).json({ success: true, message: 'Company updated successfully!' });
+            req.flash('success', 'Company updated successfully!');
+            req.session.save(() => res.status(200).json({ success: true, message: 'Company updated successfully!' }));
         } catch (error) {
             console.error('Error updating company:', error);
-            res.status(500).json({ success: false, message: 'Failed to update company.' });
+            req.flash('errors', ['Failed to edit staff member.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'Failed to update company.' }));
         }
     }    
-    
 };

@@ -13,7 +13,7 @@ export async function handlePersonFormSubmission(event) {
     console.log("handlePersonFormSubmission called", companyId, flag);
 
     if (!personName) errors.push("Person's name is required.");
-    if (!replyText) errors.push('Response text is required.');
+    if (!replyText) errors.push('Reply text is required.');
     if (!mobile && !email && !outlet) errors.push('Either mobile number, email address or outlet address is required.');
     const img = getImg();
     if (!img) errors.push('An image is required. Please add an image.');

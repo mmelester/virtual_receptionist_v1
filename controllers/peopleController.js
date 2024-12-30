@@ -38,7 +38,7 @@ module.exports = {
             if (isApiRequest) {
                 return res.status(500).json({ success: false, message: 'Failed to fetch people.' });
             }
-            req.flash('errors', ['Failed to retrieve people for the company.']);
+            req.flash('errors', ['Failed to retrieve staff member from company.']);
             req.session.save(() => res.redirect('/admin'));
         }
     },
@@ -99,8 +99,8 @@ module.exports = {
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
         } catch (error) {
-            console.error('Controller Error:', error);
-            res.status(500).json({ success: false, message: 'An internal server error occurred.' });
+            req.flash('errors', ['Failed to delete staff member.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred while deleting the company.' }));
         }
     },
 
@@ -117,8 +117,9 @@ module.exports = {
                 res.status(400).json({ success: false, message: result.message });
             }
         } catch (error) {
-            console.error('Controller Error:', error);
-            res.status(500).json({ success: false, message: 'An internal server error occurred.' });
+            console.error('Error editing staff member:', error);
+            req.flash('errors', ['Failed to edit staff member.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'An internal server error occurred.' }));
         }
     },
     
@@ -131,19 +132,23 @@ module.exports = {
         // Input Validation
         if (!personData.name || !personData.reply || !personData.image) {
             console.error('Validation failed:', { personData });
-            return res.status(400).json({ success: false, message: 'Name, reply, and image are required.' });
+            req.flash('errors', ['Name, intro, and image are required.']);
+            return req.session.save(() =>res.status(400).json({ success: false, message: 'Name, reply, and image are required.' }));
         }
     
         try {
             const result = await PersonModel.updatePerson(companyId, personId, personData);
             if (!result.success) {
-                return res.status(400).json({ success: false, message: result.message });
+                req.flash('errors', [result.message]);
+                console.log("Results failed");
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
             }
-    
-            res.status(200).json({ success: true, message: 'Person updated successfully!' });
+            req.flash('success', 'Staff member updated successfully!');
+            req.session.save(() => res.status(200).json({ success: true, message: 'Company updated successfully!' }));
         } catch (error) {
-            console.error('Error updating person:', error);
-            res.status(500).json({ success: false, message: 'Failed to update person.' });
+            console.error("Error updating staff member's information:", error);
+            req.flash('errors', ["Failed to update staff member's information."]);
+            req.session.save(() => res.status(500).json({ success: false, message: "Failed to update staff member's information." }));
         }
     }
       
