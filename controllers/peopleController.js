@@ -57,7 +57,7 @@ module.exports = {
                 req.flash('errors', ['Name, reply, and image are required.']);
                 return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
             }
-            if (!req.body.people.mobile || !req.body.people.email || !req.body.people.outlet) {
+            if (!(req.body.people.mobile || !req.body.people.email || !req.body.people.outlet)) {
                 req.flash('errors', ['At least mobile number, email address or outlet address is required']);
                 return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
             }
