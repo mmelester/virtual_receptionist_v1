@@ -5,7 +5,6 @@ module.exports = {
             const errors = req.flash('errors');
             const success = req.flash('success');
             const isLoggedIn = req.session && req.session.isLoggedIn;
-
             res.render('admin/people', { people, errors, success, isLoggedIn });
         } catch (error) {
             console.error('Error fetching people:', error);
@@ -15,6 +14,7 @@ module.exports = {
     },
 
     async getPeopleByCompanyId(req, res, PersonModel, isApiRequest = false) {
+
         try {
             const companyId = req.params.id;
     
@@ -44,8 +44,14 @@ module.exports = {
     },
     
     async addPerson(req, res, PersonModel) {
+
+        console.log("peopleController.addPerson called", req.params.id);
+
         try {
             const { id: companyId } = req.params; // Retrieve companyId from route parameters
+
+            console.log(companyId);
+
             const { people } = req.body; // Retrieve person data from request body
             const personId = people.id
 
@@ -58,8 +64,9 @@ module.exports = {
                 return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
             }
             if (!(req.body.people.mobile || !req.body.people.email || !req.body.people.outlet)) {
-                req.flash('errors', ['At least mobile number, email address or outlet address is required']);
-                return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
+                console.log("At least mobile number, email address or outlet address is required");
+                req.flash('errors', ['At least mobile number, email address or outlet address is required.']);
+                return req.session.save(() => res.redirect('/admin/companies/companyId/people'));
             }
     
             if (!people || !companyId) {
@@ -76,11 +83,11 @@ module.exports = {
             }
 
             req.flash('success', 'Staff member added/updated successfully!');
-            req.session.save(() => res.status(200).json({ success: true, message: 'Company added successfully!' }));
+            req.session.save(() => res.status(200).json({ success: true, message: 'Staff member added successfully!' }));
     
         } catch (error) {
             console.error('Error adding company:', error);
-            req.flash('errors', ['Failed to add company.']);
+            req.flash('errors', ['Failed to add new staff member.']);
             req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' }));
         }
     },
@@ -150,7 +157,13 @@ module.exports = {
             req.flash('errors', ["Failed to update staff member's information."]);
             req.session.save(() => res.status(500).json({ success: false, message: "Failed to update staff member's information." }));
         }
-    }
+    },
       
-    
+    async errorHandler(req, res, PersonModel) {
+
+        console.log("peopleController.errorHandler called");
+        req.flash('errors', req.body.errors);
+        console.log("Results failed");
+        return req.session.save(() => res.status(400).json({ success: false, message: 'Failed to add new staff member' }));
+    },
 };

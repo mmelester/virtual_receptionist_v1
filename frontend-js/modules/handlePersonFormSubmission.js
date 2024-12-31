@@ -21,10 +21,22 @@ export async function handlePersonFormSubmission(event) {
     const croppedCanvas = drawSavedImage();
     if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
 
+    // If there are errors, send them to the server and stop further execution
     if (errors.length > 0) {
-        alert(errors.join('\n'));
-        return;
+        try {
+
+            await fetch(`/api/companies/${companyId}/people/errors`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ errors }),
+            });
+            window.location.reload(); // Force a page refresh to display flash errors
+            return; // Stop further execution
+        } catch (error) {
+            console.error('Error sending errors:', error);
+        }
     }
+
 
     const croppedImage = croppedCanvas.toDataURL('image/png');
     

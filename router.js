@@ -61,6 +61,13 @@ module.exports = (db) => {
         console.log("From router: ", companyId, personId);
         peopleController.editPerson(req, res, peopleModelInstance, companyId, personId);
     });
+    // Handle error paths
+    router.post('/api/companies/:id/people/errors', (req, res) => {
+        const companyId = req.params.id;
+        console.log("From router: ", companyId )
+        peopleController.errorHandler(req, res, peopleModelInstance);
+    });
+    
 
     router.post('/admin/companies/people/add', (req, res) =>
         peopleController.addPerson(req, res, peopleModelInstance)
