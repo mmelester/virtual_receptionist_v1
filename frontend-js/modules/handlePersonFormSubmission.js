@@ -14,19 +14,19 @@ export async function handlePersonFormSubmission(event) {
 
     if (!personName) errors.push("Person's name is required.");
     if (!replyText) errors.push('Reply text is required.');
-    if (!mobile && !email && !outlet) errors.push('Either mobile number, email address or outlet address is required.');
+    if (!(mobile || email || outlet)) errors.push('Either mobile number, email address or outlet address is required.');
     const img = getImg();
+    const croppedCanvas = drawSavedImage();
     if (!img) {
         errors.push('An image is required. Please add an image.');
-    } else {
-        const croppedCanvas = drawSavedImage();
-    if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
+    } else {  
+        if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
     }
     
     // If there are errors, send them to the server and stop further execution
     if (errors.length > 0) {
         try {
-
+            console.log("Errors in handlePersonFormSubmission")
             await fetch(`/api/companies/${companyId}/people/errors`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
