@@ -16,11 +16,13 @@ export async function handlePersonFormSubmission(event) {
     if (!replyText) errors.push('Reply text is required.');
     if (!mobile && !email && !outlet) errors.push('Either mobile number, email address or outlet address is required.');
     const img = getImg();
-    if (!img) errors.push('An image is required. Please add an image.');
-
-    const croppedCanvas = drawSavedImage();
+    if (!img) {
+        errors.push('An image is required. Please add an image.');
+    } else {
+        const croppedCanvas = drawSavedImage();
     if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
-
+    }
+    
     // If there are errors, send them to the server and stop further execution
     if (errors.length > 0) {
         try {
