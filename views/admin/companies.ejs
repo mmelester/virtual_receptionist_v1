@@ -36,8 +36,8 @@
             <div class="info">
                 <form id="companyForm">
                     <div class="form-group">
-                        <label class="form-data" for="companyName">Company Name (up to 35 characters):</label>
-                        <input type="text" id="companyName" name="companyName" maxlength="35" required>
+                        <label class="form-data" for="companyName">Company Name (up to 50 characters):</label>
+                        <input type="text" id="companyName" name="companyName" maxlength="50" required>
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="introText">Intro Text (up to 160 characters):</label>
@@ -88,12 +88,12 @@
                         <div class="edit-delete-people ml-auto pt-1">
                             <i
                                 id="showPeople"
-                                class="showPeople fa fa-user pr-3 text-muted" 
+                                class="showPeople icon fa fa-user pr-3 muted" 
                                 aria-hidden="true"
                                 data-id="<%= company._id %>">
                             </i>
                             <i 
-                                class="editCompany fa fa-pencil-square-o pr-3" 
+                                class="editCompany icon fa fa-pencil-square-o pr-3" 
                                 aria-hidden="true" 
                                 data-id="<%= company._id %>"
                                 data-section-id="add-company-section"
@@ -101,7 +101,7 @@
                                 data-heading-id="form-heading">
                             </i>
                             <i 
-                                class="delete-btn fa fa-trash pr-3 text-muted" 
+                                class="delete-btn icon fa fa-trash pr-3 muted" 
                                 aria-hidden="true" 
                                 data-route="/admin/companies/delete" 
                                 data-id="<%= company._id %>">

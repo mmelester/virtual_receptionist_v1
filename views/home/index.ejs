@@ -18,7 +18,7 @@
               <% } %>
               
             <section class="page-intro-section">
-                <img src="/images/logo.png" width="250" height="250" alt="building logo">
+                <img src="/images/logo.png" width="200" height="200" alt="building logo">
                 <h1>Hi I'm Vivi, Your Virtual Receptionist</h1>
             </section>
             <section class="companies-section">
@@ -26,7 +26,12 @@
                     <% if (companies.length > 0) { %>
                         <% companies.forEach(company => { %>
                             <div class="flex-col-container">
-                                <img src="<%= company.image %>" alt="<%= company.name %> logo" width="auto" height="150px"/>
+                                <img 
+                                  class="logo"
+                                  src="<%= company.image %>" 
+                                  alt="<%= company.name %> logo" 
+                                  idth="auto" 
+                                  height="125px"/>
                              
                             </div>
                         <% }); %>
