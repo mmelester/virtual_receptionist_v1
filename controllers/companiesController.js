@@ -99,5 +99,30 @@ module.exports = {
             req.flash('errors', ['Failed to edit staff member.']);
             req.session.save(() => res.status(500).json({ success: false, message: 'Failed to update company.' }));
         }
-    }    
+    },
+
+    async getCompanyById(req, res, CompanyModel) {
+        const companyId = req.params.id;
+
+        try {
+            const company = await CompanyModel.getCompanyById(companyId);
+
+            if (!company) {
+                return res.status(404).render('error', { message: 'Company not found.', isLoggedIn: req.session && req.session.isLoggedIn });
+            }
+
+            res.render('companies/detail', { 
+                company, 
+                isLoggedIn: req.session && req.session.isLoggedIn // Pass isLoggedIn to the view
+            });
+        } catch (error) {
+            console.error('Error fetching company details:', error);
+            res.status(500).render('error', { 
+                message: 'Internal server error.', 
+                isLoggedIn: req.session && req.session.isLoggedIn 
+            });
+        }
+    }
+
+    
 };
