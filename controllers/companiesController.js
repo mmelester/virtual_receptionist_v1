@@ -122,7 +122,5 @@ module.exports = {
                 isLoggedIn: req.session && req.session.isLoggedIn 
             });
         }
-    }
-
-    
+    }    
 };
