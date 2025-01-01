@@ -1,6 +1,6 @@
 section.companies-section,
 section.people-section {
-  margin-bottom: 5rem;
+  margin-bottom: 1rem;
 }
 
 .flex-container {
@@ -8,7 +8,7 @@ section.people-section {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  gap: 1.75rem;
+  gap: 2rem;
 
   h2 {
     font-size: 1.5rem;

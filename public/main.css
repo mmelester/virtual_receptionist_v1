@@ -10,7 +10,7 @@
 body {
   display: flex;
   flex-direction: column;
-  nim-height: 100vh;
+  min-height: 100vh;
   margin: 0;
 }
 
@@ -24,15 +24,27 @@ body {
 
 footer {
   text-algin: center;
+  padding: 1rem;
+}
+/* Wrapper for the page */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows the content to grow if needed */
+}
+
+/* Main content area */
+.page {
+  flex-grow: 1; /* Pushes the footer to the bottom when content is short */
 }
 
 .page-intro-section {
-  padding-top: 3rem;
+  padding-top: 2rem;
   text-align: center;
 
   h1 {
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+    padding-top: 1rem;
+    padding-bottom: 3rem;
   }
 }
 .entities-flex-container {

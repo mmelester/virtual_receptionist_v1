@@ -111,7 +111,7 @@ module.exports = {
                 return res.status(404).render('error', { message: 'Company not found.', isLoggedIn: req.session && req.session.isLoggedIn });
             }
 
-            res.render('companies/detail', { 
+            res.render('companies/company', { 
                 company, 
                 isLoggedIn: req.session && req.session.isLoggedIn // Pass isLoggedIn to the view
             });
