@@ -68,7 +68,6 @@ module.exports = (db) => {
         peopleController.errorHandler(req, res, peopleModelInstance);
     });
     
-
     router.post('/admin/companies/people/add', (req, res) =>
         peopleController.addPerson(req, res, peopleModelInstance)
     );

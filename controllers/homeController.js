@@ -10,6 +10,7 @@ exports.home = async function (req, res, db) {
 
     try {
         const companies = await companyModel.getCompanies();
+
         res.render('home/index.ejs', { 
             companies, 
             error: null, 
@@ -22,9 +23,7 @@ exports.home = async function (req, res, db) {
             error: 'Failed to load companies.', 
             isLoggedIn // Pass isLoggedIn to the view even in case of errors
         });
-        req.flash('errors', e)
-        req.session.save(function() {
-          res.redirect('/')
-        })
+        req.flash('errors', error)
+        req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch company information from database.' }));
     }
 };
