@@ -111,7 +111,8 @@ class PersonModel extends BaseModel {
         console.log("From PersonModel.update ", companyId);
 
         if (!ObjectId.isValid(companyId)) {
-            throw new Error('Invalid ObjectId.');
+            console.error('Invalid ObjectId');
+            return { success: false, message: 'Invalid Company ID.' };
         }
     
         try {
@@ -119,8 +120,10 @@ class PersonModel extends BaseModel {
                 { _id: ObjectId.createFromHexString(companyId) }, // Match the company by its ID
                 { $push: { people: personData } } // Push the new person into the `people` array
             );
-
-            return { success: result.modifiedCount > 0 };
+            if (result.modifiedCount === 0) {
+                return { success: false, message: 'No staff members found.' };
+            }
+            return { success: true, message: 'Success.  Staff members updated/loaded.' };
         } catch (error) {
             console.error('Error updating company people:', error);
             return { success: false, message: 'Failed to update people.' };
