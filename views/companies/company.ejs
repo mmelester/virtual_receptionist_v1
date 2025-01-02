@@ -14,7 +14,9 @@
             if (people.length > 0) { %>
                 <% people.forEach(person => { %>
                     <div class="flex-col-container mt-1">
-                        <img class="headshot" src="<%= person.image %>" alt="<%= person.name %>" height="150" width="150"/>
+                        <a href="/companies/person/<%= person.id %>">
+                            <img class="headshot" src="<%= person.image %>" alt="<%= person.name %>" height="150" width="150"/>
+                        </a>
                         <h5 class="mt-2" ><%= person.name %></h5>
                         <!-- <p>Role: <%= person.reply %></p> -->
                     </div>

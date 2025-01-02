@@ -158,33 +158,57 @@ module.exports = {
             req.session.save(() => res.status(500).json({ success: false, message: "Failed to update staff member's information." }));
         }
     },
-
-    async renderPeoplePageByCompanyId(req, res, PersonModel) {
+    async getPersonById(req, res, PersonModel, personId) {
         try {
-            const companyId = req.params.id;
-
-            // Fetch the people array associated with the company
-            const people = await PersonModel.getCompanyPeople(companyId);
-
-            if (!people || people.length === 0) {
-                req.flash('errors', ['No people found for this company.']);
-                return req.session.save(() => res.redirect(`/companies/${companyId}`));
+            // Decide which method to use based on the ID format
+            const isObjectId = /^[a-fA-F0-9]{24}$/.test(personId); // Check if it's a valid MongoDB ObjectId
+            const person = isObjectId
+                ? await PersonModel.getPersonById(personId) // Use existing method for ObjectId
+                : await PersonModel.getPersonByCustomId(personId); // Use new method for custom IDs
+    
+            if (!person) {
+                return res.status(404).render('error', { 
+                    message: 'Staff member not found.', 
+                    isLoggedIn: req.session && req.session.isLoggedIn 
+                });
             }
-
-            // Render the people page
-            res.render('companies/people', {
-                people,
-                companyId,
-                errors: req.flash('errors'),
-                success: req.flash('success'),
-                isLoggedIn: req.session && req.session.isLoggedIn,
-            });
+            
+            res.render('companies/person', { person, isLoggedIn: req.session && req.session.isLoggedIn });
         } catch (error) {
-            console.error('Error rendering people page:', error);
-            req.flash('errors', ['Failed to load people for the company.']);
-            req.session.save(() => res.redirect(`/companies/${req.params.id}`));
+            console.error("Error fetching staff member's details:", error);
+            res.status(500).render('error', { 
+                message: 'Internal server error.', 
+                isLoggedIn: req.session && req.session.isLoggedIn 
+            });
         }
-    },
+    },    
+    
+    // async renderPeoplePageByCompanyId(req, res, PersonModel) {
+    //     try {
+    //         const companyId = req.params.id;
+
+    //         // Fetch the people array associated with the company
+    //         const people = await PersonModel.getCompanyPeople(companyId);
+
+    //         if (!people || people.length === 0) {
+    //             req.flash('errors', ['No people found for this company.']);
+    //             return req.session.save(() => res.redirect(`/companies/${companyId}`));
+    //         }
+
+    //         // Render the people page
+    //         res.render('companies/people', {
+    //             people,
+    //             companyId,
+    //             errors: req.flash('errors'),
+    //             success: req.flash('success'),
+    //             isLoggedIn: req.session && req.session.isLoggedIn,
+    //         });
+    //     } catch (error) {
+    //         console.error('Error rendering people page:', error);
+    //         req.flash('errors', ['Failed to load people for the company.']);
+    //         req.session.save(() => res.redirect(`/companies/${req.params.id}`));
+    //     }
+    // },
       
     async errorHandler(req, res, PersonModel) {
 

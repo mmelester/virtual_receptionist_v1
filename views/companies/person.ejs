@@ -1,0 +1,12 @@
+<%- include('../includes/header') %>
+<div class="page-wrapper">
+    <div class="page">
+        <div class="person-details">
+            <img src="<%= person.image %>" alt="<%= person.name %>" />
+            <h1><%= person.name %></h1>
+            <p><%= person.reply %></p>
+            <!-- Add any other details from the person object as needed -->
+        </div>
+    </div>
+</div>
+<%- include('../includes/footer') %>

@@ -155,6 +155,18 @@ class PersonModel extends BaseModel {
         }
     }
     
+    async getPersonByCustomId(customId) {
+        try {
+            const person = await this.collection.findOne(
+                { 'people.id': customId }, 
+                { projection: { 'people.$': 1 } } // Projection to return only the matched person
+            );
+            return person?.people?.[0] || null;
+        } catch (error) {
+            console.error('Database error:', error);
+            throw new Error('Failed to retrieve person data.');
+        }
+    }
     
 }
 
