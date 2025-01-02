@@ -37,7 +37,7 @@ async function startServer() {
         });
         app.use('/frontend-js', express.static(__dirname + '/frontend-js'));
         app.use(express.static('public'));
-        app.use(express.json());
+        app.use(express.json({ limit: '5mb' }));
         app.use(express.urlencoded({ limit: '1mb', extended: true })); // Set URL-encoded body limit to 1 MB
 
         // Pass isLoggedIn globally
