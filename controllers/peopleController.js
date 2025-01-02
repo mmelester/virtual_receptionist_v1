@@ -158,6 +158,33 @@ module.exports = {
             req.session.save(() => res.status(500).json({ success: false, message: "Failed to update staff member's information." }));
         }
     },
+
+    async renderPeoplePageByCompanyId(req, res, PersonModel) {
+        try {
+            const companyId = req.params.id;
+
+            // Fetch the people array associated with the company
+            const people = await PersonModel.getCompanyPeople(companyId);
+
+            if (!people || people.length === 0) {
+                req.flash('errors', ['No people found for this company.']);
+                return req.session.save(() => res.redirect(`/companies/${companyId}`));
+            }
+
+            // Render the people page
+            res.render('companies/people', {
+                people,
+                companyId,
+                errors: req.flash('errors'),
+                success: req.flash('success'),
+                isLoggedIn: req.session && req.session.isLoggedIn,
+            });
+        } catch (error) {
+            console.error('Error rendering people page:', error);
+            req.flash('errors', ['Failed to load people for the company.']);
+            req.session.save(() => res.redirect(`/companies/${req.params.id}`));
+        }
+    },
       
     async errorHandler(req, res, PersonModel) {
 

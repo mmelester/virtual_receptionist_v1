@@ -2,10 +2,27 @@
 <div class="page-wrapper">
     <div class="page">
         <div class="page-intro-section">
-            <img src="<%= company.image %>" alt="<%= company.name %> logo" />
-            <h1><%= company.name %></h1>
-            <h2 class="pb-5"><%= company.intro %></h2>
+            <a href="/companies/<%= company._id %>/people">
+                <img src="<%= company.image %>" alt="<%= company.name %> logo" />
+            </a>
+            <!-- <h1><%= company.name %></h1> -->
+
+            <% 
+            const people = company.people;
+            
+            if (people.length > 0) { %>
+                <% people.forEach(person => { %>
+                    <img src="<%= person.image %>" alt="<%= person.name %>" />
+                    <p><%= person.name %></p>
+                    <!-- <p>Role: <%= person.reply %></p> -->
+                <% }); %>
+            <% } else { %>
+                <p>No staff member found for this company.</p>
+            <% } %>
         </div>
+
+            <h5 class="pb-5"><%= company.intro %></h2>
+        </div>        
     </div>
 </div>
 

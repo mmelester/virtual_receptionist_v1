@@ -1,0 +1,32 @@
+<%- include('../includes/header') %>
+<div class="page">
+    <h1>People Associated with Company</h1>
+    <% if (errors.length) { %>
+        <div class="alert alert-danger">
+            <% errors.forEach(error => { %>
+                <p><%= error %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    <% if (success.length) { %>
+        <div class="alert alert-success">
+            <% success.forEach(msg => { %>
+                <p><%= msg %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    <% if (people.length > 0) { %>
+        <ul>
+            <% people.forEach(person => { %>
+                <li>
+                    <img src="<%= person.image %>" alt="<%= person.name %>" />
+                    <p>Name: <%= person.name %></p>
+                    <p>Role: <%= person.reply %></p>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No people found for this company.</p>
+    <% } %>
+</div>
+<%- include('../includes/footer') %>

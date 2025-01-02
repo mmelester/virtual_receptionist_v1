@@ -24,11 +24,14 @@ module.exports = (db) => {
     // Home route
     router.get('/', (req, res) => homeController.home(req, res, db));
 
-    // Client company view route
+    // Client view routes
     router.get('/companies/:id', (req, res) => {
         companiesController.getCompanyById(req, res, companyModelInstance);
     });
-    
+    router.get('/companies/:id/people', (req, res) => {
+        peopleController.renderPeoplePageByCompanyId(req, res, peopleModelInstance);
+    });
+        
     // Admin dashboard route
     router.get('/admin', (req, res) => adminController.index(req, res, adminModelInstance));
 
