@@ -1,11 +1,10 @@
 <%- include('../includes/header') %>
 <div class="page-wrapper">
     <div class="page">
-        <div class="person-details">
-            <img src="<%= person.image %>" alt="<%= person.name %>" />
-            <h1><%= person.name %></h1>
-            <p><%= person.reply %></p>
-            <!-- Add any other details from the person object as needed -->
+        <div class="person-details mt-5 pt-3">
+            <img class="headshot d-block mx-auto mb-5" src="<%= person.image %>" alt="<%= person.name %>" height="250" width="250"/>
+            <!-- <h1><%= person.name %></h1> -->
+            <h3 class="pt-3 text-center"><%= person.reply %></h3>
         </div>
     </div>
 </div>
