@@ -175,4 +175,10 @@ img.logo:hover {
   }
 }
 
+img.headshot {
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  border: 1px solid var(--secondary-color-dark-dim);
+}
+
 /* Media Queries */

@@ -2,27 +2,30 @@
 <div class="page-wrapper">
     <div class="page">
         <div class="page-intro-section">
-            <a href="/companies/<%= company._id %>/people">
+            <div class="mt-2 mb-4">
                 <img src="<%= company.image %>" alt="<%= company.name %> logo" />
-            </a>
-            <!-- <h1><%= company.name %></h1> -->
+                <!-- <h1><%= company.name %></h1> -->
+            </div>
 
-            <% 
+            <div class="flex-container">
+                <% 
             const people = company.people;
             
             if (people.length > 0) { %>
                 <% people.forEach(person => { %>
-                    <img src="<%= person.image %>" alt="<%= person.name %>" />
-                    <p><%= person.name %></p>
-                    <!-- <p>Role: <%= person.reply %></p> -->
+                    <div class="flex-col-container mt-1">
+                        <img class="headshot" src="<%= person.image %>" alt="<%= person.name %>" height="150" width="150"/>
+                        <h5 class="mt-2" ><%= person.name %></h5>
+                        <!-- <p>Role: <%= person.reply %></p> -->
+                    </div>
+                    
                 <% }); %>
-            <% } else { %>
-                <p>No staff member found for this company.</p>
-            <% } %>
-        </div>
-
-            <h5 class="pb-5"><%= company.intro %></h2>
-        </div>        
+                <% } else { %>
+                    <p>No staff member found for this company.</p>
+                <% } %>
+            </div>
+            <h5 class=""><%= company.intro %></h2>
+        </div>     
     </div>
 </div>
 
