@@ -46,6 +46,7 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
                 if (result.success) {
 
                     const name = result.data.name;
+                    const title = result.data.title;
                     const reply = result.data.reply;
                     const mobile = result.data.mobile;
                     const email = result.data.email;
@@ -53,6 +54,7 @@ document.querySelectorAll('.editPerson').forEach((icon) => {
                     const image = result.data.image;
                     
                     personForm.elements['personName'].value = name;
+                    personForm.elements['personTitle'].value = title;
                     personForm.elements['replyText'].value = reply;
                     personForm.elements['mobile'].value = mobile;
                     personForm.elements['email'].value = email;

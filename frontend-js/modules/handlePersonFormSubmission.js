@@ -4,6 +4,7 @@ export async function handlePersonFormSubmission(event) {
     let errors = [];
     let personId;
     const personName = document.getElementById('personName').value.trim();
+    const personTitle = document.getElementById('personTitle').value.trim();
     const replyText = document.getElementById('replyText').value.trim();
     const mobile = document.getElementById('mobile').value.trim();
     const email = document.getElementById('email').value.trim();
@@ -39,7 +40,6 @@ export async function handlePersonFormSubmission(event) {
         }
     }
 
-
     const croppedImage = croppedCanvas.toDataURL('image/png');
     
     personId = flag === 'c' ? personId = crypto.randomUUID() : await localStorage.getItem('personId');
@@ -48,6 +48,7 @@ export async function handlePersonFormSubmission(event) {
     const personData = {
         id: personId,
         name: personName,
+        title: personTitle,
         reply: replyText,
         mobile: mobile,
         email: email,

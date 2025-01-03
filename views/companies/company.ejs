@@ -17,7 +17,11 @@
                         <a href="/companies/person/<%= person.id %>">
                             <img class="headshot" src="<%= person.image %>" alt="<%= person.name %>" height="150" width="150"/>
                         </a>
-                        <h5 class="mt-2" ><%= person.name %></h5>
+                        <h5 class="mt-2 mb-0"><%= person.name %></h5>
+                        <% 
+                        const title = person.title ? person.title : ""
+                        %>
+                        <h5><%= title %></h5>
                         <!-- <p>Role: <%= person.reply %></p> -->
                     </div>
                     
@@ -26,7 +30,7 @@
                     <p>No staff member found for this company.</p>
                 <% } %>
             </div>
-            <h5 class=""><%= company.intro %></h2>
+            <h4 class=""><%= company.intro %></h4>
         </div>     
     </div>
 </div>
