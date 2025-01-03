@@ -33,8 +33,6 @@ module.exports = (db) => {
         peopleController.getPersonById(req, res, peopleModelInstance, id);
     });
     
-    
-
     // router.get('/companies/:id/people', (req, res) => {
     //     peopleController.renderPeoplePageByCompanyId(req, res, peopleModelInstance);
     // });

@@ -101,16 +101,23 @@ module.exports = {
         }
     },
 
-    async getCompanyById(req, res, CompanyModel) {
+    async getCompanyById(req, res, CompanyModel, PersonModel) {
         const companyId = req.params.id;
-
+    
         try {
             const company = await CompanyModel.getCompanyById(companyId);
-
+    
             if (!company) {
                 return res.status(404).render('error', { message: 'Company not found.', isLoggedIn: req.session && req.session.isLoggedIn });
             }
-
+    
+            // Check if there's only one person in the company
+            const people = company.people || [];
+            if (people.length === 1) {
+                const personId = people[0].id;
+                return res.redirect(`/companies/person/${personId}`);
+            }
+    
             res.render('companies/company', { 
                 company, 
                 isLoggedIn: req.session && req.session.isLoggedIn // Pass isLoggedIn to the view
@@ -122,5 +129,6 @@ module.exports = {
                 isLoggedIn: req.session && req.session.isLoggedIn 
             });
         }
-    }    
+    }
+     
 };
