@@ -1,3 +1,8 @@
+const twilio = require('twilio');
+const accountSid = process.env.SMS_ACCOUNT_SID;
+const authToken = process.env.SMS_AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
+
 module.exports = {
     async getPeople(req, res, PersonModel) {
         try {
@@ -171,6 +176,17 @@ module.exports = {
                     message: 'Staff member not found.', 
                     isLoggedIn: req.session && req.session.isLoggedIn 
                 });
+            }
+            // Send SMS if mobile number specified
+            if (person.mobile) {
+                client.messages
+                    .create({
+                        body: `Hello, ${person.name}! It's Vivi.  You have someone waiting for you in the lobby.`,
+                        from: process.env.TWILIO_PHONE_NUMBER, 
+                        to: person.mobile,
+                    })
+                    .then(message => console.log(`SMS sent to:  ${person.mobile}, Record  ${message.sid}`))
+                    .catch(error => console.error('Error sending SMS:', error));
             }
             
             res.render('companies/person', { person, isLoggedIn: req.session && req.session.isLoggedIn });
