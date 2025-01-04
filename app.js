@@ -57,8 +57,9 @@ async function startServer() {
         app.use('/', router);
 
         // Start the server
-        app.listen(3000, () => {
-            console.log('Server is running on http://localhost:3000');
+        app.listen(process.env.PORT || 3000, () => { 
+            const port = process.env.PORT || 3000;
+            console.log(`Server is running on http://localhost:${port}`);
         });
     } catch (error) {
         console.error('Failed to start the server:', error);
