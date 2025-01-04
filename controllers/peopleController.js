@@ -1,4 +1,6 @@
+const dotenv = require('dotenv');
 const twilio = require('twilio');
+const sgMail = require('@sendgrid/mail');
 const accountSid = process.env.SMS_ACCOUNT_SID;
 const authToken = process.env.SMS_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
@@ -177,7 +179,7 @@ module.exports = {
                     isLoggedIn: req.session && req.session.isLoggedIn 
                 });
             }
-            // Send SMS if mobile number specified
+            // Send SMS notification if mobile number specified
             if (person.mobile) {
                 client.messages
                     .create({
@@ -187,6 +189,28 @@ module.exports = {
                     })
                     .then(message => console.log(`SMS sent to:  ${person.mobile}, Record  ${message.sid}`))
                     .catch(error => console.error('Error sending SMS:', error));
+            }
+            // Send email notification if email address specified
+            if (person.email) {
+                // Set the API key from your .env file
+                sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+                const msg = {
+                    to: person.email, // Recipient's email
+                    from: "matt@intensivehope.com", // From email must authorized in SendGrid
+                    subject: 'You have a client waiting for you in the lobby!',
+                    text: 'This is a email sent using SendGrid!',
+                    html: '<strong>Vivi is hard at work!</strong>',
+                };
+                // Send the email
+                sgMail
+                .send(msg)
+                .then(() => {
+                    console.log('Email sent successfully!');
+                })
+                .catch((error) => {
+                    console.error('Error sending email:', error);
+                });
             }
             
             res.render('companies/person', { person, isLoggedIn: req.session && req.session.isLoggedIn });
