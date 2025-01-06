@@ -181,6 +181,7 @@ module.exports = {
             }
             // Send SMS notification if mobile number specified
             if (person.mobile) {
+                console.log("From: ",process.env.TWILIO_PHONE_NUMBER);
                 client.messages
                     .create({
                         body: `Hello, ${person.name}! It's Vivi.  You have someone waiting for you in the lobby.`,

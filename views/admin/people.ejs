@@ -26,7 +26,7 @@
     
 
     <section id="add-person-section" class="add-item-section d-none">
-        <div class="add-peopele-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
+        <div class="add-peopele-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light shadow">
             <div class="d-flex">
                  <span id="close-btn" class="ml-auto bg-secondary pl-2 pr-2 border rounded text-white font-weight-bold">X</span>
             </div>
@@ -47,18 +47,23 @@
                         <label class="form-data" for="replyText">Response Text (up to 150 characters):</label>
                         <textarea class="reply-box" id="replyText" name="replyText" maxlength="150" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <label class="form-data" for="mobile">Mobile:</label>
-                        <input type="text" id="mobile" name="mobile" maxlength="11" required>
+                   
+                    <div class="border pt-3 pb-3  pl-3 pr-3 rounded mt-2  bg-light">
+                        <p class="text-center">Please enter mobile number, email address, and/or outlet ID that you wish to be contacted.</p>
+                        <div class="form-group">
+                            <label class="form-data" for="mobile">Mobile:</label>
+                            <input type="text" id="mobile" name="mobile" maxlength="11" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-data" for="email">Email:</label>
+                            <input type="text" id="email" name="email" maxlength="24" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-data" for="mobile">Outlet ID:</label>
+                            <input type="text" id="outlet" name="outlet" maxlength="24" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-data" for="email">Email:</label>
-                        <input type="text" id="email" name="email" maxlength="24" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-data" for="mobile">Outlet:</label>
-                        <input type="text" id="outlet" name="outlet" maxlength="24" required>
-                    </div>
+                   
                 </form>
             </div>
 
@@ -84,7 +89,7 @@
 
         </div>
 
-        <div class="text-center">
+        <div class="text-center pt-5">
             <button id="save-headshot-btn" class="save-headshot-btn btn btn-primary btn-sm pr-4 pl-4 pt-2 pb-2">Save</button>
         </div> 
     </div>
@@ -93,7 +98,7 @@
         <div>
             <% if (people && people.length > 0) { %>
                 <% people.forEach(person => { %>
-                    <div class="align-items-center d-flex border border-dark-grey mb-3 p-3 rounded bg-light">
+                    <div class="align-items-center d-flex border border-dark-grey mb-3 p-3 rounded bg-light shadow">
                         <div class="person-headshot flex-half">
                             <img class='text-center' src="<%= person.image %>" alt="<%= person.name %> logo" width="auto" height="50px" />
                         </div>
