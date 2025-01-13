@@ -213,6 +213,51 @@ module.exports = {
                     console.error('Error sending email:', error);
                 });
             }
+            // Toggle Outlet if outlet ID specified
+            if (person.outlet) {
+                const { Client } = require('tplink-smarthome-api');
+                const client = new Client();
+            
+                // Function to control the smart plug
+                const controlPlug = (device) => {
+                    console.log(`Connected to ${device.alias} at ${device.host}`);
+            
+                    // Turn ON the smart plug
+                    device.setPowerState(true).then(() => {
+                        console.log('Plug turned ON');
+                    });
+            
+                    // Turn OFF the smart plug after 5 seconds
+                    setTimeout(() => {
+                        device.setPowerState(false).then(() => {
+                            console.log('Plug turned OFF');
+                        });
+                    }, 5000);
+                };
+            
+                // If the device IP is known, use it; otherwise, discover the device
+                const deviceIp = '192.168.1.100';  // Replace with your known IP or leave empty
+            
+                if (deviceIp) {
+                    // Connect using the known IP address
+                    client.getDevice({ host: deviceIp }).then(controlPlug).catch(() => {
+                        console.log(`Failed to connect to ${deviceIp}. Starting discovery...`);
+            
+                        // Start discovery if direct connection fails
+                        client.startDiscovery().on('device-new', (device) => {
+                            console.log(`Discovered device: ${device.alias} at ${device.host}`);
+                            controlPlug(device);
+                        });
+                    });
+                } else {
+                    // Start discovery if IP is not set
+                    client.startDiscovery().on('device-new', (device) => {
+                        console.log(`Discovered device: ${device.alias} at ${device.host}`);
+                        controlPlug(device);
+                    });
+                }
+            }
+            
             
             res.render('companies/person', { person, isLoggedIn: req.session && req.session.isLoggedIn });
         } catch (error) {
