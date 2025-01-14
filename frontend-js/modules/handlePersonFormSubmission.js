@@ -54,6 +54,7 @@ export async function handlePersonFormSubmission(event) {
         email: email,
         outlet: outlet,
         image: croppedImage,
+        consent: "PENDING"
     };
 
     // console.log("client side ", companyId, personData);
