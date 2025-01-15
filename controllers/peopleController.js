@@ -1,9 +1,5 @@
-const dotenv = require('dotenv');
-const twilio = require('twilio');
-const sgMail = require('@sendgrid/mail');
-const accountSid = process.env.SMS_ACCOUNT_SID;
-const authToken = process.env.SMS_AUTH_TOKEN;
-const client = twilio(accountSid, authToken);
+// peopleController.js - handle HTTP requests and coordinate between the model, view, and services.
+const notificationService = require('../services/NotificationService');
 
 module.exports = {
     async getPeople(req, res, PersonModel) {
@@ -77,6 +73,7 @@ module.exports = {
             }
     
             if (!people || !companyId) {
+                
                 req.flash('errors', ['Invalid database entry or missing company ID.']);
                 return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
             }
@@ -167,107 +164,39 @@ module.exports = {
     },
     async getPersonById(req, res, PersonModel, personId) {
         try {
-            // Decide which method to use based on the ID format
-            const isObjectId = /^[a-fA-F0-9]{24}$/.test(personId); // Check if it's a valid MongoDB ObjectId
+            // Determine if the ID is a valid MongoDB ObjectId
+            const isObjectId = /^[a-fA-F0-9]{24}$/.test(personId);
             const person = isObjectId
-                ? await PersonModel.getPersonById(personId) // Use existing method for ObjectId
-                : await PersonModel.getPersonByCustomId(personId); // Use new method for custom IDs
-    
-            if (!person) {
-                return res.status(404).render('error', { 
-                    message: 'Staff member not found.', 
-                    isLoggedIn: req.session && req.session.isLoggedIn 
-                });
-            }
-            // Send SMS notification if mobile number specified
-            if (person.mobile) {
-                console.log("From: ",process.env.TWILIO_PHONE_NUMBER);
-                client.messages
-                    .create({
-                        body: `Hello, ${person.name}! It's Vivi.  You have someone waiting for you in the lobby.`,
-                        from: process.env.TWILIO_PHONE_NUMBER, 
-                        to: person.mobile,
-                    })
-                    .then(message => console.log(`SMS sent to:  ${person.mobile}, Record  ${message.sid}`))
-                    .catch(error => console.error('Error sending SMS:', error));
-            }
-            // Send email notification if email address specified
-            if (person.email) {
-                // Set the API key from your .env file
-                sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+                ? await PersonModel.getPersonById(personId)
+                : await PersonModel.getPersonByCustomId(personId);
 
-                const msg = {
-                    to: person.email, // Recipient's email
-                    from: "matt@intensivehope.com", // From email must authorized in SendGrid
-                    subject: 'You have a client waiting for you in the lobby!',
-                    text: 'This is a email sent using SendGrid!',
-                    html: '<strong>Vivi is hard at work!</strong>',
-                };
-                // Send the email
-                sgMail
-                .send(msg)
-                .then(() => {
-                    console.log('Email sent successfully!');
-                })
-                .catch((error) => {
-                    console.error('Error sending email:', error);
+            if (!person) {
+                return res.status(404).render('error', {
+                    message: 'Staff member not found.',
+                    isLoggedIn: req.session && req.session.isLoggedIn
                 });
             }
-            // Toggle Outlet if outlet ID specified
-            if (person.outlet) {
-                const { Client } = require('tplink-smarthome-api');
-                const client = new Client();
-            
-                // Function to control the smart plug
-                const controlPlug = (device) => {
-                    console.log(`Connected to ${device.alias} at ${device.host}`);
-            
-                    // Turn ON the smart plug
-                    device.setPowerState(true).then(() => {
-                        console.log('Plug turned ON');
-                    });
-            
-                    // Turn OFF the smart plug after 5 seconds
-                    setTimeout(() => {
-                        device.setPowerState(false).then(() => {
-                            console.log('Plug turned OFF');
-                        });
-                    }, 5000);
-                };
-            
-                // If the device IP is known, use it; otherwise, discover the device
-                const deviceIp = '192.168.1.100';  // Replace with your known IP or leave empty
-            
-                if (deviceIp) {
-                    // Connect using the known IP address
-                    client.getDevice({ host: deviceIp }).then(controlPlug).catch(() => {
-                        console.log(`Failed to connect to ${deviceIp}. Starting discovery...`);
-            
-                        // Start discovery if direct connection fails
-                        client.startDiscovery().on('device-new', (device) => {
-                            console.log(`Discovered device: ${device.alias} at ${device.host}`);
-                            controlPlug(device);
-                        });
-                    });
-                } else {
-                    // Start discovery if IP is not set
-                    client.startDiscovery().on('device-new', (device) => {
-                        console.log(`Discovered device: ${device.alias} at ${device.host}`);
-                        controlPlug(device);
-                    });
-                }
-            }
-            
-            
-            res.render('companies/person', { person, isLoggedIn: req.session && req.session.isLoggedIn });
+
+            // Send notifications using NotificationService
+            await Promise.all([
+                notificationService.sendSMS(person),
+                notificationService.sendEmail(person),
+                notificationService.toggleOutlet(person)
+            ]);
+
+            // Render the person's detail page
+            res.render('companies/person', {
+                person,
+                isLoggedIn: req.session && req.session.isLoggedIn
+            });
         } catch (error) {
             console.error("Error fetching staff member's details:", error);
-            res.status(500).render('error', { 
-                message: 'Internal server error.', 
-                isLoggedIn: req.session && req.session.isLoggedIn 
+            res.status(500).render('error', {
+                message: 'Internal server error.',
+                isLoggedIn: req.session && req.session.isLoggedIn
             });
         }
-    },    
+    },   
     
     // async renderPeoplePageByCompanyId(req, res, PersonModel) {
     //     try {
