@@ -7,7 +7,7 @@ class PersonModel extends BaseModel {
     }
 
     async addPerson(personData) {
-        const { name, reply, mobile, email, outlet, image } = personData;
+        const { name, reply, mobile, email, outlet, image, consent } = personData;
 
         console.log("addPerson ", name);
 
@@ -17,7 +17,7 @@ class PersonModel extends BaseModel {
         }
 
         try {
-            return await this.add({ name, reply, mobile, email, outlet, image }); // Use BaseModel's `add` method
+            return await this.add({ name, reply, mobile, email, outlet, image, consent }); // Use BaseModel's `add` method
         } catch (error) {
             console.error('Database error:', error);
             return { success: false, message: 'Failed to add the person due to a database error.' };
