@@ -3,6 +3,7 @@ import { drawSavedImage, getImg } from './drag-n-drop';
 export async function handlePersonFormSubmission(event) {
     let errors = [];
     let personId;
+    let consent;
     const personName = document.getElementById('personName').value.trim();
     const personTitle = document.getElementById('personTitle').value.trim();
     const replyText = document.getElementById('replyText').value.trim();
@@ -42,8 +43,12 @@ export async function handlePersonFormSubmission(event) {
 
     const croppedImage = croppedCanvas.toDataURL('image/png');
     
-    personId = flag === 'c' ? personId = crypto.randomUUID() : await localStorage.getItem('personId');
-    console.log("PID is ", personId)
+    if (flag === 'c') {
+        personId = crypto.randomUUID();
+        consent = "PENDING";
+    } else {
+        personId = await localStorage.getItem('personId');
+    }
     
     const personData = {
         id: personId,
@@ -54,7 +59,7 @@ export async function handlePersonFormSubmission(event) {
         email: email,
         outlet: outlet,
         image: croppedImage,
-        consent: "PENDING"
+        consent: consent
     };
 
     // console.log("client side ", companyId, personData);

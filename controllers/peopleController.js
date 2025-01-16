@@ -27,6 +27,7 @@ module.exports = {
             const people = await PersonModel.getCompanyPeople(companyId);
     
             if (isApiRequest) {
+                console.log("peopleController.getPeopleByCompanyId API request");
                 // Respond with JSON for API requests
                 return res.status(200).json({ success: true, data: people });
             }
@@ -53,14 +54,17 @@ module.exports = {
         try {
             const { id: companyId } = req.params; // Retrieve companyId from route parameters
 
-            console.log(companyId);
-
             const { people } = req.body; // Retrieve person data from request body
-            const personId = people.id
+            const personId = people.id;
+            const consentFlag = req.body.people.consent;
+            const mobile = req.body.people.mobile;
 
+            // Debug statements  
+            console.log(companyId);
+            console.log(mobile, consentFlag);
             console.log('Person ID: ', personId);    
-            console.log('Request Body:', people); // Debugging: Log the request body
-            console.log('Company ID:', companyId);  // Debugging: Log the companyId
+            // console.log('Request Body:', people); 
+            console.log('Company ID:', companyId); 
 
             if (!req.body.people.name || !req.body.people.reply || !req.body.people.image) {
                 req.flash('errors', ['Name, reply, and image are required.']);
@@ -73,7 +77,7 @@ module.exports = {
             }
     
             if (!people || !companyId) {
-                
+
                 req.flash('errors', ['Invalid database entry or missing company ID.']);
                 return req.session.save(() => res.redirect('/admin/companies/companyId/people/edit/personId'));
             }
@@ -84,6 +88,17 @@ module.exports = {
                 req.flash('errors', [result.message]);
                 console.log("Results failed");
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
+            }
+            if (consentFlag === "PENDING") {
+                // If person was added successfully, send consent SMS
+                if (result.success && mobile) {
+                    await notificationService.twilioClient.messages.create({
+                        body: "Reply CONSENT if you wish to receive client notifications from this number.",
+                        from: process.env.TWILIO_PHONE_NUMBER,
+                        to: mobile
+                    });
+                    console.log(`Consent SMS sent to: ${mobile}`);
+                }   
             }
 
             req.flash('success', 'Staff member added/updated successfully!');
@@ -138,7 +153,7 @@ module.exports = {
         const { companyId, id: personId } = req.params; // Extract IDs
         const personData = req.body.people; // Extract person data from the request body
     
-        console.log("Controller.updatePerson called", companyId, personId, personData);
+        // console.log("Controller.updatePerson called", companyId, personId, personData);
     
         // Input Validation
         if (!personData.name || !personData.reply || !personData.image) {

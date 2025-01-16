@@ -1,28 +1,42 @@
 const BaseModel = require('./BaseModel');
 const { ObjectId } = require('mongodb'); // Import ObjectId for MongoDB operations
+const notificationService = require('../services/NotificationService'); // Import NotificationService
 
 class PersonModel extends BaseModel {
     constructor(database) {
         super(database, 'companies'); // Pass the database and collection name to BaseModel
     }
 
-    async addPerson(personData) {
-        const { name, reply, mobile, email, outlet, image, consent } = personData;
+    // async addPerson(personData) {
+    //     const { name, reply, mobile, email, outlet, image, consent } = personData;
 
-        console.log("addPerson ", name);
+    //     console.log("addPerson ", name, consent);
 
-        // Validation
-        if (!name || !reply || !image) {
-            return { success: false, message: 'Name, reply, and logo image are required.' };
-        }
+    //     // Validation
+    //     if (!name || !reply || !image) {
+    //         return { success: false, message: 'Name, reply, and logo image are required.' };
+    //     }
 
-        try {
-            return await this.add({ name, reply, mobile, email, outlet, image, consent }); // Use BaseModel's `add` method
-        } catch (error) {
-            console.error('Database error:', error);
-            return { success: false, message: 'Failed to add the person due to a database error.' };
-        }
-    }
+    //     try {
+    //         result = await this.add({ name, reply, mobile, email, outlet, image, consent }); // Use BaseModel's `add` method
+    //         // If person was added successfully, send consent SMS
+    //         if (result.success && mobile) {
+    //             console.log("I got here!")
+    //             await notificationService.twilioClient.messages.create({
+    //                 body: "Reply CONSENT if you wish to receive client notifications from this number.",
+    //                 from: process.env.TWILIO_PHONE_NUMBER,
+    //                 to: mobile
+    //             });
+    //             console.log(`Consent SMS sent to: ${mobile}`);
+    //         }
+
+    //         return result;
+
+    //     } catch (error) {
+    //         console.error('Database error:', error);
+    //         return { success: false, message: 'Failed to add the person due to a database error.' };
+    //     }
+    // }
 
     async getPeople() {
         try {
