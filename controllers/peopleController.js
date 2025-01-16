@@ -239,6 +239,19 @@ module.exports = {
     //         req.session.save(() => res.redirect(`/companies/${req.params.id}`));
     //     }
     // },
+
+    async receiveSms(req, res) {
+        const incomingMessage = req.body.Body;
+        const fromNumber = req.body.From;
+
+        console.log("Message Received");
+
+        // Delegate the processing to NotificationService
+        const responseMessage = await notificationService.processIncomingSms(incomingMessage, fromNumber);
+
+        res.writeHead(200, { 'Content-Type': 'text/xml' });
+        res.end(responseMessage);
+    },
       
     async errorHandler(req, res, PersonModel) {
 

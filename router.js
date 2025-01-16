@@ -99,6 +99,14 @@ module.exports = (db) => {
         peopleController.updatePerson(req, res, peopleModelInstance)
     );
 
+    // ✅ Twilio Incoming SMS Webhook
+    router.get('/twilio/sms', (req, res) => {
+        res.send('✅ Twilio Webhook is active and waiting for POST requests.');
+    }); // Test route - not needed
+    router.post('/twilio/sms', (req, res) => {
+        console.log("🔔 Webhook route hit!");  // Debug log
+        peopleController.receiveSms(req, res);
+    });
     // Authentication routes
     router.post('/login', authController.login);
     router.get('/logout', authController.logout);
