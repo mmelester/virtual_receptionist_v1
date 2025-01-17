@@ -8,7 +8,7 @@ section.people-section {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  gap: 4rem;
+  gap: 2rem;
 
   h2 {
     font-size: 1.5rem;
@@ -162,6 +162,7 @@ i.muted {
 i.icon:hover {
   color: #ff5733;
 }
+
 img.logo:hover {
   animation: tilt 0.6s ease-in-out infinite alternate;
 }
@@ -182,3 +183,16 @@ img.headshot {
 }
 
 /* Media Queries */
+@media (max-width: 1100px) {
+  img.logo {
+    height: 75px;
+  }
+}
+@media (max-width: 800px) {
+  .flex-container {
+    gap: 1rem;
+  }
+  img.logo {
+    height: 70px;
+  }
+}
