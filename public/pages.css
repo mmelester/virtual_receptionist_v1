@@ -196,6 +196,14 @@ img.headshot {
   img.logo {
     height: 75px;
   }
+
+  .add-company-flex-container,
+  .add-person-flex-container {
+    .info {
+      max-width: 600px;
+      width: 80%;
+    }
+  }
 }
 @media (max-width: 800px) {
   .flex-container {
