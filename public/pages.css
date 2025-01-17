@@ -14,6 +14,15 @@ section.people-section {
     font-size: 1.5rem;
   }
 }
+
+.admin-btn-container {
+  display: flex;
+  justify-content: center; /* Center the items */
+  gap: 7rem; /* Set a maximum gap */
+  padding: 0 20px;
+  color: white;
+}
+
 .flex-col-container {
   display: flex;
   flex-direction: column;
