@@ -32,10 +32,6 @@ module.exports = (db) => {
         const { id } = req.params;
         peopleController.getPersonById(req, res, peopleModelInstance, id);
     });
-    
-    // router.get('/companies/:id/people', (req, res) => {
-    //     peopleController.renderPeoplePageByCompanyId(req, res, peopleModelInstance);
-    // });
         
     // Admin dashboard route
     router.get('/admin', (req, res) => adminController.index(req, res, adminModelInstance));
