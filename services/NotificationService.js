@@ -2,6 +2,7 @@ const twilio = require('twilio');
 const sgMail = require('@sendgrid/mail');
 const { Client } = require('tplink-smarthome-api');
 const { connectDB } = require('../db');
+const Messages = require('../src/messages');  // Import centralized messages
 
 class NotificationService {
     constructor() {
@@ -14,7 +15,7 @@ class NotificationService {
         if (person.mobile) {
             try {
                 const message = await this.twilioClient.messages.create({
-                    body: `Hello, ${person.name}! It's Vivi. You have someone waiting for you in the lobby.\n\nReply STOP if you no longer wish to receive notifications from this number.`,
+                    body: Messages.SMS.LOBBY_NOTIFICATION(person.name),
                     from: process.env.TWILIO_PHONE_NUMBER,
                     to: person.mobile,
                 });
@@ -30,10 +31,10 @@ class NotificationService {
             const msg = {
                 to: person.email,
                 from: "matt@intensivehope.com",
-                subject: 'You have a client waiting for you in the lobby!',
-                text: 'This is an email sent using SendGrid!',
-                html: '<strong>Vivi is hard at work!</strong>',
-            };
+                subject: Messages.EMAIL.SUBJECT,
+                text: Messages.EMAIL.TEXT,
+                html: Messages.EMAIL.HTML,
+                };
             try {
                 await sgMail.send(msg);
                 console.log('Email sent successfully!');
@@ -84,20 +85,20 @@ class NotificationService {
 
                 if (result.modifiedCount > 0) {
                     console.log(`Consent updated to GRANTED for ${fromNumber}`);
-                    twiml.message('✅ Consent granted! You will now receive notifications.');
+                    twiml.message(Messages.SMS.CONSENT_GRANTED);
                 } else {
                     console.log(`No matching record found for ${fromNumber}`);
-                    twiml.message("❌ Could not find your record. Please contact support.");
+                    twiml.message(Messages.SMS.CONSENT_NOT_FOUND);
                 }
             } catch (error) {
                 console.error('Error updating consent:', error);
-                twiml.message("❌ An error occurred while updating your consent. Please try again later.");
+                twiml.message(Messages.SMS.CONSENT_ERROR);
             }
         } else if (incomingMessage === 'stop') {
-            twiml.message('🛑 You have been unsubscribed from notifications.');
+            twiml.message(Messages.SMS.UNSUBSCRIBED);
             // (Optional) Add logic to update the consent to 'REVOKED' if needed.
         } else {
-            twiml.message("❓ Invalid response. Please reply with 'CONSENT' to receive notifications or 'STOP' to unsubscribe.");
+            twiml.message(Messages.SMS.INVALID_RESPONSE);
         }
 
         return twiml.toString();
