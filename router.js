@@ -37,7 +37,15 @@ module.exports = (db) => {
     router.get('/', (req, res) => homeController.home(req, res, db));
     router.post('/login', authController.login);
     router.get('/logout', authController.logout);
+    router.get('/companies/:id', (req, res) => {
+        companiesController.getCompanyById(req, res, companyModelInstance);
+    });
+    router.get('/companies/person/:id', (req, res) => {
+        const { id } = req.params;
+        peopleController.getPersonById(req, res, peopleModelInstance, id);
+    });
 
+    
     // -------------------------------------
     // 🔒 Protected Admin Routes
     // -------------------------------------
