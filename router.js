@@ -65,12 +65,74 @@ module.exports = (db) => {
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
     );
 
+    router.get('/admin/companies/edit/:id', ensureAuthenticated, (req, res) =>
+        companiesController.editCompany(req, res, companyModelInstance)
+    );
+
+    router.put('/admin/companies/edit/:id', ensureAuthenticated, (req, res) =>
+        companiesController.updateCompany(req, res, companyModelInstance)
+    );
+
+    router.delete('/admin/companies/delete/:id', ensureAuthenticated, (req, res) => companiesController.deleteItem(req, res, companyModelInstance)
+    );
+
+    router.get('/admin/companies/:id/people', ensureAuthenticated, (req, res) =>
+        peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
+    ); // Route for rendering people.ejs template in browser
+
+    router.get('/api/companies/:id/people', ensureAuthenticated, (req, res) =>
+        peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
+    );  // API route for fetching JSON data (fetch API request in client-side js)
+
+    router.get('/admin/companies/:companyId/people/edit/:personId', ensureAuthenticated, (req, res) => {
+        const { companyId, personId } = req.params;
+        console.log("From router: ", companyId, personId);
+        peopleController.editPerson(req, res, peopleModelInstance, companyId, personId);
+    });
+
+    router.post('/admin/companies/people/add', ensureAuthenticated, (req, res) =>
+        peopleController.addPerson(req, res, peopleModelInstance)
+    );
+
+    router.delete('/admin/companies/:companyId/people/delete/:personId', ensureAuthenticated, (req, res) => {
+        const { companyId, personId } = req.params;
+        console.log("From router: ", companyId, personId);
+        peopleController.deletePerson(req, res, peopleModelInstance, companyId, personId);
+    });
+
+
     // -------------------------------------
     // 📲 API Routes 
     // -------------------------------------
     router.get('/api/companies/:id/people', (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
     );
+
+    router.post('/api/companies/:id/people/errors', ensureAuthenticated, (req, res) => {
+        const companyId = req.params.id;
+        console.log("From router: ", companyId )
+        peopleController.errorHandler(req, res, peopleModelInstance);
+    });
+
+    router.put('/api/companies/:id/people', ensureAuthenticated, (req, res) =>
+        peopleController.addPerson(req, res, peopleModelInstance)
+    );
+
+    router.put('/admin/companies/:companyId/people/edit/:id', ensureAuthenticated, (req, res) =>
+        peopleController.updatePerson(req, res, peopleModelInstance)
+    );
+
+    // -------------------------------------
+    // ✅ Twilio Incoming SMS Webhook
+    // -------------------------------------
+    router.get('/twilio/sms', (req, res) => {
+        res.send('✅ Twilio Webhook is active and waiting for POST requests.');
+    }); // Test route - not needed
+    router.post('/twilio/sms', (req, res) => {
+        console.log("🔔 Webhook route hit!");  // Debug log
+        peopleController.receiveSms(req, res);
+    });
+    
 
     return router;
 };
