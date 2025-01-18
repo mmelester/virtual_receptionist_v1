@@ -32,7 +32,8 @@ section.people-section {
 }
 
 .add-company-flex-container,
-.add-person-flex-container {
+.add-person-flex-container,
+.add-building-flex-container {
   justify-content: space-around;
   gap: 2rem;
   flex-wrap: wrap;
@@ -198,7 +199,8 @@ img.headshot {
   }
 
   .add-company-flex-container,
-  .add-person-flex-container {
+  .add-person-flex-container,
+  .add-building-flex-container {
     .info {
       max-width: 600px;
       width: 80%;
