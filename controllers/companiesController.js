@@ -86,6 +86,18 @@ module.exports = {
         }
     
         try {
+
+            const currentData = await CompanyModel.getCompanyById(req.params.id);
+
+            // Compare incoming data with current data
+            if (
+                currentData.name === name &&
+                currentData.intro === intro &&
+                currentData.image === image
+            ) {
+                return res.status(200).json({ success: true, message: 'No changes detected.' });
+            }
+
             const result = await CompanyModel.updateCompany(req.params.id, { name, intro, image });
             if (!result.success) {
                 req.flash('errors', [result.message]);

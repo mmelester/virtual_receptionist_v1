@@ -18,6 +18,7 @@ export async function handlePersonFormSubmission(event) {
     if (!replyText) errors.push('Reply text is required.');
     if (!(mobile || email || outlet)) errors.push('Either mobile number, email address or outlet address is required.');
     const img = getImg();
+
     const croppedCanvas = drawSavedImage();
     if (!img) {
         errors.push('An image is required. Please add an image.');

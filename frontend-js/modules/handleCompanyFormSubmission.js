@@ -66,6 +66,7 @@ export async function handleCompanyFormSubmission(event) {
 
         if (!response.ok) {
             alert(result.message || 'An error occurred.');
+            console.log(!response);
             return;
         }
 

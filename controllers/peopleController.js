@@ -163,6 +163,28 @@ module.exports = {
         }
     
         try {
+            // Fetch existing person data
+            const existingPersonResult = await PersonModel.editPersonFromCompany(companyId, personId);
+            if (!existingPersonResult.success) {
+                return res.status(404).json({ success: false, message: 'Person not found.' });
+            }
+
+            const existingPerson = existingPersonResult.data;
+
+            // Compare incoming data with existing data
+            if (
+                existingPerson.name === personData.name &&
+                existingPerson.title === personData.title &&
+                existingPerson.reply === personData.reply &&
+                existingPerson.mobile === personData.mobile &&
+                existingPerson.email === personData.email &&
+                existingPerson.outlet === personData.outlet &&
+                existingPerson.image === personData.image
+            ) {
+                return res.status(200).json({ success: true, message: 'No changes detected.' });
+            }
+
+            // Proceed with update if data has changed
             const result = await PersonModel.updatePerson(companyId, personId, personData);
             if (!result.success) {
                 req.flash('errors', [result.message]);
