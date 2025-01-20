@@ -68,11 +68,12 @@
                 </div>
                 
                 <div class="canvas-container <%= building && building.image ? '' : 'hidden' %>">
+                    <% if (building && building.image) { %>
+                        <img src="<%= building.image %>" alt="Building Logo" id="buildingLogoPreview" />
+                    <% } else {%> 
                     <canvas id="canvas" class="canvas" width="450" height="500">
-                        <% if (building && building.image) { %>
-                            <img src="<%= building.image %>" alt="Building Logo" id="buildingLogoPreview" />
-                        <% } %>  
-                    </canvas>
+                        <canvas id="canvas" class="canvas" width="450" height="500"></canvas>
+                    </canvas> <% } %>
                     <button class="delete">
                         <i class="delete-image-btn fa fa-trash" aria-hidden="true"></i>
                     </button>      
