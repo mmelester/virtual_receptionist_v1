@@ -53,7 +53,7 @@ module.exports = (db) => {
     // 🔒 Protected Admin Routes
     // -------------------------------------
     router.get('/admin', ensureAuthenticated, (req, res) =>
-        adminController.index(req, res, adminModelInstance)
+        adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
     
     router.get('/admin/building', ensureAuthenticated, (req, res) =>

@@ -1,4 +1,5 @@
 <%- include('../includes/header') %>
+
 <div class="page">
     <h1 class="pt-md-5 pb-md-5 text-center">Admin Dashboard</h1>
 
@@ -32,17 +33,25 @@
         </a>
     </div>
     <div class="d-flex add-building-flex-container align-items-center justify-content-lg-between mt-5">
-        <div class="info">
-            <form id="buildingForm">
-                <div class="form-group">
-                    <label class="form-data" for="buildingName">Building Name (up to 50 characters):</label>
-                    <input type="text" id="companyName" name="companyName" maxlength="50" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-data" for="introText">Intro Text (up to 160 characters):</label>
-                    <textarea id="introText" name="introText" maxlength="160" required></textarea>
-                </div>
-            </form>
+        <div class="form-group">
+            <label for="buildingName">Building Name (up to 50 characters):</label>
+            <input
+                type="text"
+                id="buildingName"
+                name="buildingName"
+                maxlength="50"
+                value="<%= building && building.name ? building.name : '' %>"
+                required
+            >
+        </div>
+        <div class="form-group">
+            <label for="introText">Intro Text (up to 160 characters):</label>
+            <textarea
+                id="introText"
+                name="introText"
+                maxlength="160"
+                required
+            ><%= building && building.intro ? building.intro : '' %></textarea>
         </div>
 
         <div class="drop-area">
@@ -54,19 +63,24 @@
                 </form>
             </div>
             
-            <div class="canvas-container hidden">
-                <canvas id="canvas" class="canvas" width="450" height="500"></canvas>
-                <button class="delete">
-                    <i class="delete-image-btn fa fa-trash" aria-hidden="true"></i>
-                  </button>      
+            <div class="canvas-container <%= building && building.image ? '' : 'hidden' %>">
+                <% if (building && building.image) { %>
+                    <img src="<%= building.image %>" alt="Building Logo" id="buildingLogoPreview" />
+                <% } %>
             </div>
 
         </div>
-
+     
     </div>
 
     <div id="buildingPage" class="text-center">
         <button id="save-building-log" class="save-img-btn btn btn-primary btn-sm pr-4 pl-4 pt-2 pb-2">Save</button>
     </div> 
 </div>
+<script>
+    // Set buildingFlag in session storage
+    const buildingFlag = <%= buildingExists ? 1 : 0 %>;
+    sessionStorage.setItem('buildingFlag', buildingFlag);
+    console.log('Building flag set to:', buildingFlag);
+</script>
 <%- include('../includes/footer') %>
