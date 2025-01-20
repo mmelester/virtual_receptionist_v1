@@ -2,7 +2,7 @@ const BaseModel = require('./BaseModel');
 
 class BuildingModel extends BaseModel {
     constructor(database) {
-        super(database, 'buildings'); // Use "buildings" as the collection name
+        super(database, 'building'); // Use "building" as the collection name
     }
 
     async getBuilding() {
