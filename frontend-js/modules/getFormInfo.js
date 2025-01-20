@@ -1,3 +1,4 @@
+import { handleBuildingFormSubmission } from './handleBuildingFormSubmission';
 import { handleCompanyFormSubmission } from './handleCompanyFormSubmission';
 import { handlePersonFormSubmission } from './handlePersonFormSubmission';
 
@@ -39,6 +40,9 @@ if (buttonElement) {
     } else if (pageId === 'personPage') {
         // Attach the person-specific function
         buttonElement.addEventListener('click', handlePersonFormSubmission);
+    } else if (pageId === 'buildingPage') {
+        // Attach the building-specific function
+        buttonElement.addEventListener('click', handleBuildingFormSubmission);
     } else {
         console.log("No valid handler for this page.");
     }

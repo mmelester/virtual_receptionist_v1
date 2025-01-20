@@ -48,14 +48,17 @@ module.exports = (db) => {
         peopleController.getPersonById(req, res, peopleModelInstance, id);
     });
 
-    
     // -------------------------------------
     // 🔒 Protected Admin Routes
     // -------------------------------------
     router.get('/admin', ensureAuthenticated, (req, res) =>
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
-    
+
+    router.post('/admin/building', ensureAuthenticated, (req, res) =>
+        buildingController.saveBuilding(req, res, buildingModelInstance)
+    );
+        
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.getBuilding(req, res, buildingModelInstance)
     );
