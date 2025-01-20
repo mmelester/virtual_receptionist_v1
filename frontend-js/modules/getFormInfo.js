@@ -14,7 +14,7 @@ const idMap = {
 };
 
 // Find the div with the page ID
-const pageDiv = document.querySelector("div[id='companyPage'], div[id='personPage']");
+const pageDiv = document.querySelector("div[id='companyPage'], div[id='personPage'], div[id='buildingPage']");
 const pageId = pageDiv ? pageDiv.id : null; // e.g., "companyPage" or "personPage"
 
 // Helper function to get the element by logical name
