@@ -7,6 +7,9 @@ const idMap = {
     },
     personPage: {
         btnId: "save-headshot-btn"
+    },
+    buildingPage: {
+        btnId: "save-building-logo"
     }
 };
 

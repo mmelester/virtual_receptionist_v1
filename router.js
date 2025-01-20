@@ -5,17 +5,20 @@ module.exports = (db) => {
     // Import Controllers
     const homeController = require('./controllers/homeController');
     const adminController = require('./controllers/adminController');
+    const buildingController = require('./controllers/buildingController');
     const companiesController = require('./controllers/companiesController');
     const peopleController = require('./controllers/peopleController');
     const authController = require('./controllers/authController');
 
     // Import Models
     const AdminModel = require('./models/AdminModel');
+    const BuildingModel = require('./models/BuildingModel');
     const CompanyModel = require('./models/CompanyModel');
     const PersonModel = require('./models/PersonModel');
 
     // Initialize Model Instances
     const adminModelInstance = new AdminModel(db);
+    const buildingModelInstance = new BuildingModel(db);
     const companyModelInstance = new CompanyModel(db);
     const peopleModelInstance = new PersonModel(db);
 
@@ -51,6 +54,10 @@ module.exports = (db) => {
     // -------------------------------------
     router.get('/admin', ensureAuthenticated, (req, res) =>
         adminController.index(req, res, adminModelInstance)
+    );
+    
+    router.get('/admin/building', ensureAuthenticated, (req, res) =>
+        buildingController.getBuilding(req, res, buildingModelInstance)
     );
 
     router.get('/admin/companies', ensureAuthenticated, (req, res) =>
