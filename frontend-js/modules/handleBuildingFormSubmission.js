@@ -42,6 +42,21 @@ export async function handleBuildingFormSubmission(event) {
 
     const croppedImage = croppedCanvas.toDataURL('image/png'); // Convert the cropped image to Base64
 
+    // Fetch buildingExists status from the server
+    let buildingExists = false;
+    try {
+        const response = await fetch('/admin/building', { method: 'GET' });
+        if (response.ok) {
+            const result = await response.json();
+            buildingExists = result.buildingExists;
+            console.log('Building exists:', buildingExists);
+        } else {
+            console.error('Failed to fetch building data');
+        }
+    } catch (error) {
+        console.error('Error fetching building:', error);
+    }
+
     // Prepare data for the server
     const buildingData = {
         name: buildingName,
@@ -50,9 +65,13 @@ export async function handleBuildingFormSubmission(event) {
     };
 
     try {
+
+        const method = !buildingExists ? 'POST' : 'PUT';
+        console.log("Method = ", method, "Payload = ", buildingData);
+
         // Make a POST request to the server to save the building data
         const response = await fetch('/admin/building', {
-            method: 'POST',
+            method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(buildingData),
         });

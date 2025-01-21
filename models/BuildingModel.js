@@ -1,5 +1,5 @@
 const BaseModel = require('./BaseModel');
-
+const { ObjectId } = require('mongodb');
 class BuildingModel extends BaseModel {
     constructor(database) {
         super(database, 'building'); // Use "building" as the collection name
@@ -30,6 +30,8 @@ class BuildingModel extends BaseModel {
     }
 
     async updateBuilding(id, buildingData) {
+        // Convert to ObjectId only if it's not already an ObjectId
+        const objectId = ObjectId.isValid(id) && typeof id === 'string' ? new ObjectId(id) : id;
         try {
             return await this.update(id, buildingData);
         } catch (error) {

@@ -26,9 +26,13 @@ module.exports = (db) => {
     // 🔒 Authentication Middleware
     // -------------------------------------
     function ensureAuthenticated(req, res, next) {
+        console.log('ensureAuthenticated middleware triggered');
+        console.log('Session:', req.session); // Log session details
         if (req.session && req.session.isLoggedIn) {
+            console.log('User is authenticated');
             return next();
         } else {
+            console.log('Authentication failed.');
             req.flash('errors', 'You must be logged in to access this page.');
             return res.redirect('/');
         }
@@ -58,7 +62,11 @@ module.exports = (db) => {
     router.post('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.saveBuilding(req, res, buildingModelInstance)
     );
-        
+
+    router.put('/admin/building', ensureAuthenticated, (req, res) =>
+        buildingController.updateBuilding(req, res, buildingModelInstance)
+    );
+    
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.getBuilding(req, res, buildingModelInstance)
     );
@@ -110,11 +118,14 @@ module.exports = (db) => {
         peopleController.deletePerson(req, res, peopleModelInstance, companyId, personId);
     });
 
+    router.put('/admin/companies/:companyId/people/edit/:id', ensureAuthenticated, (req, res) =>
+        peopleController.updatePerson(req, res, peopleModelInstance)
+    );
 
     // -------------------------------------
     // 📲 API Routes 
     // -------------------------------------
-    router.get('/api/companies/:id/people', (req, res) =>
+    router.get('/api/companies/:id/people', ensureAuthenticated, (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
     );
 
@@ -126,10 +137,6 @@ module.exports = (db) => {
 
     router.put('/api/companies/:id/people', ensureAuthenticated, (req, res) =>
         peopleController.addPerson(req, res, peopleModelInstance)
-    );
-
-    router.put('/admin/companies/:companyId/people/edit/:id', ensureAuthenticated, (req, res) =>
-        peopleController.updatePerson(req, res, peopleModelInstance)
     );
 
     // -------------------------------------

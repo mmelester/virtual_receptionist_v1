@@ -45,6 +45,8 @@ class BaseModel {
     
     async update(id, data) {
         try {
+             // Convert to ObjectId only if it's not already an ObjectId
+            const objectId = ObjectId.isValid(id) && typeof id === 'string' ? new ObjectId(id) : id;
             const result = await this.collection.updateOne(
                 { _id: ObjectId.createFromHexString(id) },
                 { $set: data }
