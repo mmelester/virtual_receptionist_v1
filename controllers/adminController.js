@@ -22,6 +22,7 @@ module.exports = {
 
             // Render the admin dashboard with stats, building data, and buildingExists flag
             res.render('admin/index', { stats, building, buildingExists, errors, success, isLoggedIn });
+       
         } catch (error) {
             console.error('Error loading admin dashboard:', error);
             req.flash('errors', ['Failed to load admin dashboard.']);

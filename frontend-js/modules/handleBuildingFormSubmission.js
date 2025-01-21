@@ -18,7 +18,6 @@ export async function handleBuildingFormSubmission(event) {
     const img = getImg();
     if (!img) errors.push('An image is required. Please add an image.');
 
-
     // Save the cropped image
     const croppedCanvas = drawSavedImage();
     if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');

@@ -26,8 +26,6 @@ module.exports = (db) => {
     // 🔒 Authentication Middleware
     // -------------------------------------
     function ensureAuthenticated(req, res, next) {
-        console.log('ensureAuthenticated middleware triggered');
-        console.log('Session:', req.session); // Log session details
         if (req.session && req.session.isLoggedIn) {
             console.log('User is authenticated');
             return next();
