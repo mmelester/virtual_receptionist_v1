@@ -91,10 +91,5 @@
     </section>
     
 </div>
-<script>
-    // Set buildingFlag in session storage
-    const buildingFlag = <%= buildingExists ? 1 : 0 %>;
-    sessionStorage.setItem('buildingFlag', buildingFlag);
-    console.log('Building flag set to:', buildingFlag);
-</script>
+
 <%- include('../includes/footer') %>

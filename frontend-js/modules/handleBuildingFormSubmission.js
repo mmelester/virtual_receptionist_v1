@@ -2,8 +2,7 @@ import { drawSavedImage, getImg } from './drag-n-drop';
 
 export async function handleBuildingFormSubmission(event) {
     event.preventDefault(); // Prevent default form submission behavior
-
-    console.log("handleBuildingFormSubmission Called!")
+    console.log("handleBuildingFormSubmission Called!");
 
     let errors = []; // Initialize an array to store validation errors
 
@@ -74,7 +73,7 @@ export async function handleBuildingFormSubmission(event) {
         }
 
         // Refresh the page on success
-        window.location.reload();
+        // window.location.reload();
     } catch (error) {
         console.error('Error submitting form:', error);
         const errorContainer = document.querySelector('.alert-danger ul');

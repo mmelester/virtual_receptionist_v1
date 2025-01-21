@@ -35,14 +35,11 @@ module.exports = {
     async getBuilding(req, res, BuildingModel) {
         try {
             const building = await BuildingModel.getBuilding();
-            if (building) {
-                return res.status(200).json({ success: true, data: building });
-            } else {
-                return res.status(404).json({ success: false, message: 'No building record found.' });
-            }
+            const buildingExists = !!building;
+            return res.status(200).json({ success: true, data: building, buildingExists });
         } catch (error) {
             console.error('Error fetching building:', error);
             res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
         }
-    }
+    }     
 };
