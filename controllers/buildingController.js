@@ -58,6 +58,17 @@ module.exports = {
             if (!existingBuilding || !existingBuilding._id) {
                 return res.status(404).json({ success: false, message: 'Building record not found.' });
             }
+            // Check if the new data is identical to the existing data
+            const isUnchanged = 
+            existingBuilding.name === name &&
+            existingBuilding.intro === intro &&
+            existingBuilding.image === image;
+
+            if (isUnchanged) {
+                return res.status(200).json({ success: true, message: 'No changes detected.' });
+            }
+
+            // Proceed with the update
     
             const result = await BuildingModel.updateBuilding(existingBuilding._id, { name, intro, image });
     

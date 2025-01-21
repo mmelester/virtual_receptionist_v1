@@ -30,15 +30,23 @@ class BuildingModel extends BaseModel {
     }
 
     async updateBuilding(id, buildingData) {
-        // Convert to ObjectId only if it's not already an ObjectId
-        const objectId = ObjectId.isValid(id) && typeof id === 'string' ? new ObjectId(id) : id;
         try {
-            return await this.update(id, buildingData);
+            // Convert the ObjectId to a 24-character hex string if it's already an ObjectId
+            const formattedId = id instanceof ObjectId ? id.toHexString() : id;
+    
+            // Ensure the formattedId is valid
+            if (!ObjectId.isValid(formattedId)) {
+                throw new Error('Invalid ObjectId format');
+            }
+    
+            // Call the BaseModel.update with the formattedId
+            return await this.update(formattedId, buildingData);
         } catch (error) {
             console.error('Error updating building:', error);
             return { success: false, message: 'Database error.' };
         }
     }
+    
 }
 
 module.exports = BuildingModel;
