@@ -5,10 +5,13 @@ const fileSelect = document.getElementsByClassName('file-select')[0];
 let deleteBtn = document.getElementsByClassName('delete')[0];
 let img;
 let cropWidth;
+
+console.log("Drag-n-Drop Executed");
+
 // Get the canvas element and its context
 const canvasContainer = document.querySelector('.canvas-container');
 const canvas = document.getElementById('canvas');
-// const canvas = document.getElementsByClassName('canvas')[0];
+
 const ctx = canvas.getContext('2d');
 
 // Set initial crop box dimensions

@@ -1,5 +1,8 @@
 module.exports = {
     async index(req, res, adminModel, buildingModel) {
+
+        console.log("adminController.index called");
+
         try {
             const stats = await adminModel.getAdminStats();
             let building = null;
@@ -10,6 +13,7 @@ module.exports = {
                 building = await buildingModel.getBuilding();
                 if (building) {
                     buildingExists = true; // Flag that building record exists
+                    console.log("Building Record Present")
                 }
             } catch (buildingError) {
                 console.error('Error fetching building data:', buildingError);
