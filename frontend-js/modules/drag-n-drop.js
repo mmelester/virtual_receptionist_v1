@@ -3,8 +3,10 @@ let formContainer = document.getElementsByClassName('form-container')[0];
 let fileInput = document.getElementsByClassName('file-element')[0]
 const fileSelect = document.getElementsByClassName('file-select')[0];
 let deleteBtn = document.getElementsByClassName('delete')[0];
+const imgPreview = document.getElementById('buildingLogoPreview');
 let img;
 let cropWidth;
+let ctx;
 
 console.log("Drag-n-Drop Executed");
 
@@ -12,7 +14,34 @@ console.log("Drag-n-Drop Executed");
 const canvasContainer = document.querySelector('.canvas-container');
 const canvas = document.getElementById('canvas');
 
-const ctx = canvas.getContext('2d');
+// ctx = canvas.getContext('2d');
+
+    if (imgPreview) {
+        // If an image exists, replace it with a canvas
+        const img = new Image();
+        img.src = imgPreview.src;
+
+        img.onload = () => {
+            // Set up the canvas
+            canvas.id = 'canvas';
+            canvas.classList.add('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // Replace the <img> with the canvas
+            canvasContainer.replaceChild(canvas, imgPreview);
+
+            // Draw the image on the canvas
+            ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // Initialize cropping functionality
+            initializeCrop(canvas, ctx, img);
+        };
+    } else if (canvas) {
+        // If no image exists, ensure the canvas is set up
+        ctx = canvas.getContext('2d');
+}
 
 // Set initial crop box dimensions
 let isDragging = false;

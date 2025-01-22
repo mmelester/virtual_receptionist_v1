@@ -1,3 +1,15 @@
+# Webpack
+
+## Development Mode
+
+1.  Enter npx webpack --mode development
+2.  Then rebuild, i.e., npm run watch
+
+## Product Mode
+
+1.  Enter npx webpack --mode development
+2.  Then rebuild, i.e., npm run watch
+
 # Setting Up Twilio to Receive SMS Messages
 
 ## Production
