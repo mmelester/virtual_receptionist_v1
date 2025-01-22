@@ -1,3 +1,11 @@
+# Going to Production
+
+1.  Remove public/main-bundled.js from the gitignore file
+2.  Rebuild webpack (i.e., npx webpack --mode development)
+3.  Rebuild main-bundled.js (npm run watch)
+
+take a look if i need to change package.json
+
 # Webpack
 
 ## Development Mode
