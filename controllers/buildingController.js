@@ -36,9 +36,13 @@ module.exports = {
         try {
             const building = await BuildingModel.getBuilding();
             const buildingExists = !!building;
-            return res.status(200).json({ success: true, data: building, buildingExists });
+            const errors = req.flash('errors');
+            const success = req.flash('success');
+            const isLoggedIn = req.session && req.session.isLoggedIn;
+            return res.status(200).json({ success: true, data: building, buildingExists, isLoggedIn });
         } catch (error) {
             console.error('Error fetching building:', error);
+            req.flash('errors', ['Failed to retrieve building record from database.']);
             res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
         }
     },

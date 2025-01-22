@@ -56,6 +56,9 @@ module.exports = (db) => {
     router.get('/admin', ensureAuthenticated, (req, res) =>
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
+    router.get('/admin/building', ensureAuthenticated, (req, res) =>
+        buildingController.getBuilding(req, res, buildingModelInstance)
+    );
 
     router.post('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.saveBuilding(req, res, buildingModelInstance)
@@ -63,10 +66,6 @@ module.exports = (db) => {
 
     router.put('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.updateBuilding(req, res, buildingModelInstance)
-    );
-    
-    router.get('/admin/building', ensureAuthenticated, (req, res) =>
-        buildingController.getBuilding(req, res, buildingModelInstance)
     );
 
     router.get('/admin/companies', ensureAuthenticated, (req, res) =>
