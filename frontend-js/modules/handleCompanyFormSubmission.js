@@ -9,6 +9,8 @@ export async function handleCompanyFormSubmission(event) {
     const Id = localStorage.getItem('editId');
     const flag = localStorage.getItem('editFlag');
 
+    console.log("handleCompanyFormSubmission Flag = ", flag);
+
     event.preventDefault(); // Prevent default form submission behavior
 
     // Collect form data

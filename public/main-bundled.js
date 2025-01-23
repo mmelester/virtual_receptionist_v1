@@ -159,6 +159,20 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 var img = null;
 var cropWidth, cropHeight, cropX, cropY;
 var ctx = null;
+var canvasContainer = document.querySelector('.canvas-container');
+var canvas = document.getElementById('canvas');
+var deleteBtn = document.querySelector('.delete');
+var dropArea = document.querySelector('.drop-area');
+var formContainer = document.querySelector('.form-container');
+var fileInput = document.querySelector('.file-element');
+var fileSelect = document.querySelector('.file-select');
+var imgPreview = document.getElementById('buildingLogoPreview');
+// * Declare variables for image and cropping functionality
+var isDragging = false;
+var isResizing = false;
+var startX, startY;
+var resizeDirection = '';
+var handleSize = 10; // Size of the resize handles
 
 // Function to return the current image
 function getImg() {
@@ -192,8 +206,174 @@ function drawSavedImage() {
   croppedCtx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, cropWidth, cropHeight);
   return croppedCanvas;
 }
+
+// Delete image logic
+deleteBtn.addEventListener('click', function () {
+  try {
+    deleteBtn.classList.add('hidden');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    formContainer.classList.remove('hidden');
+    img = undefined;
+    cropX = cropY = cropWidth = cropHeight = 0;
+    console.log("Image deleted.");
+  } catch (error) {
+    console.error("Error during image deletion:", error.message);
+    alert("An error occurred while deleting the image. Please try again.");
+  }
+});
+function previewFile(file) {
+  deleteBtn.classList.remove('hidden');
+  canvasContainer.classList.remove('hidden');
+  formContainer.classList.add('hidden');
+  console.log("File =", file);
+  img = new Image();
+  img.src = URL.createObjectURL(file);
+  console.log("img.src = ", img.src);
+  img.onload = function () {
+    var originalAspectRatio = img.width / img.height;
+
+    // Get the container's width
+    var containerWidth = canvasContainer.offsetWidth;
+
+    // Set canvas dimensions based on container width while maintaining aspect ratio
+    var canvasWidth = containerWidth;
+    var canvasHeight = canvasWidth / originalAspectRatio;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    // Center the crop box
+    cropWidth = canvasWidth;
+    cropHeight = cropWidth / originalAspectRatio; // Keep aspect ratio
+    cropX = (canvas.width - cropWidth) / 2;
+    cropY = (canvas.height - cropHeight) / 2;
+
+    // Draw image and crop box
+    drawCanvas();
+  };
+}
+// Make sure this is an image file (file type) and if valid show inside div/hide form
+function handleFiles(files) {
+  var file = files[0];
+  if (file && file.type.startsWith('image/')) {
+    if (file.type === 'image/svg+xml') {
+      fixSvgDim(file);
+    }
+    previewFile(file); // Use your existing logic for other image types
+  } else {
+    alert('Please upload a valid image file.');
+    fileInput.value = ''; // Reset the input so the user can try again
+  }
+}
+function drawCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw the image
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  // Draw overlay and crop box
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+  ctx.fillRect(0, 0, canvas.width, cropY);
+  ctx.fillRect(0, cropY + cropHeight, canvas.width, canvas.height - cropY - cropHeight);
+  ctx.fillRect(0, cropY, cropX, cropHeight);
+  ctx.fillRect(cropX + cropWidth, cropY, canvas.width - cropX - cropWidth, cropHeight);
+
+  // Draw the crop box outline
+  ctx.strokeStyle = '#ff0000';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(cropX, cropY, cropWidth, cropHeight);
+
+  // Draw resize handles
+  ctx.fillStyle = '#ff0000'; // Red color for handles
+  drawHandle(cropX, cropY); // Top-left
+  drawHandle(cropX + cropWidth, cropY); // Top-right
+  drawHandle(cropX, cropY + cropHeight); // Bottom-left
+  drawHandle(cropX + cropWidth, cropY + cropHeight); // Bottom-right
+}
+function fixSvgDim(file) {
+  var reader = new FileReader();
+  reader.onload = function (event) {
+    var svgText = event.target.result;
+
+    // Parse the SVG as an XML document
+    var parser = new DOMParser();
+    var svgDoc = parser.parseFromString(svgText, "image/svg+xml");
+    var svgElement = svgDoc.documentElement;
+
+    // Check if the width attribute is missing
+    if (!svgElement.hasAttribute("width")) {
+      var viewBox = svgElement.getAttribute("viewBox");
+      if (viewBox) {
+        // Extract the width from the viewBox (e.g., "0 0 512 512")
+        var viewBoxValues = viewBox.split(" ").map(Number);
+        if (viewBoxValues.length === 4) {
+          var _viewBoxValues = _slicedToArray(viewBoxValues, 3),
+            viewBoxWidth = _viewBoxValues[2];
+
+          // Set the width attribute using the viewBox width
+          svgElement.setAttribute("width", "".concat(viewBoxWidth, "px"));
+        } else {
+          console.error("Invalid viewBox format.");
+        }
+      } else {
+        console.error("SVG is missing both width and viewBox attributes.");
+      }
+    }
+
+    // Serialize the modified SVG back to a string
+    var serializer = new XMLSerializer();
+    var modifiedSvg = serializer.serializeToString(svgElement);
+
+    // Create a new Blob and URL
+    var blob = new Blob([modifiedSvg], {
+      type: "image/svg+xml"
+    });
+
+    // Create a new File object with the updated Blob
+    var updatedFile = new File([blob], file.name, {
+      type: file.type
+    });
+
+    // Pass the updatedFile to further processing (e.g., preview or other functions)
+    previewFile(updatedFile);
+  };
+  reader.onerror = function (error) {
+    console.error("Error reading the file:", error);
+  };
+
+  // Read the SVG file as text
+  reader.readAsText(file);
+}
+function drawHandle(x, y) {
+  ctx.fillRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
+}
+
+// Function to resize the crop box
+function resizeCropBox(mouseX, mouseY) {
+  if (resizeDirection === 'top-left') {
+    cropWidth += cropX - mouseX;
+    cropHeight += cropY - mouseY;
+    cropX = mouseX;
+    cropY = mouseY;
+  } else if (resizeDirection === 'top-right') {
+    cropWidth = mouseX - cropX;
+    cropHeight += cropY - mouseY;
+    cropY = mouseY;
+  } else if (resizeDirection === 'bottom-left') {
+    cropWidth += cropX - mouseX;
+    cropX = mouseX;
+    cropHeight = mouseY - cropY;
+  } else if (resizeDirection === 'bottom-right') {
+    cropWidth = mouseX - cropX;
+    cropHeight = mouseY - cropY;
+  }
+
+  // Ensure the crop box doesn't shrink below a minimum size
+  cropWidth = Math.max(handleSize, cropWidth);
+  cropHeight = Math.max(handleSize, cropHeight);
+}
 module.exports = {
   drawSavedImage: drawSavedImage,
+  previewFile: previewFile,
   getImg: getImg // Export the getImg function
 };
 document.addEventListener('DOMContentLoaded', function () {
@@ -205,22 +385,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 function initializeDragAndDrop() {
-  var dropArea = document.querySelector('.drop-area');
-  var formContainer = document.querySelector('.form-container');
-  var fileInput = document.querySelector('.file-element');
-  var fileSelect = document.querySelector('.file-select');
-  var deleteBtn = document.querySelector('.delete');
-  var imgPreview = document.getElementById('buildingLogoPreview');
-  var canvasContainer = document.querySelector('.canvas-container');
-  var canvas = document.getElementById('canvas');
-
-  // Declare variables for image and cropping functionality
-  var isDragging = false;
-  var isResizing = false;
-  var startX, startY;
-  var resizeDirection = '';
-  var handleSize = 10; // Size of the resize handles
-
   localStorage.setItem('editFlag', 'c');
 
   // Expose handleFiles globally
@@ -350,21 +514,6 @@ function initializeDragAndDrop() {
     });
   }
 
-  // Delete image logic
-  deleteBtn.addEventListener('click', function () {
-    try {
-      deleteBtn.classList.add('hidden');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      formContainer.classList.remove('hidden');
-      img = undefined;
-      cropX = cropY = cropWidth = cropHeight = 0;
-      console.log("Image deleted.");
-    } catch (error) {
-      console.error("Error during image deletion:", error.message);
-      alert("An error occurred while deleting the image. Please try again.");
-    }
-  });
-
   // Mouse move event for resizing or dragging
   canvas.addEventListener('mousemove', function (e) {
     try {
@@ -468,160 +617,6 @@ function initializeDragAndDrop() {
     e.preventDefault();
     e.stopPropagation();
   }
-
-  // Make sure this is an image file (file type) and if valid show inside div/hide form
-  function handleFiles(files) {
-    var file = files[0];
-    if (file && file.type.startsWith('image/')) {
-      if (file.type === 'image/svg+xml') {
-        fixSvgDim(file);
-      }
-      previewFile(file); // Use your existing logic for other image types
-    } else {
-      alert('Please upload a valid image file.');
-      fileInput.value = ''; // Reset the input so the user can try again
-    }
-  }
-  function previewFile(file) {
-    deleteBtn.classList.remove('hidden');
-    canvasContainer.classList.remove('hidden');
-    formContainer.classList.add('hidden');
-    console.log("File =", file);
-    img = new Image();
-    img.src = URL.createObjectURL(file);
-    console.log("img.src = ", img.src);
-    img.onload = function () {
-      var originalAspectRatio = img.width / img.height;
-
-      // Get the container's width
-      var containerWidth = canvasContainer.offsetWidth;
-
-      // Set canvas dimensions based on container width while maintaining aspect ratio
-      var canvasWidth = containerWidth;
-      var canvasHeight = canvasWidth / originalAspectRatio;
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
-
-      // Center the crop box
-      cropWidth = canvasWidth;
-      cropHeight = cropWidth / originalAspectRatio; // Keep aspect ratio
-      cropX = (canvas.width - cropWidth) / 2;
-      cropY = (canvas.height - cropHeight) / 2;
-
-      // Draw image and crop box
-      drawCanvas();
-    };
-  }
-  function drawCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw the image
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    // Draw overlay and crop box
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-    ctx.fillRect(0, 0, canvas.width, cropY);
-    ctx.fillRect(0, cropY + cropHeight, canvas.width, canvas.height - cropY - cropHeight);
-    ctx.fillRect(0, cropY, cropX, cropHeight);
-    ctx.fillRect(cropX + cropWidth, cropY, canvas.width - cropX - cropWidth, cropHeight);
-
-    // Draw the crop box outline
-    ctx.strokeStyle = '#ff0000';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(cropX, cropY, cropWidth, cropHeight);
-
-    // Draw resize handles
-    ctx.fillStyle = '#ff0000'; // Red color for handles
-    drawHandle(cropX, cropY); // Top-left
-    drawHandle(cropX + cropWidth, cropY); // Top-right
-    drawHandle(cropX, cropY + cropHeight); // Bottom-left
-    drawHandle(cropX + cropWidth, cropY + cropHeight); // Bottom-right
-  }
-  function fixSvgDim(file) {
-    var reader = new FileReader();
-    reader.onload = function (event) {
-      var svgText = event.target.result;
-
-      // Parse the SVG as an XML document
-      var parser = new DOMParser();
-      var svgDoc = parser.parseFromString(svgText, "image/svg+xml");
-      var svgElement = svgDoc.documentElement;
-
-      // Check if the width attribute is missing
-      if (!svgElement.hasAttribute("width")) {
-        var viewBox = svgElement.getAttribute("viewBox");
-        if (viewBox) {
-          // Extract the width from the viewBox (e.g., "0 0 512 512")
-          var viewBoxValues = viewBox.split(" ").map(Number);
-          if (viewBoxValues.length === 4) {
-            var _viewBoxValues = _slicedToArray(viewBoxValues, 3),
-              viewBoxWidth = _viewBoxValues[2];
-
-            // Set the width attribute using the viewBox width
-            svgElement.setAttribute("width", "".concat(viewBoxWidth, "px"));
-          } else {
-            console.error("Invalid viewBox format.");
-          }
-        } else {
-          console.error("SVG is missing both width and viewBox attributes.");
-        }
-      }
-
-      // Serialize the modified SVG back to a string
-      var serializer = new XMLSerializer();
-      var modifiedSvg = serializer.serializeToString(svgElement);
-
-      // Create a new Blob and URL
-      var blob = new Blob([modifiedSvg], {
-        type: "image/svg+xml"
-      });
-
-      // Create a new File object with the updated Blob
-      var updatedFile = new File([blob], file.name, {
-        type: file.type
-      });
-
-      // Pass the updatedFile to further processing (e.g., preview or other functions)
-      previewFile(updatedFile);
-    };
-    reader.onerror = function (error) {
-      console.error("Error reading the file:", error);
-    };
-
-    // Read the SVG file as text
-    reader.readAsText(file);
-  }
-  function drawHandle(x, y) {
-    ctx.fillRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
-  }
-
-  // Function to resize the crop box
-  function resizeCropBox(mouseX, mouseY) {
-    if (resizeDirection === 'top-left') {
-      cropWidth += cropX - mouseX;
-      cropHeight += cropY - mouseY;
-      cropX = mouseX;
-      cropY = mouseY;
-    } else if (resizeDirection === 'top-right') {
-      cropWidth = mouseX - cropX;
-      cropHeight += cropY - mouseY;
-      cropY = mouseY;
-    } else if (resizeDirection === 'bottom-left') {
-      cropWidth += cropX - mouseX;
-      cropX = mouseX;
-      cropHeight = mouseY - cropY;
-    } else if (resizeDirection === 'bottom-right') {
-      cropWidth = mouseX - cropX;
-      cropHeight = mouseY - cropY;
-    }
-
-    // Ensure the crop box doesn't shrink below a minimum size
-    cropWidth = Math.max(handleSize, cropWidth);
-    cropHeight = Math.max(handleSize, cropHeight);
-  }
-  module.exports = {
-    previewFile: previewFile
-  };
 }
 
 /***/ }),
@@ -1198,6 +1193,7 @@ function _handleCompanyFormSubmission() {
           errors = []; // Retrieve the company Id and editFlag from localStorage
           Id = localStorage.getItem('editId');
           flag = localStorage.getItem('editFlag');
+          console.log("handleCompanyFormSubmission Flag = ", flag);
           event.preventDefault(); // Prevent default form submission behavior
 
           // Collect form data
@@ -1216,11 +1212,11 @@ function _handleCompanyFormSubmission() {
 
           // If there are errors, send them to the server and stop further execution
           if (!(errors.length > 0)) {
-            _context.next = 23;
+            _context.next = 24;
             break;
           }
-          _context.prev = 13;
-          _context.next = 16;
+          _context.prev = 14;
+          _context.next = 17;
           return fetch('/admin/companies/add', {
             method: 'POST',
             headers: {
@@ -1230,14 +1226,14 @@ function _handleCompanyFormSubmission() {
               errors: errors
             })
           });
-        case 16:
+        case 17:
           window.location.reload(); // Force a page refresh to display flash errors
           return _context.abrupt("return");
-        case 20:
-          _context.prev = 20;
-          _context.t0 = _context["catch"](13);
+        case 21:
+          _context.prev = 21;
+          _context.t0 = _context["catch"](14);
           console.error('Error sending errors:', _context.t0);
-        case 23:
+        case 24:
           croppedImage = croppedCanvas.toDataURL('image/png'); // Convert cropped image to Base64
           // Prepare data for the server
           companyData = {
@@ -1246,10 +1242,10 @@ function _handleCompanyFormSubmission() {
             image: croppedImage,
             people: []
           };
-          _context.prev = 25;
+          _context.prev = 26;
           url = flag === 'c' ? '/admin/companies/add' : "/admin/companies/edit/".concat(Id);
           method = flag === 'c' ? 'POST' : 'PUT';
-          _context.next = 30;
+          _context.next = 31;
           return fetch(url, {
             method: method,
             headers: {
@@ -1257,35 +1253,35 @@ function _handleCompanyFormSubmission() {
             },
             body: JSON.stringify(companyData)
           });
-        case 30:
+        case 31:
           response = _context.sent;
-          _context.next = 33;
+          _context.next = 34;
           return response.json();
-        case 33:
+        case 34:
           result = _context.sent;
           if (response.ok) {
-            _context.next = 38;
+            _context.next = 39;
             break;
           }
           alert(result.message || 'An error occurred.');
           console.log(!response);
           return _context.abrupt("return");
-        case 38:
+        case 39:
           alert(result.message || 'Operation successful!');
           document.getElementById('companyForm').reset(); // Optionally reset the form
           window.location.reload(); // Refresh the page
-          _context.next = 47;
+          _context.next = 48;
           break;
-        case 43:
-          _context.prev = 43;
-          _context.t1 = _context["catch"](25);
+        case 44:
+          _context.prev = 44;
+          _context.t1 = _context["catch"](26);
           console.error('Error submitting form:', _context.t1);
           alert('An unexpected error occurred. Please try again.');
-        case 47:
+        case 48:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[13, 20], [25, 43]]);
+    }, _callee, null, [[14, 21], [26, 44]]);
   }));
   return _handleCompanyFormSubmission.apply(this, arguments);
 }
