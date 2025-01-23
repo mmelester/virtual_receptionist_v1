@@ -155,222 +155,20 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-var dropArea = document.getElementsByClassName('drop-area')[0];
-var formContainer = document.getElementsByClassName('form-container')[0];
-var fileInput = document.getElementsByClassName('file-element')[0];
-var fileSelect = document.getElementsByClassName('file-select')[0];
-var deleteBtn = document.getElementsByClassName('delete')[0];
-var imgPreview = document.getElementById('buildingLogoPreview');
-var img;
-var cropWidth;
-var ctx;
-console.log("Drag-n-Drop Executed");
+// Global variables
+var img = null;
+var cropWidth, cropHeight, cropX, cropY;
+var ctx = null;
 
-// Get the canvas element and its context
-var canvasContainer = document.querySelector('.canvas-container');
-var canvas = document.getElementById('canvas');
-
-// ctx = canvas.getContext('2d');
-
-if (imgPreview) {
-  // If an image exists, replace it with a canvas
-  var _img = new Image();
-  _img.src = imgPreview.src;
-  _img.onload = function () {
-    // Set up the canvas
-    canvas.id = 'canvas';
-    canvas.classList.add('canvas');
-    canvas.width = _img.width;
-    canvas.height = _img.height;
-
-    // Replace the <img> with the canvas
-    canvasContainer.replaceChild(canvas, imgPreview);
-
-    // Draw the image on the canvas
-    ctx = canvas.getContext('2d');
-    ctx.drawImage(_img, 0, 0, canvas.width, canvas.height);
-
-    // Initialize cropping functionality
-    initializeCrop(canvas, ctx, _img);
-  };
-} else if (canvas) {
-  // If no image exists, ensure the canvas is set up
-  ctx = canvas.getContext('2d');
+// Function to return the current image
+function getImg() {
+  return img; // Returns the current image object
 }
-
-// Set initial crop box dimensions
-var isDragging = false;
-var cropX, cropY; // X and Y positions of the crop box
-var startX, startY; // Starting mouse coordinates for dragging
-var isResizing = false; // Flag to track if resizing is active
-var resizeDirection = ''; // Track the direction of resize (e.g., 'right', 'bottom', etc.)
-var handleSize = 10; // Size of the resize handles
-
-localStorage.setItem('editFlag', 'c');
-
-// Expose handleFiles globally
-window.handleFiles = handleFiles;
-function preventDefaults(e) {
-  e.preventDefault();
-  e.stopPropagation();
-}
-
-// Make sure this is an image file (file type) and if valid show inside div/hide form
-function handleFiles(files) {
-  var file = files[0];
-  if (file && file.type.startsWith('image/')) {
-    if (file.type === 'image/svg+xml') {
-      fixSvgDim(file);
-    }
-    previewFile(file); // Use your existing logic for other image types
-  } else {
-    alert('Please upload a valid image file.');
-    fileInput.value = ''; // Reset the input so the user can try again
-  }
-}
-function fixSvgDim(file) {
-  var reader = new FileReader();
-  reader.onload = function (event) {
-    var svgText = event.target.result;
-
-    // Parse the SVG as an XML document
-    var parser = new DOMParser();
-    var svgDoc = parser.parseFromString(svgText, "image/svg+xml");
-    var svgElement = svgDoc.documentElement;
-
-    // Check if the width attribute is missing
-    if (!svgElement.hasAttribute("width")) {
-      var viewBox = svgElement.getAttribute("viewBox");
-      if (viewBox) {
-        // Extract the width from the viewBox (e.g., "0 0 512 512")
-        var viewBoxValues = viewBox.split(" ").map(Number);
-        if (viewBoxValues.length === 4) {
-          var _viewBoxValues = _slicedToArray(viewBoxValues, 3),
-            viewBoxWidth = _viewBoxValues[2];
-
-          // Set the width attribute using the viewBox width
-          svgElement.setAttribute("width", "".concat(viewBoxWidth, "px"));
-        } else {
-          console.error("Invalid viewBox format.");
-        }
-      } else {
-        console.error("SVG is missing both width and viewBox attributes.");
-      }
-    }
-
-    // Serialize the modified SVG back to a string
-    var serializer = new XMLSerializer();
-    var modifiedSvg = serializer.serializeToString(svgElement);
-
-    // Create a new Blob and URL
-    var blob = new Blob([modifiedSvg], {
-      type: "image/svg+xml"
-    });
-
-    // Create a new File object with the updated Blob
-    var updatedFile = new File([blob], file.name, {
-      type: file.type
-    });
-
-    // Pass the updatedFile to further processing (e.g., preview or other functions)
-    previewFile(updatedFile);
-  };
-  reader.onerror = function (error) {
-    console.error("Error reading the file:", error);
-  };
-
-  // Read the SVG file as text
-  reader.readAsText(file);
-}
-function previewFile(file) {
-  deleteBtn.classList.remove('hidden');
-  canvasContainer.classList.remove('hidden');
-  formContainer.classList.add('hidden');
-  console.log("File =", file);
-  img = new Image();
-  img.src = URL.createObjectURL(file);
-  console.log("img.src = ", img.src);
-  img.onload = function () {
-    var originalAspectRatio = img.width / img.height;
-
-    // Get the container's width
-    var containerWidth = canvasContainer.offsetWidth;
-
-    // Set canvas dimensions based on container width while maintaining aspect ratio
-    var canvasWidth = containerWidth;
-    var canvasHeight = canvasWidth / originalAspectRatio;
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-
-    // Center the crop box
-    cropWidth = canvasWidth;
-    cropHeight = cropWidth / originalAspectRatio; // Keep aspect ratio
-    cropX = (canvas.width - cropWidth) / 2;
-    cropY = (canvas.height - cropHeight) / 2;
-
-    // Draw image and crop box
-    drawCanvas();
-  };
-}
-function drawCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Draw the image
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-  // Draw overlay and crop box
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-  ctx.fillRect(0, 0, canvas.width, cropY);
-  ctx.fillRect(0, cropY + cropHeight, canvas.width, canvas.height - cropY - cropHeight);
-  ctx.fillRect(0, cropY, cropX, cropHeight);
-  ctx.fillRect(cropX + cropWidth, cropY, canvas.width - cropX - cropWidth, cropHeight);
-
-  // Draw the crop box outline
-  ctx.strokeStyle = '#ff0000';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(cropX, cropY, cropWidth, cropHeight);
-
-  // Draw resize handles
-  ctx.fillStyle = '#ff0000'; // Red color for handles
-  drawHandle(cropX, cropY); // Top-left
-  drawHandle(cropX + cropWidth, cropY); // Top-right
-  drawHandle(cropX, cropY + cropHeight); // Bottom-left
-  drawHandle(cropX + cropWidth, cropY + cropHeight); // Bottom-right
-}
-function drawHandle(x, y) {
-  ctx.fillRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
-}
-
-// Function to resize the crop box
-function resizeCropBox(mouseX, mouseY) {
-  if (resizeDirection === 'top-left') {
-    cropWidth += cropX - mouseX;
-    cropHeight += cropY - mouseY;
-    cropX = mouseX;
-    cropY = mouseY;
-  } else if (resizeDirection === 'top-right') {
-    cropWidth = mouseX - cropX;
-    cropHeight += cropY - mouseY;
-    cropY = mouseY;
-  } else if (resizeDirection === 'bottom-left') {
-    cropWidth += cropX - mouseX;
-    cropX = mouseX;
-    cropHeight = mouseY - cropY;
-  } else if (resizeDirection === 'bottom-right') {
-    cropWidth = mouseX - cropX;
-    cropHeight = mouseY - cropY;
-  }
-
-  // Ensure the crop box doesn't shrink below a minimum size
-  cropWidth = Math.max(handleSize, cropWidth);
-  cropHeight = Math.max(handleSize, cropHeight);
-}
-
 // Function to draw image to be saved on new canvas
 function drawSavedImage() {
   if (!img) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    return;
+    return null;
   }
   // Create a new canvas to draw the cropped portion of the image (without the outline or overlay)
   var croppedCanvas = document.createElement('canvas');
@@ -394,126 +192,437 @@ function drawSavedImage() {
   croppedCtx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, cropWidth, cropHeight);
   return croppedCanvas;
 }
-
-// Prevent default browser behavior for drag and drop
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
-  dropArea.addEventListener(eventName, preventDefaults, false);
-});
-// Highlight drop area when file is dragged over
-['dragenter', 'dragover'].forEach(function (eventName) {
-  dropArea.addEventListener(eventName, function () {
-    console.log("entered drop-area");
-    dropArea.classList.add('highlight');
-  }, false);
-});
-
-// Remove highlight when file is dragged away or dropped
-['dragleave', 'drop'].forEach(function (eventName) {
-  dropArea.addEventListener(eventName, function () {
-    dropArea.classList.remove('highlight');
-  }, false);
-});
-
-// Handle drag and dropped files (uses Drag and Drop API)
-dropArea.addEventListener('drop', function (e) {
-  var dt = e.dataTransfer;
-  var files = dt.files;
-  handleFiles(files);
-}, false);
-
-// Fallback to file input
-// document.getElementBy('fileSelect').onclick = function () {
-document.getElementsByClassName('file-select')[0].onclick = function () {
-  console.log("File Select");
-  fileInput.click();
-};
-
-// Detect if the mouse is near an edge or corner for resizing
-canvas.addEventListener('mousemove', function (e) {
-  var mouseX = e.offsetX;
-  var mouseY = e.offsetY;
-  if (isResizing) {
-    resizeCropBox(mouseX, mouseY);
-    drawCanvas();
-    return;
-  }
-
-  // Check if inside the crop box (change to grab cursor)
-  if (mouseX > cropX && mouseX < cropX + cropWidth && mouseY > cropY && mouseY < cropY + cropHeight) {
-    canvas.style.cursor = 'grab'; // Change cursor to grab inside the crop box
-  } else {
-    canvas.style.cursor = 'default'; // Reset cursor outside the crop box
-  }
-
-  // Check if near any of the crop box edges or corners
-  if (mouseX > cropX - handleSize && mouseX < cropX + handleSize && mouseY > cropY - handleSize && mouseY < cropY + handleSize) {
-    // Top-left corner
-    canvas.style.cursor = 'nwse-resize';
-    resizeDirection = 'top-left';
-  } else if (mouseX > cropX + cropWidth - handleSize && mouseX < cropX + cropWidth + handleSize && mouseY > cropY - handleSize && mouseY < cropY + handleSize) {
-    // Top-right corner
-    canvas.style.cursor = 'nesw-resize';
-    resizeDirection = 'top-right';
-  } else if (mouseX > cropX - handleSize && mouseX < cropX + handleSize && mouseY > cropY + cropHeight - handleSize && mouseY < cropY + cropHeight + handleSize) {
-    // Bottom-left corner
-    canvas.style.cursor = 'nesw-resize';
-    resizeDirection = 'bottom-left';
-  } else if (mouseX > cropX + cropWidth - handleSize && mouseX < cropX + cropWidth + handleSize && mouseY > cropY + cropHeight - handleSize && mouseY < cropY + cropHeight + handleSize) {
-    // Bottom-right corner
-    canvas.style.cursor = 'nwse-resize';
-    resizeDirection = 'bottom-right';
-  } else {
-    resizeDirection = '';
-  }
-
-  // Handle dragging logic if isDragging is true
-  if (isDragging) {
-    cropX = e.offsetX - startX;
-    cropY = e.offsetY - startY;
-
-    // Prevent the crop box from going out of bounds
-    cropX = Math.max(0, Math.min(cropX, canvas.width - cropWidth));
-    cropY = Math.max(0, Math.min(cropY, canvas.height - cropHeight));
-    drawCanvas();
-  }
-});
-
-// Mouse down event: Start dragging or resizing
-canvas.addEventListener('mousedown', function (e) {
-  var mouseX = e.offsetX;
-  var mouseY = e.offsetY;
-  if (resizeDirection) {
-    isResizing = true;
-  } else if (mouseX > cropX && mouseX < cropX + cropWidth && mouseY > cropY && mouseY < cropY + cropHeight) {
-    isDragging = true;
-    startX = mouseX - cropX;
-    startY = mouseY - cropY;
-  }
-});
-
-// Mouse up event: Stop dragging or resizing
-canvas.addEventListener('mouseup', function () {
-  isDragging = false;
-  isResizing = false;
-  canvas.style.cursor = 'default';
-  resizeDirection = '';
-});
-
-// Delete event: Clear preview image, set image to undefined, and hide delete button
-deleteBtn.addEventListener('click', function () {
-  deleteBtn.classList.add('hidden');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  formContainer.classList.remove('hidden');
-  img = undefined;
-  console.log("Image ", img);
-});
 module.exports = {
   drawSavedImage: drawSavedImage,
-  previewFile: previewFile,
-  getImg: function getImg() {
-    return img;
-  } // Getter function for img
+  getImg: getImg // Export the getImg function
 };
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    initializeDragAndDrop();
+  } catch (error) {
+    console.error("Initialization error:", error.message);
+    alert("An error occurred while initializing the drag-and-drop functionality. Please reload the page.");
+  }
+});
+function initializeDragAndDrop() {
+  var dropArea = document.querySelector('.drop-area');
+  var formContainer = document.querySelector('.form-container');
+  var fileInput = document.querySelector('.file-element');
+  var fileSelect = document.querySelector('.file-select');
+  var deleteBtn = document.querySelector('.delete');
+  var imgPreview = document.getElementById('buildingLogoPreview');
+  var canvasContainer = document.querySelector('.canvas-container');
+  var canvas = document.getElementById('canvas');
+
+  // Declare variables for image and cropping functionality
+  var isDragging = false;
+  var isResizing = false;
+  var startX, startY;
+  var resizeDirection = '';
+  var handleSize = 10; // Size of the resize handles
+
+  localStorage.setItem('editFlag', 'c');
+
+  // Expose handleFiles globally
+  window.handleFiles = handleFiles;
+  console.log("Drag-n-Drop Executed");
+
+  // Check required elements and report missing ones
+  var requiredElements = [{
+    element: dropArea,
+    name: "Drop Area (.drop-area)"
+  }, {
+    element: formContainer,
+    name: "Form Container (.form-container)"
+  }, {
+    element: fileInput,
+    name: "File Input (.file-element)"
+  }, {
+    element: fileSelect,
+    name: "File Select (.file-select)"
+  }, {
+    element: deleteBtn,
+    name: "Delete Button (.delete)"
+  }, {
+    element: canvasContainer,
+    name: "Canvas Container (.canvas-container)"
+  }, {
+    element: canvas,
+    name: "Canvas (#canvas)"
+  }];
+  var missingElements = requiredElements.filter(function (item) {
+    return !item.element;
+  });
+  if (missingElements.length > 0) {
+    var missingNames = missingElements.map(function (item) {
+      return item.name;
+    }).join(", ");
+    throw new Error("Missing required DOM elements: ".concat(missingNames));
+  }
+
+  // Initialize the canvas if it exists
+  if (canvas) {
+    ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error("Failed to get 2D context from canvas.");
+    }
+  } else {
+    console.warn("Canvas element is not present in the DOM. Skipping canvas setup.");
+  }
+  // Load the preview image if it exists
+  if (imgPreview) {
+    img = new Image();
+    img.src = imgPreview.src;
+    img.onload = function () {
+      try {
+        // Set up the canvas
+        canvas.id = 'canvas';
+        canvas.classList.add('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Replace the <img> with the canvas
+        canvasContainer.replaceChild(canvas, imgPreview);
+
+        // Draw the image on the canvas
+        ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Initialize cropping functionality
+        initializeCrop(canvas, ctx, img);
+      } catch (error) {
+        console.error("Error loading image:", error.message);
+        alert("Failed to load the image. Please try again.");
+      }
+    };
+    img.onerror = function () {
+      console.error("Image failed to load:");
+      alert("The image could not be loaded. Please check the file format.");
+    };
+  } else if (canvas) {
+    // If no image exists, ensure the canvas is set up
+    ctx = canvas.getContext('2d');
+  }
+
+  // Set up drag-and-drop events
+  if (dropArea) {
+    // Prevent default browser behavior for drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
+      dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+    // Highlight drop area when file is dragged over
+    ['dragenter', 'dragover'].forEach(function (eventName) {
+      dropArea.addEventListener(eventName, function () {
+        return dropArea.classList.add('highlight');
+      }, false);
+    });
+    // Remove highlight when file is dragged away or dropped
+    ['dragleave', 'drop'].forEach(function (eventName) {
+      dropArea.addEventListener(eventName, function () {
+        return dropArea.classList.remove('highlight');
+      }, false);
+    });
+    // Handle drag and dropped files (uses Drag and Drop API)
+    dropArea.addEventListener('drop', function (e) {
+      try {
+        var dt = e.dataTransfer;
+        var files = dt.files;
+        handleFiles(files);
+      } catch (error) {
+        console.error("Error handling file drop:", error.message);
+        alert("An error occurred while handling the dropped files. Please try again.");
+      }
+    });
+  }
+
+  // File selection logic
+  if (fileSelect) {
+    fileSelect.addEventListener('click', function () {
+      fileInput.click();
+    });
+  }
+
+  // File input change event
+  if (fileInput) {
+    fileInput.addEventListener('change', function (e) {
+      var files = e.target.files;
+      if (files.length) handleFiles(files);
+    });
+  }
+
+  // Delete image logic
+  deleteBtn.addEventListener('click', function () {
+    try {
+      deleteBtn.classList.add('hidden');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      formContainer.classList.remove('hidden');
+      img = undefined;
+      cropX = cropY = cropWidth = cropHeight = 0;
+      console.log("Image deleted.");
+    } catch (error) {
+      console.error("Error during image deletion:", error.message);
+      alert("An error occurred while deleting the image. Please try again.");
+    }
+  });
+
+  // Mouse move event for resizing or dragging
+  canvas.addEventListener('mousemove', function (e) {
+    try {
+      // const mouseX = e.offsetX;
+      // const mouseY = e.offsetY;
+
+      // if (isResizing) {
+      //     resizeCropBox(mouseX, mouseY);
+      //     drawCanvas();
+      //     return;
+      // }
+
+      // if (isDragging) {
+      //     cropX = e.offsetX - startX;
+      //     cropY = e.offsetY - startY;
+      //     cropX = Math.max(0, Math.min(cropX, canvas.width - cropWidth));
+      //     cropY = Math.max(0, Math.min(cropY, canvas.height - cropHeight));
+      //     drawCanvas();
+      var mouseX = e.offsetX;
+      var mouseY = e.offsetY;
+      if (isResizing) {
+        resizeCropBox(mouseX, mouseY);
+        drawCanvas();
+        return;
+      }
+
+      // Check if inside the crop box (change to grab cursor)
+      if (mouseX > cropX && mouseX < cropX + cropWidth && mouseY > cropY && mouseY < cropY + cropHeight) {
+        canvas.style.cursor = 'grab'; // Change cursor to grab inside the crop box
+      } else {
+        canvas.style.cursor = 'default'; // Reset cursor outside the crop box
+      }
+
+      // Check if near any of the crop box edges or corners
+      if (mouseX > cropX - handleSize && mouseX < cropX + handleSize && mouseY > cropY - handleSize && mouseY < cropY + handleSize) {
+        // Top-left corner
+        canvas.style.cursor = 'nwse-resize';
+        resizeDirection = 'top-left';
+      } else if (mouseX > cropX + cropWidth - handleSize && mouseX < cropX + cropWidth + handleSize && mouseY > cropY - handleSize && mouseY < cropY + handleSize) {
+        // Top-right corner
+        canvas.style.cursor = 'nesw-resize';
+        resizeDirection = 'top-right';
+      } else if (mouseX > cropX - handleSize && mouseX < cropX + handleSize && mouseY > cropY + cropHeight - handleSize && mouseY < cropY + cropHeight + handleSize) {
+        // Bottom-left corner
+        canvas.style.cursor = 'nesw-resize';
+        resizeDirection = 'bottom-left';
+      } else if (mouseX > cropX + cropWidth - handleSize && mouseX < cropX + cropWidth + handleSize && mouseY > cropY + cropHeight - handleSize && mouseY < cropY + cropHeight + handleSize) {
+        // Bottom-right corner
+        canvas.style.cursor = 'nwse-resize';
+        resizeDirection = 'bottom-right';
+      } else {
+        resizeDirection = '';
+      }
+
+      // Handle dragging logic if isDragging is true
+      if (isDragging) {
+        cropX = e.offsetX - startX;
+        cropY = e.offsetY - startY;
+
+        // Prevent the crop box from going out of bounds
+        cropX = Math.max(0, Math.min(cropX, canvas.width - cropWidth));
+        cropY = Math.max(0, Math.min(cropY, canvas.height - cropHeight));
+        drawCanvas();
+      }
+    } catch (error) {
+      console.error("Error in mousemove event:", error.message);
+    }
+  });
+
+  // Mouse down event: Start dragging or resizing
+  canvas.addEventListener('mousedown', function (e) {
+    try {
+      var mouseX = e.offsetX;
+      var mouseY = e.offsetY;
+      if (resizeDirection) {
+        isResizing = true;
+      } else if (mouseX > cropX && mouseX < cropX + cropWidth && mouseY > cropY && mouseY < cropY + cropHeight) {
+        isDragging = true;
+        startX = mouseX - cropX;
+        startY = mouseY - cropY;
+      }
+    } catch (error) {
+      console.error("Error in mousedown event:", error.message);
+      alert("An error occurred while starting the interaction. Please try again.");
+    }
+  });
+
+  // Mouse up event: Stop dragging or resizing
+  canvas.addEventListener('mouseup', function () {
+    try {
+      isDragging = false;
+      isResizing = false;
+      canvas.style.cursor = 'default';
+      resizeDirection = '';
+    } catch (error) {
+      console.error("Error in mouseup event:", error.message);
+      alert("An error occurred while ending the interaction. Please try again.");
+    }
+  });
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  // Make sure this is an image file (file type) and if valid show inside div/hide form
+  function handleFiles(files) {
+    var file = files[0];
+    if (file && file.type.startsWith('image/')) {
+      if (file.type === 'image/svg+xml') {
+        fixSvgDim(file);
+      }
+      previewFile(file); // Use your existing logic for other image types
+    } else {
+      alert('Please upload a valid image file.');
+      fileInput.value = ''; // Reset the input so the user can try again
+    }
+  }
+  function previewFile(file) {
+    deleteBtn.classList.remove('hidden');
+    canvasContainer.classList.remove('hidden');
+    formContainer.classList.add('hidden');
+    console.log("File =", file);
+    img = new Image();
+    img.src = URL.createObjectURL(file);
+    console.log("img.src = ", img.src);
+    img.onload = function () {
+      var originalAspectRatio = img.width / img.height;
+
+      // Get the container's width
+      var containerWidth = canvasContainer.offsetWidth;
+
+      // Set canvas dimensions based on container width while maintaining aspect ratio
+      var canvasWidth = containerWidth;
+      var canvasHeight = canvasWidth / originalAspectRatio;
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+
+      // Center the crop box
+      cropWidth = canvasWidth;
+      cropHeight = cropWidth / originalAspectRatio; // Keep aspect ratio
+      cropX = (canvas.width - cropWidth) / 2;
+      cropY = (canvas.height - cropHeight) / 2;
+
+      // Draw image and crop box
+      drawCanvas();
+    };
+  }
+  function drawCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the image
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Draw overlay and crop box
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, canvas.width, cropY);
+    ctx.fillRect(0, cropY + cropHeight, canvas.width, canvas.height - cropY - cropHeight);
+    ctx.fillRect(0, cropY, cropX, cropHeight);
+    ctx.fillRect(cropX + cropWidth, cropY, canvas.width - cropX - cropWidth, cropHeight);
+
+    // Draw the crop box outline
+    ctx.strokeStyle = '#ff0000';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cropX, cropY, cropWidth, cropHeight);
+
+    // Draw resize handles
+    ctx.fillStyle = '#ff0000'; // Red color for handles
+    drawHandle(cropX, cropY); // Top-left
+    drawHandle(cropX + cropWidth, cropY); // Top-right
+    drawHandle(cropX, cropY + cropHeight); // Bottom-left
+    drawHandle(cropX + cropWidth, cropY + cropHeight); // Bottom-right
+  }
+  function fixSvgDim(file) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var svgText = event.target.result;
+
+      // Parse the SVG as an XML document
+      var parser = new DOMParser();
+      var svgDoc = parser.parseFromString(svgText, "image/svg+xml");
+      var svgElement = svgDoc.documentElement;
+
+      // Check if the width attribute is missing
+      if (!svgElement.hasAttribute("width")) {
+        var viewBox = svgElement.getAttribute("viewBox");
+        if (viewBox) {
+          // Extract the width from the viewBox (e.g., "0 0 512 512")
+          var viewBoxValues = viewBox.split(" ").map(Number);
+          if (viewBoxValues.length === 4) {
+            var _viewBoxValues = _slicedToArray(viewBoxValues, 3),
+              viewBoxWidth = _viewBoxValues[2];
+
+            // Set the width attribute using the viewBox width
+            svgElement.setAttribute("width", "".concat(viewBoxWidth, "px"));
+          } else {
+            console.error("Invalid viewBox format.");
+          }
+        } else {
+          console.error("SVG is missing both width and viewBox attributes.");
+        }
+      }
+
+      // Serialize the modified SVG back to a string
+      var serializer = new XMLSerializer();
+      var modifiedSvg = serializer.serializeToString(svgElement);
+
+      // Create a new Blob and URL
+      var blob = new Blob([modifiedSvg], {
+        type: "image/svg+xml"
+      });
+
+      // Create a new File object with the updated Blob
+      var updatedFile = new File([blob], file.name, {
+        type: file.type
+      });
+
+      // Pass the updatedFile to further processing (e.g., preview or other functions)
+      previewFile(updatedFile);
+    };
+    reader.onerror = function (error) {
+      console.error("Error reading the file:", error);
+    };
+
+    // Read the SVG file as text
+    reader.readAsText(file);
+  }
+  function drawHandle(x, y) {
+    ctx.fillRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
+  }
+
+  // Function to resize the crop box
+  function resizeCropBox(mouseX, mouseY) {
+    if (resizeDirection === 'top-left') {
+      cropWidth += cropX - mouseX;
+      cropHeight += cropY - mouseY;
+      cropX = mouseX;
+      cropY = mouseY;
+    } else if (resizeDirection === 'top-right') {
+      cropWidth = mouseX - cropX;
+      cropHeight += cropY - mouseY;
+      cropY = mouseY;
+    } else if (resizeDirection === 'bottom-left') {
+      cropWidth += cropX - mouseX;
+      cropX = mouseX;
+      cropHeight = mouseY - cropY;
+    } else if (resizeDirection === 'bottom-right') {
+      cropWidth = mouseX - cropX;
+      cropHeight = mouseY - cropY;
+    }
+
+    // Ensure the crop box doesn't shrink below a minimum size
+    cropWidth = Math.max(handleSize, cropWidth);
+    cropHeight = Math.max(handleSize, cropHeight);
+  }
+  module.exports = {
+    previewFile: previewFile
+  };
+}
 
 /***/ }),
 
