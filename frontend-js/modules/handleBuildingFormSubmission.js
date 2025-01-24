@@ -6,6 +6,21 @@ export async function handleBuildingFormSubmission(event) {
 
     let errors = []; // Initialize an array to store validation errors
 
+    // Retrieve buildingExist variable
+    let buildingExists = false;
+    try {
+        const response = await fetch('/admin/building', { method: 'GET' });
+        if (response.ok) {
+            const result = await response.json();
+            buildingExists = result.buildingExists;
+            console.log('Building exists:', buildingExists);
+        } else {
+            console.error('Failed to fetch building data');
+        }
+    } catch (error) {
+        console.error('Error fetching building:', error);
+    }
+
     // Collect form data
     const buildingName = document.getElementById('buildingName').value.trim();
     const introText = document.getElementById('buildingIntroText').value.trim();
@@ -23,38 +38,22 @@ export async function handleBuildingFormSubmission(event) {
     if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
 
     // If there are validation errors, display them and stop further execution
-    if (errors.length > 0) {
-        console.log("Errors: ", errors); 
-        const errorContainer = document.querySelector('.alert-danger ul');
-        if (errorContainer) {
-            errorContainer.innerHTML = ''; // Clear previous errors
-            errors.forEach((error) => {
-                const li = document.createElement('li');
-                li.textContent = error;
-                errorContainer.appendChild(li);
+     // If there are errors, send them to the server and stop further execution
+     if (errors.length > 0) {
+        try {
+            await fetch('/admin/companies', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ errors }),
             });
-        } else {
-            console.error('Error container not found in DOM.');
+            window.location.reload(); // Force a page refresh to display flash errors
+            return; // Stop further execution
+        } catch (error) {
+            console.error('Error sending errors:', error);
         }
-        return;
     }
 
     const croppedImage = croppedCanvas.toDataURL('image/png'); // Convert the cropped image to Base64
-
-    // Fetch buildingExists status from the server
-    let buildingExists = false;
-    try {
-        const response = await fetch('/admin/building', { method: 'GET' });
-        if (response.ok) {
-            const result = await response.json();
-            buildingExists = result.buildingExists;
-            console.log('Building exists:', buildingExists);
-        } else {
-            console.error('Failed to fetch building data');
-        }
-    } catch (error) {
-        console.error('Error fetching building:', error);
-    }
 
     // Prepare data for the server
     const buildingData = {
@@ -68,7 +67,7 @@ export async function handleBuildingFormSubmission(event) {
         const method = !buildingExists ? 'POST' : 'PUT';
         console.log("Method = ", method, "Payload = ", buildingData);
 
-        // Make a POST request to the server to save the building data
+        // Make a POST or PUT request to the server to save/update the building data
         const response = await fetch('/admin/building', {
             method: method,
             headers: { 'Content-Type': 'application/json' },
@@ -78,20 +77,13 @@ export async function handleBuildingFormSubmission(event) {
         const result = await response.json();
 
         if (!response.ok) {
-            // Display server-side validation or error messages
-            const errorContainer = document.querySelector('.alert-danger ul');
-            console.log("Bad response: ", response);
-            if (errorContainer) {
-                errorContainer.innerHTML = ''; // Clear previous errors
-                const li = document.createElement('li');
-                li.textContent = result.message || 'An error occurred.';
-                errorContainer.appendChild(li);
-            }
+            alert(result.message || 'An error occurred.');
+            console.log(!response);
             return;
         }
-
-        // Refresh the page on success
-        // window.location.reload();
+        alert(result.message || 'Operation successful!');
+        document.getElementById('buildingForm').reset(); // Optionally reset the form
+        window.location.reload(); // Refresh the page
     } catch (error) {
         console.error('Error submitting form:', error);
         const errorContainer = document.querySelector('.alert-danger ul');

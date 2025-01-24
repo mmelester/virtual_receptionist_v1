@@ -255,7 +255,6 @@ function initializeDragAndDrop() {
         { element: fileSelect, name: "File Select (.file-select)" },
         { element: deleteBtn, name: "Delete Button (.delete)" },
         { element: canvasContainer, name: "Canvas Container (.canvas-container)" },
-        { element: canvas, name: "Canvas (#canvas)" },
     ];
 
     const missingElements = requiredElements.filter(item => !item.element);
@@ -281,7 +280,7 @@ function initializeDragAndDrop() {
         img.onload = () => {
             try {
                 // Set up the canvas
-                canvas.id = 'canvas';
+                // canvas.id = 'canvas';
                 canvas.classList.add('canvas');
                 canvas.width = img.width;
                 canvas.height = img.height;

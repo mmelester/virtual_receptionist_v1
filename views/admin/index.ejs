@@ -35,26 +35,29 @@
     <section class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mt-5 mb-5 bg-light">
         <div class="d-flex add-building-flex-container align-items-center justify-content-lg-between mt-5">
             <div class="info">
-                <div class="form-group">
-                    <label for="buildingName">Building Name (up to 50 characters):</label>
-                    <input
-                        type="text"
-                        id="buildingName"
-                        name="buildingName"
-                        maxlength="50"
-                        value="<%= building && building.name ? building.name : '' %>"
-                        required
-                    >
-                </div>
-                <div class="form-group">
-                    <label for="introText">Intro Text (up to 160 characters):</label>
-                    <textarea
-                        id="buildingIntroText"
-                        name="introText"
-                        maxlength="160"
-                        required
-                    ><%= building && building.intro ? building.intro : '' %></textarea>
-                </div>
+                <form id="buildingForm">
+                    <div class="form-group">
+                        <label for="buildingName">Building Name (up to 50 characters):</label>
+                        <input
+                            type="text"
+                            id="buildingName"
+                            name="buildingName"
+                            maxlength="50"
+                            value="<%= building && building.name ? building.name : '' %>"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="introText">Intro Text (up to 160 characters):</label>
+                        <textarea
+                            id="buildingIntroText"
+                            name="introText"
+                            maxlength="160"
+                            required
+                        ><%= building && building.intro ? building.intro : '' %></textarea>
+                    </div>
+                </form>
+
             </div>
     
     
@@ -69,9 +72,9 @@
                 
                 
                 <div class="canvas-container <%= building && building.image ? '' : 'hidden' %>">
-                    <% if (building && building.image) { %>
+                    <!-- <% if (building && building.image) { %>
                         <img src="<%= building.image %>" alt="Building Logo" id="buildingLogoPreview" />
-                    <% } else {%> 
+                    <% } else {%>  -->
                     <canvas id="canvas" class="canvas" width="450" height="500"></canvas> <% } %>
                     <button class="delete">
                         <i class="delete-image-btn fa fa-trash" aria-hidden="true"></i>

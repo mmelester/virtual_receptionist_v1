@@ -410,9 +410,6 @@ function initializeDragAndDrop() {
   }, {
     element: canvasContainer,
     name: "Canvas Container (.canvas-container)"
-  }, {
-    element: canvas,
-    name: "Canvas (#canvas)"
   }];
   var missingElements = requiredElements.filter(function (item) {
     return !item.element;
@@ -440,7 +437,7 @@ function initializeDragAndDrop() {
     img.onload = function () {
       try {
         // Set up the canvas
-        canvas.id = 'canvas';
+        // canvas.id = 'canvas';
         canvas.classList.add('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
@@ -668,6 +665,8 @@ document.querySelectorAll('.editCompany').forEach(function (icon) {
             }
             addCompanySection.classList.remove('d-none');
             createCompanyButton.classList.add('d-none');
+
+            // Retrieve company record from database
             _context2.prev = 13;
             _context2.next = 16;
             return fetch("/admin/companies/edit/".concat(Id));
@@ -688,18 +687,36 @@ document.querySelectorAll('.editCompany').forEach(function (icon) {
               if (image) {
                 img = new Image();
                 img.src = image; // Assuming `image` contains the Base64 or URL
+                // img.onload = async function () {
+                //     // Fetch the image data
+                //     const response = await fetch(img.src);
+                //     const blob = await response.blob(); // Convert to Blob
+
+                //     // Create a File object from the Blob if needed
+                //     const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
+
+                //     // Call the previewFile function with the File
+                //     previewFile(file);
+                // };
                 img.onload = /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-                  var response, blob, file;
+                  var _response, blob, file;
                   return _regeneratorRuntime().wrap(function _callee$(_context) {
                     while (1) switch (_context.prev = _context.next) {
                       case 0:
-                        _context.next = 2;
+                        _context.prev = 0;
+                        _context.next = 3;
                         return fetch(img.src);
-                      case 2:
-                        response = _context.sent;
-                        _context.next = 5;
-                        return response.blob();
-                      case 5:
+                      case 3:
+                        _response = _context.sent;
+                        if (_response.ok) {
+                          _context.next = 6;
+                          break;
+                        }
+                        throw new Error("Failed to fetch image. Status: ".concat(_response.status));
+                      case 6:
+                        _context.next = 8;
+                        return _response.blob();
+                      case 8:
                         blob = _context.sent;
                         // Convert to Blob
                         // Create a File object from the Blob if needed
@@ -707,11 +724,19 @@ document.querySelectorAll('.editCompany').forEach(function (icon) {
                           type: blob.type
                         }); // Call the previewFile function with the File
                         (0,_drag_n_drop__WEBPACK_IMPORTED_MODULE_0__.previewFile)(file);
-                      case 8:
+                        _context.next = 17;
+                        break;
+                      case 13:
+                        _context.prev = 13;
+                        _context.t0 = _context["catch"](0);
+                        // Handle the error (e.g., log it or show an alert)
+                        console.error('Error loading image:', _context.t0.message);
+                        alert('There was an error processing the image. Please try again.');
+                      case 17:
                       case "end":
                         return _context.stop();
                     }
-                  }, _callee);
+                  }, _callee, null, [[0, 13]]);
                 }));
               }
             } else {
@@ -1024,13 +1049,44 @@ function handleBuildingFormSubmission(_x) {
 }
 function _handleBuildingFormSubmission() {
   _handleBuildingFormSubmission = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-    var errors, buildingName, introText, img, croppedCanvas, errorContainer, croppedImage, buildingExists, response, result, buildingData, method, _response, _result, _errorContainer, li, _errorContainer2, _li;
+    var errors, buildingExists, response, result, buildingName, introText, img, croppedCanvas, croppedImage, buildingData, method, _response, _result, errorContainer, li;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           event.preventDefault(); // Prevent default form submission behavior
           console.log("handleBuildingFormSubmission Called!");
           errors = []; // Initialize an array to store validation errors
+          // Retrieve buildingExist variable
+          buildingExists = false;
+          _context.prev = 4;
+          _context.next = 7;
+          return fetch('/admin/building', {
+            method: 'GET'
+          });
+        case 7:
+          response = _context.sent;
+          if (!response.ok) {
+            _context.next = 16;
+            break;
+          }
+          _context.next = 11;
+          return response.json();
+        case 11:
+          result = _context.sent;
+          buildingExists = result.buildingExists;
+          console.log('Building exists:', buildingExists);
+          _context.next = 17;
+          break;
+        case 16:
+          console.error('Failed to fetch building data');
+        case 17:
+          _context.next = 22;
+          break;
+        case 19:
+          _context.prev = 19;
+          _context.t0 = _context["catch"](4);
+          console.error('Error fetching building:', _context.t0);
+        case 22:
           // Collect form data
           buildingName = document.getElementById('buildingName').value.trim();
           introText = document.getElementById('buildingIntroText').value.trim(); // Validate form inputs
@@ -1046,68 +1102,43 @@ function _handleBuildingFormSubmission() {
           if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
 
           // If there are validation errors, display them and stop further execution
+          // If there are errors, send them to the server and stop further execution
           if (!(errors.length > 0)) {
-            _context.next = 16;
+            _context.next = 41;
             break;
           }
-          console.log("Errors: ", errors);
-          errorContainer = document.querySelector('.alert-danger ul');
-          if (errorContainer) {
-            errorContainer.innerHTML = ''; // Clear previous errors
-            errors.forEach(function (error) {
-              var li = document.createElement('li');
-              li.textContent = error;
-              errorContainer.appendChild(li);
-            });
-          } else {
-            console.error('Error container not found in DOM.');
-          }
-          return _context.abrupt("return");
-        case 16:
-          croppedImage = croppedCanvas.toDataURL('image/png'); // Convert the cropped image to Base64
-          // Fetch buildingExists status from the server
-          buildingExists = false;
-          _context.prev = 18;
-          _context.next = 21;
-          return fetch('/admin/building', {
-            method: 'GET'
+          _context.prev = 31;
+          _context.next = 34;
+          return fetch('/admin/companies', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              errors: errors
+            })
           });
-        case 21:
-          response = _context.sent;
-          if (!response.ok) {
-            _context.next = 30;
-            break;
-          }
-          _context.next = 25;
-          return response.json();
-        case 25:
-          result = _context.sent;
-          buildingExists = result.buildingExists;
-          console.log('Building exists:', buildingExists);
-          _context.next = 31;
-          break;
-        case 30:
-          console.error('Failed to fetch building data');
-        case 31:
-          _context.next = 36;
-          break;
-        case 33:
-          _context.prev = 33;
-          _context.t0 = _context["catch"](18);
-          console.error('Error fetching building:', _context.t0);
-        case 36:
+        case 34:
+          window.location.reload(); // Force a page refresh to display flash errors
+          return _context.abrupt("return");
+        case 38:
+          _context.prev = 38;
+          _context.t1 = _context["catch"](31);
+          console.error('Error sending errors:', _context.t1);
+        case 41:
+          croppedImage = croppedCanvas.toDataURL('image/png'); // Convert the cropped image to Base64
           // Prepare data for the server
           buildingData = {
             name: buildingName,
             intro: introText,
             image: croppedImage
           };
-          _context.prev = 37;
+          _context.prev = 43;
           method = !buildingExists ? 'POST' : 'PUT';
           console.log("Method = ", method, "Payload = ", buildingData);
 
-          // Make a POST request to the server to save the building data
-          _context.next = 42;
+          // Make a POST or PUT request to the server to save/update the building data
+          _context.next = 48;
           return fetch('/admin/building', {
             method: method,
             headers: {
@@ -1115,45 +1146,41 @@ function _handleBuildingFormSubmission() {
             },
             body: JSON.stringify(buildingData)
           });
-        case 42:
+        case 48:
           _response = _context.sent;
-          _context.next = 45;
+          _context.next = 51;
           return _response.json();
-        case 45:
+        case 51:
           _result = _context.sent;
           if (_response.ok) {
-            _context.next = 51;
+            _context.next = 56;
             break;
           }
-          // Display server-side validation or error messages
-          _errorContainer = document.querySelector('.alert-danger ul');
-          console.log("Bad response: ", _response);
-          if (_errorContainer) {
-            _errorContainer.innerHTML = ''; // Clear previous errors
-            li = document.createElement('li');
-            li.textContent = _result.message || 'An error occurred.';
-            _errorContainer.appendChild(li);
-          }
+          alert(_result.message || 'An error occurred.');
+          console.log(!_response);
           return _context.abrupt("return");
-        case 51:
-          _context.next = 58;
+        case 56:
+          alert(_result.message || 'Operation successful!');
+          document.getElementById('buildingForm').reset(); // Optionally reset the form
+          window.location.reload(); // Refresh the page
+          _context.next = 66;
           break;
-        case 53:
-          _context.prev = 53;
-          _context.t1 = _context["catch"](37);
-          console.error('Error submitting form:', _context.t1);
-          _errorContainer2 = document.querySelector('.alert-danger ul');
-          if (_errorContainer2) {
-            _errorContainer2.innerHTML = ''; // Clear previous errors
-            _li = document.createElement('li');
-            _li.textContent = 'An unexpected error occurred. Please try again.';
-            _errorContainer2.appendChild(_li);
+        case 61:
+          _context.prev = 61;
+          _context.t2 = _context["catch"](43);
+          console.error('Error submitting form:', _context.t2);
+          errorContainer = document.querySelector('.alert-danger ul');
+          if (errorContainer) {
+            errorContainer.innerHTML = ''; // Clear previous errors
+            li = document.createElement('li');
+            li.textContent = 'An unexpected error occurred. Please try again.';
+            errorContainer.appendChild(li);
           }
-        case 58:
+        case 66:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[18, 33], [37, 53]]);
+    }, _callee, null, [[4, 19], [31, 38], [43, 61]]);
   }));
   return _handleBuildingFormSubmission.apply(this, arguments);
 }

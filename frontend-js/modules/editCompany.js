@@ -30,6 +30,7 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
             addCompanySection.classList.remove('d-none');
             createCompanyButton.classList.add('d-none');
 
+            // Retrieve company record from database
             try {
                 const response = await fetch(`/admin/companies/edit/${Id}`);
 
@@ -48,17 +49,41 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
                     if (image) {
                         const img = new Image();
                         img.src = image; // Assuming `image` contains the Base64 or URL
+                        // img.onload = async function () {
+                        //     // Fetch the image data
+                        //     const response = await fetch(img.src);
+                        //     const blob = await response.blob(); // Convert to Blob
+                        
+                        //     // Create a File object from the Blob if needed
+                        //     const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
+                        
+                        //     // Call the previewFile function with the File
+                        //     previewFile(file);
+                        // };
                         img.onload = async function () {
-                            // Fetch the image data
-                            const response = await fetch(img.src);
-                            const blob = await response.blob(); // Convert to Blob
+                            try {
+                                // Fetch the image data
+                                const response = await fetch(img.src);
+                                
+                                // Check if the response is successful
+                                if (!response.ok) {
+                                    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                                }
                         
-                            // Create a File object from the Blob if needed
-                            const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
+                                const blob = await response.blob(); // Convert to Blob
                         
-                            // Call the previewFile function with the File
-                            previewFile(file);
+                                // Create a File object from the Blob if needed
+                                const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
+                        
+                                // Call the previewFile function with the File
+                                previewFile(file);
+                            } catch (error) {
+                                // Handle the error (e.g., log it or show an alert)
+                                console.error('Error loading image:', error.message);
+                                alert('There was an error processing the image. Please try again.');
+                            }
                         };
+                        
                     }
                 } else {
                     alert(result.message || 'Failed to fetch company information.');
