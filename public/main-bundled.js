@@ -648,7 +648,7 @@ document.querySelectorAll('.editCompany').forEach(function (icon) {
             createCompanyButton = document.getElementsByClassName('create-company-btn')[0];
             addCompanySection = document.getElementById('add-company-section');
             companyForm = document.getElementById('companyForm');
-            formHeading = document.getElementById('form-heading'); // const deleteIcon = document.getElementById('delete-icon')
+            formHeading = document.getElementById('form-heading');
             deleteIcon = document.getElementsByClassName('delete-image-btn')[0]; // Store the Id and editFlag in localStorage
             localStorage.setItem('editId', Id);
             localStorage.setItem('editFlag', 'e');
@@ -1063,7 +1063,13 @@ function _handleBuildingFormSubmission() {
           errors = []; // Initialize an array to store validation errors
           _clientData = clientData, building = _clientData.building, buildingExists = _clientData.buildingExists; // Use building and buildingExists directly in your logic
           console.log('Building exists:', buildingExists);
-
+          if (!(building && buildingExists)) {
+            _context.next = 8;
+            break;
+          }
+          _context.next = 8;
+          return showBuilding(building);
+        case 8:
           // Collect form data
           buildingName = document.getElementById('buildingName').value.trim();
           introText = document.getElementById('buildingIntroText').value.trim(); // Validate form inputs
@@ -1078,14 +1084,14 @@ function _handleBuildingFormSubmission() {
           croppedCanvas = (0,_drag_n_drop__WEBPACK_IMPORTED_MODULE_0__.drawSavedImage)();
           if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
 
-          // If there are validation errors, display them and stop further execution
           // If there are errors, send them to the server and stop further execution
           if (!(errors.length > 0)) {
-            _context.next = 24;
+            _context.next = 28;
             break;
           }
-          _context.prev = 14;
-          _context.next = 17;
+          console.log("Errors present");
+          _context.prev = 18;
+          _context.next = 21;
           return fetch('/admin/companies', {
             method: 'POST',
             headers: {
@@ -1095,14 +1101,14 @@ function _handleBuildingFormSubmission() {
               errors: errors
             })
           });
-        case 17:
+        case 21:
           window.location.reload(); // Force a page refresh to display flash errors
           return _context.abrupt("return");
-        case 21:
-          _context.prev = 21;
-          _context.t0 = _context["catch"](14);
+        case 25:
+          _context.prev = 25;
+          _context.t0 = _context["catch"](18);
           console.error('Error sending errors:', _context.t0);
-        case 24:
+        case 28:
           croppedImage = croppedCanvas.toDataURL('image/png'); // Convert the cropped image to Base64
           // Prepare data for the server
           buildingData = {
@@ -1110,12 +1116,13 @@ function _handleBuildingFormSubmission() {
             intro: introText,
             image: croppedImage
           };
-          _context.prev = 26;
+          console.log("buildingData", buildingData);
+          _context.prev = 31;
           method = !buildingExists ? 'POST' : 'PUT';
           console.log("Method = ", method, "Payload = ", buildingData);
 
           // Make a POST or PUT request to the server to save/update the building data
-          _context.next = 31;
+          _context.next = 36;
           return fetch('/admin/building', {
             method: method,
             headers: {
@@ -1123,28 +1130,29 @@ function _handleBuildingFormSubmission() {
             },
             body: JSON.stringify(buildingData)
           });
-        case 31:
+        case 36:
           response = _context.sent;
-          _context.next = 34;
+          _context.next = 39;
           return response.json();
-        case 34:
+        case 39:
           result = _context.sent;
           if (response.ok) {
-            _context.next = 39;
+            _context.next = 44;
             break;
           }
           alert(result.message || 'An error occurred.');
           console.log(!response);
           return _context.abrupt("return");
-        case 39:
-          alert(result.message || 'Operation successful!');
-          document.getElementById('buildingForm').reset(); // Optionally reset the form
-          window.location.reload(); // Refresh the page
-          _context.next = 49;
-          break;
         case 44:
-          _context.prev = 44;
-          _context.t1 = _context["catch"](26);
+          _context.next = 46;
+          return showBuilding(buildingData);
+        case 46:
+          alert(result.message || 'Operation successful!');
+          _context.next = 54;
+          break;
+        case 49:
+          _context.prev = 49;
+          _context.t1 = _context["catch"](31);
           console.error('Error submitting form:', _context.t1);
           errorContainer = document.querySelector('.alert-danger ul');
           if (errorContainer) {
@@ -1153,13 +1161,86 @@ function _handleBuildingFormSubmission() {
             li.textContent = 'An unexpected error occurred. Please try again.';
             errorContainer.appendChild(li);
           }
-        case 49:
+        case 54:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[14, 21], [26, 44]]);
+    }, _callee, null, [[18, 25], [31, 49]]);
   }));
   return _handleBuildingFormSubmission.apply(this, arguments);
+}
+function showBuilding(_x2) {
+  return _showBuilding.apply(this, arguments);
+}
+function _showBuilding() {
+  _showBuilding = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(buildingData) {
+    var buildingForm, deleteIcon, name, intro, image, img;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          console.log("buildingData from showBuilding", buildingData);
+          try {
+            buildingForm = document.getElementById('buildingForm');
+            deleteIcon = document.querySelector('.delete-building-image-btn'); // Destructure the building data
+            name = buildingData.name, intro = buildingData.intro, image = buildingData.image;
+            console.log("Name is ", name);
+
+            // Populate the form fields
+            buildingForm.elements['buildingName'].value = name || '';
+            buildingForm.elements['introText'].value = intro || '';
+
+            // Preload the image into the canvas
+            if (image) {
+              img = new Image();
+              img.src = image;
+              img.onload = /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+                var response, blob, file;
+                return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                  while (1) switch (_context2.prev = _context2.next) {
+                    case 0:
+                      _context2.prev = 0;
+                      _context2.next = 3;
+                      return fetch(img.src);
+                    case 3:
+                      response = _context2.sent;
+                      if (response.ok) {
+                        _context2.next = 6;
+                        break;
+                      }
+                      throw new Error("Failed to fetch image. Status: ".concat(response.status));
+                    case 6:
+                      _context2.next = 8;
+                      return response.blob();
+                    case 8:
+                      blob = _context2.sent;
+                      file = new File([blob], "uploadedImage.jpg", {
+                        type: blob.type
+                      }); // Use the previewFile function to display the image
+                      (0,_drag_n_drop__WEBPACK_IMPORTED_MODULE_0__.previewFile)(file);
+                      _context2.next = 17;
+                      break;
+                    case 13:
+                      _context2.prev = 13;
+                      _context2.t0 = _context2["catch"](0);
+                      console.error('Error loading image:', _context2.t0.message);
+                      alert('There was an error processing the image. Please try again.');
+                    case 17:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }, _callee2, null, [[0, 13]]);
+              }));
+            }
+          } catch (error) {
+            console.error('Error during edit building:', error.message);
+          }
+        case 2:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+  return _showBuilding.apply(this, arguments);
 }
 
 /***/ }),

@@ -1,15 +1,18 @@
-import { drawSavedImage, getImg } from './drag-n-drop';
+import { drawSavedImage, getImg, previewFile } from './drag-n-drop';
 
 export async function handleBuildingFormSubmission(event) {
     event.preventDefault(); // Prevent default form submission behavior
     console.log("handleBuildingFormSubmission Called!");
-
     let errors = []; // Initialize an array to store validation errors
 
     const { building, buildingExists } = clientData;
+
     // Use building and buildingExists directly in your logic
     console.log('Building exists:', buildingExists);
 
+    if (building && buildingExists) {
+        await showBuilding(building);
+    } 
     // Collect form data
     const buildingName = document.getElementById('buildingName').value.trim();
     const introText = document.getElementById('buildingIntroText').value.trim();
@@ -26,9 +29,11 @@ export async function handleBuildingFormSubmission(event) {
     const croppedCanvas = drawSavedImage();
     if (!croppedCanvas) errors.push('No image to save! Please ensure the image is correctly cropped.');
 
-    // If there are validation errors, display them and stop further execution
-     // If there are errors, send them to the server and stop further execution
-     if (errors.length > 0) {
+    // If there are errors, send them to the server and stop further execution
+    if (errors.length > 0) {
+         
+        console.log("Errors present");
+        
         try {
             await fetch('/admin/companies', {
                 method: 'POST',
@@ -51,6 +56,8 @@ export async function handleBuildingFormSubmission(event) {
         image: croppedImage,
     };
 
+    console.log("buildingData", buildingData);
+
     try {
 
         const method = !buildingExists ? 'POST' : 'PUT';
@@ -70,9 +77,10 @@ export async function handleBuildingFormSubmission(event) {
             console.log(!response);
             return;
         }
+        await showBuilding(buildingData);
+
         alert(result.message || 'Operation successful!');
-        document.getElementById('buildingForm').reset(); // Optionally reset the form
-        window.location.reload(); // Refresh the page
+
     } catch (error) {
         console.error('Error submitting form:', error);
         const errorContainer = document.querySelector('.alert-danger ul');
@@ -82,5 +90,49 @@ export async function handleBuildingFormSubmission(event) {
             li.textContent = 'An unexpected error occurred. Please try again.';
             errorContainer.appendChild(li);
         }
+    }
+}
+
+async function showBuilding(buildingData) {
+    console.log("buildingData from showBuilding", buildingData);
+    try {
+        const buildingForm = document.getElementById('buildingForm');
+        const deleteIcon = document.querySelector('.delete-building-image-btn');
+
+        // Destructure the building data
+        const { name, intro, image } = buildingData;
+
+        console.log("Name is ", name);
+
+        // Populate the form fields
+        buildingForm.elements['buildingName'].value = name || '';
+        buildingForm.elements['introText'].value = intro || '';
+
+        // Preload the image into the canvas
+        if (image) {
+            const img = new Image();
+            img.src = image;
+
+            img.onload = async function () {
+                try {
+                    const response = await fetch(img.src);
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                    }
+
+                    const blob = await response.blob();
+                    const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
+
+                    // Use the previewFile function to display the image
+                    previewFile(file);
+                } catch (error) {
+                    console.error('Error loading image:', error.message);
+                    alert('There was an error processing the image. Please try again.');
+                }
+            };
+        }
+    } catch (error) {
+        console.error('Error during edit building:', error.message);
     }
 }

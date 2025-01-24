@@ -9,7 +9,6 @@ document.querySelectorAll('.editCompany').forEach((icon) => {
             const addCompanySection = document.getElementById('add-company-section');
             const companyForm = document.getElementById('companyForm');
             const formHeading = document.getElementById('form-heading');
-            // const deleteIcon = document.getElementById('delete-icon')
             const deleteIcon = document.getElementsByClassName('delete-image-btn')[0];
 
             // Store the Id and editFlag in localStorage
