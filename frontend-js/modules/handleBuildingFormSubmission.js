@@ -6,20 +6,9 @@ export async function handleBuildingFormSubmission(event) {
 
     let errors = []; // Initialize an array to store validation errors
 
-    // Retrieve buildingExist variable
-    let buildingExists = false;
-    try {
-        const response = await fetch('/admin/building', { method: 'GET' });
-        if (response.ok) {
-            const result = await response.json();
-            buildingExists = result.buildingExists;
-            console.log('Building exists:', buildingExists);
-        } else {
-            console.error('Failed to fetch building data');
-        }
-    } catch (error) {
-        console.error('Error fetching building:', error);
-    }
+    const { building, buildingExists } = clientData;
+    // Use building and buildingExists directly in your logic
+    console.log('Building exists:', buildingExists);
 
     // Collect form data
     const buildingName = document.getElementById('buildingName').value.trim();

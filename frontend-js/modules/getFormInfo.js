@@ -1,3 +1,8 @@
+// getFormInfo,js
+//
+// Triggered by the Save button in the dropArea
+// Sets event handler according to button id (building, company, or person)
+//
 import { handleBuildingFormSubmission } from './handleBuildingFormSubmission';
 import { handleCompanyFormSubmission } from './handleCompanyFormSubmission';
 import { handlePersonFormSubmission } from './handlePersonFormSubmission';

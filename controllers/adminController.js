@@ -11,9 +11,12 @@ module.exports = {
             try {
                 // Attempt to fetch building data
                 building = await buildingModel.getBuilding();
+                console.log("building = ", building);
                 if (building) {
                     buildingExists = true; // Flag that building record exists
                     console.log("Building Record Present")
+                } else {
+                    buildingExist = false; // Flag the no building record has been created
                 }
             } catch (buildingError) {
                 console.error('Error fetching building data:', buildingError);
@@ -25,7 +28,16 @@ module.exports = {
             const isLoggedIn = req.session && req.session.isLoggedIn;
 
             // Render the admin dashboard with stats, building data, and buildingExists flag
-            res.render('admin/index', { stats, building, buildingExists, errors, success, isLoggedIn });
+            res.render('admin/index', { 
+                stats, 
+                building, 
+                buildingExists, 
+                errors, 
+                success, 
+                isLoggedIn,
+                clientData: JSON.stringify({ building, buildingExists }) // Embed the variables as JSON
+            });
+            
        
         } catch (error) {
             console.error('Error loading admin dashboard:', error);

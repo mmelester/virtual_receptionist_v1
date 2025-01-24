@@ -77,7 +77,7 @@
                     <% } else {%>  -->
                     <canvas id="canvas" class="canvas" width="450" height="500"></canvas> <% } %>
                     <button class="delete">
-                        <i class="delete-image-btn fa fa-trash" aria-hidden="true"></i>
+                        <i class="delete-building-image-btn fa fa-trash" aria-hidden="true"></i>
                     </button>      
 
                 </div>
@@ -92,5 +92,11 @@
     </section>
     
 </div>
+<script>
+    const clientData = <%- clientData %>; // Inject JSON data into a JavaScript variable
+</script>
+<script>
+    console.log("Building Data from EJS:", <%- clientData %>);
+</script>
 
 <%- include('../includes/footer') %>
