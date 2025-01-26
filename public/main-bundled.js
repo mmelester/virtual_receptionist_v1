@@ -1063,16 +1063,13 @@ function _handleBuildingFormSubmission() {
           errors = []; // Initialize an array to store validation errors
           _clientData = clientData, building = _clientData.building, buildingExists = _clientData.buildingExists; // Use building and buildingExists directly in your logic
           console.log('Building exists:', buildingExists);
-          if (!(building && buildingExists)) {
-            _context.next = 8;
-            break;
-          }
-          _context.next = 8;
-          return showBuilding(building);
-        case 8:
+
           // Collect form data
           buildingName = document.getElementById('buildingName').value.trim();
-          introText = document.getElementById('buildingIntroText').value.trim(); // Validate form inputs
+          introText = document.getElementById('buildingIntroText').value.trim();
+          console.log("building name and intro ", buildingName, introText);
+
+          // Validate form inputs
           if (!buildingName) errors.push('Building name is required.');
           if (!introText) errors.push('Intro text is required.');
 
@@ -1086,12 +1083,12 @@ function _handleBuildingFormSubmission() {
 
           // If there are errors, send them to the server and stop further execution
           if (!(errors.length > 0)) {
-            _context.next = 28;
+            _context.next = 26;
             break;
           }
           console.log("Errors present");
-          _context.prev = 18;
-          _context.next = 21;
+          _context.prev = 16;
+          _context.next = 19;
           return fetch('/admin/companies', {
             method: 'POST',
             headers: {
@@ -1101,14 +1098,14 @@ function _handleBuildingFormSubmission() {
               errors: errors
             })
           });
-        case 21:
+        case 19:
           window.location.reload(); // Force a page refresh to display flash errors
           return _context.abrupt("return");
-        case 25:
-          _context.prev = 25;
-          _context.t0 = _context["catch"](18);
+        case 23:
+          _context.prev = 23;
+          _context.t0 = _context["catch"](16);
           console.error('Error sending errors:', _context.t0);
-        case 28:
+        case 26:
           croppedImage = croppedCanvas.toDataURL('image/png'); // Convert the cropped image to Base64
           // Prepare data for the server
           buildingData = {
@@ -1117,12 +1114,12 @@ function _handleBuildingFormSubmission() {
             image: croppedImage
           };
           console.log("buildingData", buildingData);
-          _context.prev = 31;
+          _context.prev = 29;
           method = !buildingExists ? 'POST' : 'PUT';
           console.log("Method = ", method, "Payload = ", buildingData);
 
           // Make a POST or PUT request to the server to save/update the building data
-          _context.next = 36;
+          _context.next = 34;
           return fetch('/admin/building', {
             method: method,
             headers: {
@@ -1130,29 +1127,26 @@ function _handleBuildingFormSubmission() {
             },
             body: JSON.stringify(buildingData)
           });
-        case 36:
+        case 34:
           response = _context.sent;
-          _context.next = 39;
+          _context.next = 37;
           return response.json();
-        case 39:
+        case 37:
           result = _context.sent;
           if (response.ok) {
-            _context.next = 44;
+            _context.next = 42;
             break;
           }
           alert(result.message || 'An error occurred.');
           console.log(!response);
           return _context.abrupt("return");
-        case 44:
-          _context.next = 46;
-          return showBuilding(buildingData);
-        case 46:
+        case 42:
           alert(result.message || 'Operation successful!');
-          _context.next = 54;
+          _context.next = 50;
           break;
-        case 49:
-          _context.prev = 49;
-          _context.t1 = _context["catch"](31);
+        case 45:
+          _context.prev = 45;
+          _context.t1 = _context["catch"](29);
           console.error('Error submitting form:', _context.t1);
           errorContainer = document.querySelector('.alert-danger ul');
           if (errorContainer) {
@@ -1161,11 +1155,11 @@ function _handleBuildingFormSubmission() {
             li.textContent = 'An unexpected error occurred. Please try again.';
             errorContainer.appendChild(li);
           }
-        case 54:
+        case 50:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[18, 25], [31, 49]]);
+    }, _callee, null, [[16, 23], [29, 45]]);
   }));
   return _handleBuildingFormSubmission.apply(this, arguments);
 }

@@ -10,12 +10,11 @@ export async function handleBuildingFormSubmission(event) {
     // Use building and buildingExists directly in your logic
     console.log('Building exists:', buildingExists);
 
-    if (building && buildingExists) {
-        await showBuilding(building);
-    } 
     // Collect form data
     const buildingName = document.getElementById('buildingName').value.trim();
     const introText = document.getElementById('buildingIntroText').value.trim();
+
+    console.log("building name and intro ", buildingName, introText);
 
     // Validate form inputs
     if (!buildingName) errors.push('Building name is required.');
@@ -77,7 +76,6 @@ export async function handleBuildingFormSubmission(event) {
             console.log(!response);
             return;
         }
-        await showBuilding(buildingData);
 
         alert(result.message || 'Operation successful!');
 
