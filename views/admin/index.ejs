@@ -121,7 +121,31 @@
 </div>
 
 <script type="module">
-     import { previewFile } from './frontend-js/modules/drag-n-drop.js';
+    import { previewFile } from './frontend-js/modules/drag-n-drop.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.querySelector('.file-element');
+        const fileSelect = document.querySelector('.file-select');
+
+        // Ensure file input is reset and open file dialog
+        fileSelect.addEventListener('click', () => {
+        fileInput.value = ''; // Reset the input
+        fileInput.click();
+        });
+
+        // Handle file input change
+        fileInput.addEventListener('change', (event) => {
+        const files = event.target.files;
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('image/')) {
+            previewFile(file); // Use the imported function
+            } else {
+            alert('Please upload a valid image file.');
+            }
+        }
+        });
+
     // Directly use clientData as it's already an object
     window.clientData = <%- JSON.stringify(clientData) %>;
 
@@ -166,6 +190,7 @@
             };
                     
         }
+    }
     }
 </script>
 
