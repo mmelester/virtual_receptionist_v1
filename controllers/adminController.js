@@ -35,7 +35,7 @@ module.exports = {
                 errors, 
                 success, 
                 isLoggedIn,
-                clientData: JSON.stringify({ building, buildingExists }) // Embed the variables as JSON
+                clientData: { building, buildingExists }
             });
             
        

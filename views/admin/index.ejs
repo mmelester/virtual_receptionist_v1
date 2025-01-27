@@ -61,15 +61,15 @@
             </div> -->
             <div class="info">
                 <form id="buildingForm">
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         <label class="form-data" for="buildingName">Building Name (up to 50 characters):</label>
                         <input type="text" id="buildingName" name="buildingName" maxlength="50" required>
                     </div>
                     <div class="form-group">
                         <label class="form-data" for="introText">Intro Text (up to 160 characters):</label>
                         <textarea id="buildingIntroText" name="introText" maxlength="160" required></textarea>
-                    </div> -->
-                    <div class="form-group">
+                    </div>
+                    <!-- <div class="form-group">
                         <label class="form-data" for="buildingName">Building Name (up to 50 characters):</label>
                         <input
                             type="text"
@@ -88,11 +88,11 @@
                             maxlength="160"
                             required
                         ><%= building && building.intro ? building.intro : '' %></textarea>
-                    </div>
+                    </div> -->
                     
                 </form>
+
             </div>
-    
             <div class="drop-area">
                 <div class="form-container">
                     <form class="upload-form">
@@ -119,27 +119,20 @@
     </section>
     
 </div>
-<!-- <script>
-    const clientData = <%- clientData %>; // Inject JSON data into a JavaScript variable
-</script> -->
 <script>
-    // Safely inject and parse clientData
-    const clientData = <%- JSON.stringify(clientData || {}) %>;
+    // Directly use clientData as it's already an object
+    const clientData = <%- JSON.stringify(clientData) %>;
 
     console.log("Parsed Client Data:", clientData);
 
-    // Access the building data
     const { building } = clientData;
+
+    console.log("Building: ", building);
 
     if (building) {
         document.getElementById('buildingName').value = building.name || '';
         document.getElementById('buildingIntroText').value = building.intro || '';
     }
-</script>
-
-
-<script>
-    console.log("Building Data from EJS:", <%- clientData %>);
 </script>
 
 <%- include('../includes/footer') %>
