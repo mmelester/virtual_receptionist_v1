@@ -119,7 +119,10 @@
     </section>
     
 </div>
-
+<script type="module">
+    window.clientData = <%- JSON.stringify(clientData) %>;
+    console.log("Global clientData initialized:", window.clientData);
+</script>
 <script type="module">
     import { previewFile } from './frontend-js/modules/drag-n-drop.js';
 
@@ -145,9 +148,6 @@
             }
         }
         });
-
-    // Directly use clientData as it's already an object
-    window.clientData = <%- JSON.stringify(clientData) %>;
 
     const clientData = window.clientData;
 
