@@ -1,4 +1,5 @@
 // Global variables
+let debugCounter = 0;
 let img = null;
 let cropWidth, cropHeight, cropX, cropY;
 let ctx = null;
@@ -344,6 +345,8 @@ function initializeDragAndDrop() {
 
     // File input change event
     if (fileInput) {
+        debugCounter++
+        console.log("File Input", fileInput, debugCounter)
         fileInput.addEventListener('change', (e) => {
             const files = e.target.files;
             if (files.length) handleFiles(files);

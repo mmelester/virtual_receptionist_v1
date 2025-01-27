@@ -163,6 +163,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 // Global variables
+var debugCounter = 0;
 var img = null;
 var cropWidth, cropHeight, cropX, cropY;
 var ctx = null;
@@ -508,6 +509,8 @@ function initializeDragAndDrop() {
 
   // File input change event
   if (fileInput) {
+    debugCounter++;
+    console.log("File Input", fileInput, debugCounter);
     fileInput.addEventListener('change', function (e) {
       var files = e.target.files;
       if (files.length) handleFiles(files);
@@ -1054,14 +1057,14 @@ function handleBuildingFormSubmission(_x) {
 }
 function _handleBuildingFormSubmission() {
   _handleBuildingFormSubmission = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-    var errors, _JSON$stringify, building, buildingExists, buildingName, introText, img, croppedCanvas, croppedImage, buildingData, method, response, result, errorContainer, li;
+    var errors, _clientData, building, buildingExists, buildingName, introText, img, croppedCanvas, croppedImage, buildingData, method, response, result, errorContainer, li;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           event.preventDefault(); // Prevent default form submission behavior
           console.log("handleBuildingFormSubmission Called!");
           errors = []; // Initialize an array to store validation errors
-          _JSON$stringify = JSON.stringify(clientData), building = _JSON$stringify.building, buildingExists = _JSON$stringify.buildingExists; // Use building and buildingExists directly in your logic
+          _clientData = clientData, building = _clientData.building, buildingExists = _clientData.buildingExists; // Use building and buildingExists directly in your logic
           console.log('Building exists:', buildingExists);
 
           // Collect form data

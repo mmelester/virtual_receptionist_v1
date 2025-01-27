@@ -5,7 +5,7 @@ export async function handleBuildingFormSubmission(event) {
     console.log("handleBuildingFormSubmission Called!");
     let errors = []; // Initialize an array to store validation errors
 
-    const { building, buildingExists } = JSON.stringify(clientData);
+    const { building, buildingExists } = clientData;
 
     // Use building and buildingExists directly in your logic
     console.log('Building exists:', buildingExists);
