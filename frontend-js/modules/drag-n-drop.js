@@ -223,10 +223,10 @@ function resizeCropBox(mouseX, mouseY) {
     cropWidth = Math.max(handleSize, cropWidth);
     cropHeight = Math.max(handleSize, cropHeight);
 }
-module.exports = {
+export {
     drawSavedImage,
     previewFile,
-    getImg, // Export the getImg function
+    getImg,
 }
 
 document.addEventListener('DOMContentLoaded', () => {

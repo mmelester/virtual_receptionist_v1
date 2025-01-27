@@ -119,9 +119,13 @@
     </section>
     
 </div>
-<script>
+
+<script type="module">
+     import { previewFile } from './frontend-js/modules/drag-n-drop.js';
     // Directly use clientData as it's already an object
-    const clientData = <%- JSON.stringify(clientData) %>;
+    window.clientData = <%- JSON.stringify(clientData) %>;
+
+    const clientData = window.clientData;
 
     console.log("Parsed Client Data:", clientData);
 
@@ -132,6 +136,36 @@
     if (building) {
         document.getElementById('buildingName').value = building.name || '';
         document.getElementById('buildingIntroText').value = building.intro || '';
+        // Preload image into the canvas
+        const image = building.image;
+        if (image) {
+            const img = new Image();
+            img.src = image; // Assuming `image` contains the Base64 or URL
+            img.onload = async function () {
+                try {
+                    // Fetch the image data
+                    const response = await fetch(img.src);
+                    
+                    // Check if the response is successful
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                    }
+            
+                    const blob = await response.blob(); // Convert to Blob
+            
+                    // Create a File object from the Blob if needed
+                    const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
+            
+                    // Call the previewFile function with the File
+                    previewFile(file);
+                } catch (error) {
+                    // Handle the error (e.g., log it or show an alert)
+                    console.error('Error loading image:', error.message);
+                    alert('There was an error processing the image. Please try again.');
+                }
+            };
+                    
+        }
     }
 </script>
 
