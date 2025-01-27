@@ -181,6 +181,7 @@ var isResizing = false;
 var startX, startY;
 var resizeDirection = '';
 var handleSize = 10; // Size of the resize handles
+var dragAndDropInitialized = false;
 
 // Function to return the current image
 function getImg() {
@@ -389,6 +390,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 function initializeDragAndDrop() {
+  if (dragAndDropInitialized) {
+    console.warn("Drag-and-drop already initialized.");
+    return;
+  }
+  dragAndDropInitialized = true;
   localStorage.setItem('editFlag', 'c');
 
   // Expose handleFiles globally
@@ -503,6 +509,7 @@ function initializeDragAndDrop() {
   // File selection logic
   if (fileSelect) {
     fileSelect.addEventListener('click', function () {
+      fileInput.value = ''; // Reset the input value
       fileInput.click();
     });
   }
@@ -512,6 +519,7 @@ function initializeDragAndDrop() {
     debugCounter++;
     console.log("File Input", fileInput, debugCounter);
     fileInput.addEventListener('change', function (e) {
+      console.log("Input Changed !!!!!!!!!!!!!!!", debugCounter);
       var files = e.target.files;
       if (files.length) handleFiles(files);
     });

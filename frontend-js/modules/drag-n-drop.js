@@ -17,6 +17,7 @@ let isResizing = false;
 let startX, startY;
 let resizeDirection = '';
 const handleSize = 10; // Size of the resize handles
+let dragAndDropInitialized = false;
 
 // Function to return the current image
 function getImg() {
@@ -240,6 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeDragAndDrop() {
+    if (dragAndDropInitialized) {
+        console.warn("Drag-and-drop already initialized.");
+        return;
+    }
+    dragAndDropInitialized = true;
 
     localStorage.setItem('editFlag', 'c');
 
@@ -339,6 +345,7 @@ function initializeDragAndDrop() {
     // File selection logic
     if (fileSelect) {
         fileSelect.addEventListener('click', () => {
+            fileInput.value = ''; // Reset the input value
             fileInput.click();
         });
     }
@@ -348,6 +355,7 @@ function initializeDragAndDrop() {
         debugCounter++
         console.log("File Input", fileInput, debugCounter)
         fileInput.addEventListener('change', (e) => {
+            console.log("Input Changed !!!!!!!!!!!!!!!", debugCounter);
             const files = e.target.files;
             if (files.length) handleFiles(files);
         });
