@@ -682,7 +682,7 @@ document.querySelectorAll('.editBuilding').forEach(function (icon) {
             // Retrieve building record from database
             _context2.prev = 13;
             _context2.next = 16;
-            return fetch("/admin/building/edit/".concat(Id));
+            return fetch("/admin/building");
           case 16:
             response = _context2.sent;
             console.log("editBuilding.js response = ", response);
@@ -694,7 +694,7 @@ document.querySelectorAll('.editBuilding').forEach(function (icon) {
             if (result.success) {
               _result$data = result.data, name = _result$data.name, intro = _result$data.intro, image = _result$data.image;
               buildingForm.elements['buildingName'].value = name;
-              buildingForm.elements['introText'].value = intro;
+              buildingForm.elements['buildingIntroText'].value = intro;
 
               // Preload image into the canvas
               if (image) {

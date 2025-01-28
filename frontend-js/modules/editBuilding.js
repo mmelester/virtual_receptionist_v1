@@ -31,7 +31,7 @@ document.querySelectorAll('.editBuilding').forEach((icon) => {
 
             // Retrieve building record from database
             try {
-                const response = await fetch(`/admin/building/edit/${Id}`);
+                const response = await fetch(`/admin/building`);
 
                 console.log("editBuilding.js response = ", response);
 
@@ -42,10 +42,11 @@ document.querySelectorAll('.editBuilding').forEach((icon) => {
                 if (result.success) {
                     const { name, intro, image } = result.data;
                     buildingForm.elements['buildingName'].value = name;
-                    buildingForm.elements['introText'].value = intro;
-
+                    buildingForm.elements['buildingIntroText'].value = intro;
+  
                     // Preload image into the canvas
                     if (image) {
+                     
                         const img = new Image();
                         img.src = image; // Assuming `image` contains the Base64 or URL
                         // img.onload = async function () {

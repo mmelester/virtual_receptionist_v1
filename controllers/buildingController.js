@@ -31,7 +31,7 @@ module.exports = {
             }
         } catch (error) {
             console.error('Error saving building:', error);
-            req.flash('errors', ['Failed to add company.']);
+            req.flash('errors', ['Failed to add building.']);
             req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' }));
         }
     },
@@ -91,6 +91,24 @@ module.exports = {
         }
     },
    
+    async editBuilding(req, res, BuildingModel) {
+        try {
+    
+            // Fetch the building details
+            const building = await BuildingModel.getBuilding();
+    
+            if (!building) {
+                return res.status(404).json({ success: false, message: 'Building not found or invalid ID.' });
+            }
+    
+            // Return the building details
+            res.status(200).json({ success: true, data: building });
+        } catch (error) {
+            console.error('Error editing staff member:', error);
+            req.flash('errors', ['Failed to edit staff member.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch building information from database.' }));
+        }
+    },
     async deleteItem(req, res, buildingModel) {
         try {
             const buildingId = req.params.id;
@@ -104,7 +122,7 @@ module.exports = {
             req.session.save(() => res.status(200).json({ success: true, message: 'Building record deleted successfully!' }));
         } catch (error) {
             console.error('Error deleting building record:', error);
-            req.flash('errors', ['Failed to delete company.']);
+            req.flash('errors', ['Failed to delete building.']);
             req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred while deleting the building record.' }));
         }
     },
