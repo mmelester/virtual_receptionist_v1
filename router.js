@@ -70,6 +70,11 @@ module.exports = (db) => {
         buildingController.saveBuilding(req, res, buildingModelInstance)
     );
 
+    router.get('/admin/building/edit/:id', ensureAuthenticated, (req, res) =>
+        buildingController.editBuilding(req, res, buildingModelInstance)
+    );
+    
+    // Edit building information
     router.put('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.updateBuilding(req, res, buildingModelInstance)
     );
