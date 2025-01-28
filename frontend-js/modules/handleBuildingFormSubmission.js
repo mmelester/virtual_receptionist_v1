@@ -5,10 +5,9 @@ export async function handleBuildingFormSubmission(event) {
     console.log("handleBuildingFormSubmission Called!");
     let errors = []; // Initialize an array to store validation errors
 
-    const { building, buildingExists } = clientData;
-
-    // Use building and buildingExists directly in your logic
-    console.log('Building exists:', buildingExists);
+    // Retrieve the company Id and editFlag from localStorage
+    const Id = localStorage.getItem('editId');
+    const flag = localStorage.getItem('editFlag');
 
     // Collect form data
     const buildingName = document.getElementById('buildingName').value.trim();
@@ -34,7 +33,7 @@ export async function handleBuildingFormSubmission(event) {
         console.log("Errors present");
         
         try {
-            await fetch('/admin/companies', {
+            await fetch('/admin', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ errors }),
@@ -59,9 +58,7 @@ export async function handleBuildingFormSubmission(event) {
 
     try {
 
-        const method = !buildingExists ? 'POST' : 'PUT';
-        console.log("Method = ", method, "Payload = ", buildingData);
-
+        const method = flag === 'c' ? 'POST' : 'PUT';
         // Make a POST or PUT request to the server to save/update the building data
         const response = await fetch('/admin/building', {
             method: method,

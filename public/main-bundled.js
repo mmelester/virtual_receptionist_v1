@@ -1065,17 +1065,16 @@ function handleBuildingFormSubmission(_x) {
 }
 function _handleBuildingFormSubmission() {
   _handleBuildingFormSubmission = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-    var errors, _clientData, building, buildingExists, buildingName, introText, img, croppedCanvas, croppedImage, buildingData, method, response, result, errorContainer, li;
+    var errors, Id, flag, buildingName, introText, img, croppedCanvas, croppedImage, buildingData, method, response, result, errorContainer, li;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           event.preventDefault(); // Prevent default form submission behavior
           console.log("handleBuildingFormSubmission Called!");
           errors = []; // Initialize an array to store validation errors
-          _clientData = clientData, building = _clientData.building, buildingExists = _clientData.buildingExists; // Use building and buildingExists directly in your logic
-          console.log('Building exists:', buildingExists);
-
-          // Collect form data
+          // Retrieve the company Id and editFlag from localStorage
+          Id = localStorage.getItem('editId');
+          flag = localStorage.getItem('editFlag'); // Collect form data
           buildingName = document.getElementById('buildingName').value.trim();
           introText = document.getElementById('buildingIntroText').value.trim();
           console.log("building name and intro ", buildingName, introText);
@@ -1100,7 +1099,7 @@ function _handleBuildingFormSubmission() {
           console.log("Errors present");
           _context.prev = 16;
           _context.next = 19;
-          return fetch('/admin/companies', {
+          return fetch('/admin', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -1126,11 +1125,8 @@ function _handleBuildingFormSubmission() {
           };
           console.log("buildingData", buildingData);
           _context.prev = 29;
-          method = !buildingExists ? 'POST' : 'PUT';
-          console.log("Method = ", method, "Payload = ", buildingData);
-
-          // Make a POST or PUT request to the server to save/update the building data
-          _context.next = 34;
+          method = flag === 'c' ? 'POST' : 'PUT'; // Make a POST or PUT request to the server to save/update the building data
+          _context.next = 33;
           return fetch('/admin/building', {
             method: method,
             headers: {
@@ -1138,25 +1134,25 @@ function _handleBuildingFormSubmission() {
             },
             body: JSON.stringify(buildingData)
           });
-        case 34:
+        case 33:
           response = _context.sent;
-          _context.next = 37;
+          _context.next = 36;
           return response.json();
-        case 37:
+        case 36:
           result = _context.sent;
           if (response.ok) {
-            _context.next = 42;
+            _context.next = 41;
             break;
           }
           alert(result.message || 'An error occurred.');
           console.log(!response);
           return _context.abrupt("return");
-        case 42:
+        case 41:
           alert(result.message || 'Operation successful!');
-          _context.next = 50;
+          _context.next = 49;
           break;
-        case 45:
-          _context.prev = 45;
+        case 44:
+          _context.prev = 44;
           _context.t1 = _context["catch"](29);
           console.error('Error submitting form:', _context.t1);
           errorContainer = document.querySelector('.alert-danger ul');
@@ -1166,11 +1162,11 @@ function _handleBuildingFormSubmission() {
             li.textContent = 'An unexpected error occurred. Please try again.';
             errorContainer.appendChild(li);
           }
-        case 50:
+        case 49:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[16, 23], [29, 45]]);
+    }, _callee, null, [[16, 23], [29, 44]]);
   }));
   return _handleBuildingFormSubmission.apply(this, arguments);
 }

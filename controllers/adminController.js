@@ -35,7 +35,6 @@ module.exports = {
                 errors, 
                 success, 
                 isLoggedIn,
-                clientData: { building, buildingExists }
             });
             
        

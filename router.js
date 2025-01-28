@@ -56,8 +56,14 @@ module.exports = (db) => {
     router.get('/admin', ensureAuthenticated, (req, res) =>
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
+
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.getBuilding(req, res, buildingModelInstance)
+    );
+    
+    // Post errors
+    router.post('/admin', ensureAuthenticated, (req, res) =>
+        adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
 
     router.post('/admin/building', ensureAuthenticated, (req, res) =>
