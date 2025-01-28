@@ -74,6 +74,9 @@ module.exports = (db) => {
         buildingController.updateBuilding(req, res, buildingModelInstance)
     );
 
+    router.delete('/admin/building/delete/:id', ensureAuthenticated, (req, res) => buildingController.deleteItem(req, res, buildingModelInstance)
+    );
+
     router.get('/admin/companies', ensureAuthenticated, (req, res) =>
         companiesController.getCompanies(req, res, companyModelInstance)
     );

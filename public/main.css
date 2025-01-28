@@ -21,7 +21,7 @@ body {
   flex: 1;
   width: 80%;
   height: auto;
-  margin: auto;
+  margin: 1rem auto;
 }
 
 footer {

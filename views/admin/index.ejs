@@ -20,22 +20,6 @@
     <% } %>  
     <h1 class="pt-md-5 pb-md-5 text-center">Admin Dashboard</h1>
 
-    <% if (errors && errors.length > 0) { %>
-        <div class="alert alert-danger">
-            <ul>
-                <% errors.forEach(function(error) { %>
-                    <li><%= error %></li>
-                <% }); %>
-            </ul>
-        </div>
-    <% } %>
-
-    <% if (success && success.length > 0) { %>
-        <div class="alert alert-success">
-            <%= success %>
-        </div>
-    <% } %>
-
     <!-- <p>Total Companies: <%= stats.companyCount %></p> -->
     <div class="admin-btn-container mb-5">
         <!-- <a href="/admin/building" class="create-building-btn btn-companies-staff btn btn-primary btn-sm">
@@ -98,36 +82,41 @@
         </div> 
     </div>
     </section>
-    <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light">
-        <div class="building-logo pr-5">
-            <img class='text-center' src="<%= building.image %>" alt="<%= building.name %> logo" width="auto" height="50px" />
-        </div>
-        <div class="building-name pr-5">
-            <%= building.name %>
-        </div>
-        <div class="-intro-text pr-5">
-            <%= building.intro.length > 30 ? building.intro.slice(0, 30) + "  . . .  " : building.intro %>
-        </div>
+    <% if (building) { %>
+        <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light">
+            <div class="building-logo pr-5">
+                <img class='text-center' src="<%= building.image %>" alt="<%= building.name %> logo" width="auto" height="50px" />
+            </div>
+            <div class="building-name pr-5">
+                <%= building.name %>
+            </div>
+            <div class="-intro-text pr-5">
+                <%= building.intro.length > 30 ? building.intro.slice(0, 30) + "  . . .  " : building.intro %>
+            </div>
 
-        <div class="edit-delete-people ml-auto pt-1">
+            <div class="edit-delete-people ml-auto pt-1">
 
-            <i 
-                class="editBuilding icon fa fa-pencil-square-o pr-3" 
-                aria-hidden="true" 
-                data-id="<%= building._id %>"
-                data-section-id="add-building-section"
-                data-form-id="buildingForm"
-                data-heading-id="form-heading">
-            </i>
-            <i 
-                class="delete-btn icon fa fa-trash pr-3 muted" 
-                aria-hidden="true" 
-                data-route="/admin/building/delete" 
-                data-id="<%= building._id %>">
-            </i>
+                <i 
+                    class="editBuilding icon fa fa-pencil-square-o pr-3" 
+                    aria-hidden="true" 
+                    data-id="<%= building._id %>"
+                    data-section-id="add-building-section"
+                    data-form-id="buildingForm"
+                    data-heading-id="form-heading">
+                </i>
+                <i 
+                    class="delete-btn icon fa fa-trash pr-3 muted" 
+                    aria-hidden="true" 
+                    data-route="/admin/building/delete" 
+                    data-id="<%= building._id %>">
+                </i>
+            </div>
         </div>
-    </div>
-   
+    <% } else { %>
+        <p>The building information has not been added.</p>
+    <% } %>
+
+
 </div>
 <!-- Load explicitly because DOM may not be available before main.js executes -->
 <script type="module" src="../frontend-js/modules/create-building.js"></script>

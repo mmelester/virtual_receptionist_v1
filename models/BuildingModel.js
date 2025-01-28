@@ -31,6 +31,8 @@ class BuildingModel extends BaseModel {
 
     async updateBuilding(id, buildingData) {
         try {
+
+            console.log("Building ID is ", id, " BuildingData is ", buildingData);
             // Convert the ObjectId to a 24-character hex string if it's already an ObjectId
             const formattedId = id instanceof ObjectId ? id.toHexString() : id;
     
@@ -44,6 +46,19 @@ class BuildingModel extends BaseModel {
         } catch (error) {
             console.error('Error updating building:', error);
             return { success: false, message: 'Database error.' };
+        }
+    }
+
+    async deleteItem(buildingId) {
+        if (!ObjectId.isValid(buildingId)) {
+            return { success: false, message: 'Invalid ObjectId.' };
+        }
+
+        try {
+            return await this.delete(buildingId); // Use BaseModel's `delete` method
+        } catch (error) {
+            console.error('Database error:', error);
+            return { success: false, message: 'Failed to delete the company due to a database error.' };
         }
     }
     

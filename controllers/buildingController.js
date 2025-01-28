@@ -23,7 +23,7 @@ module.exports = {
                 const result = await BuildingModel.addBuilding({ name, intro, image });
                 if (result.success) {
                     req.flash('success', 'Building record added successfully!');
-                    return req.session.save(() => res.status(200).json({ success: true, message: 'Building added successfully!' }));
+                    return req.session.save(() => res.status(200).json({ success: true, refresh: true, message: 'Building added successfully!' }));
                 } else {
                     req.flash('errors', [result.message]);
                     return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
@@ -89,7 +89,24 @@ module.exports = {
             console.error('Error updating building:', error);
             res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
         }
-    }
-    
+    },
+   
+    async deleteItem(req, res, buildingModel) {
+        try {
+            const buildingId = req.params.id;
+            const result = await buildingModel.deleteItem(buildingId); 
+            if (!result.success) {
+                req.flash('errors', [result.message]);
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
+            }
+
+            req.flash('success', 'Building record deleted successfully!');
+            req.session.save(() => res.status(200).json({ success: true, message: 'Building record deleted successfully!' }));
+        } catch (error) {
+            console.error('Error deleting building record:', error);
+            req.flash('errors', ['Failed to delete company.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred while deleting the building record.' }));
+        }
+    },
     
 };

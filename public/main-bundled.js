@@ -1148,11 +1148,12 @@ function _handleBuildingFormSubmission() {
           console.log(!response);
           return _context.abrupt("return");
         case 41:
+          location.reload(); // Refresh the page
           alert(result.message || 'Operation successful!');
-          _context.next = 49;
+          _context.next = 50;
           break;
-        case 44:
-          _context.prev = 44;
+        case 45:
+          _context.prev = 45;
           _context.t1 = _context["catch"](29);
           console.error('Error submitting form:', _context.t1);
           errorContainer = document.querySelector('.alert-danger ul');
@@ -1162,11 +1163,11 @@ function _handleBuildingFormSubmission() {
             li.textContent = 'An unexpected error occurred. Please try again.';
             errorContainer.appendChild(li);
           }
-        case 49:
+        case 50:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[16, 23], [29, 44]]);
+    }, _callee, null, [[16, 23], [29, 45]]);
   }));
   return _handleBuildingFormSubmission.apply(this, arguments);
 }

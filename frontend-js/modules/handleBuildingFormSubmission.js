@@ -73,7 +73,7 @@ export async function handleBuildingFormSubmission(event) {
             console.log(!response);
             return;
         }
-
+        location.reload(); // Refresh the page
         alert(result.message || 'Operation successful!');
 
     } catch (error) {

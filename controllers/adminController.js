@@ -37,7 +37,6 @@ module.exports = {
                 isLoggedIn,
             });
             
-       
         } catch (error) {
             console.error('Error loading admin dashboard:', error);
             req.flash('errors', ['Failed to load admin dashboard.']);
