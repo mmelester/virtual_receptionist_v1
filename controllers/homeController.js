@@ -4,9 +4,9 @@ exports.home = async function (req, res, db) {
     const companyModel = new CompanyModel(db);
 
     // Check if the user is logged in
-    const isLoggedIn = req.session && req.session.isLoggedIn;
+    const adminIsLoggedIn = req.session && req.session.adminIsLoggedIn;
 
-    console.log("Logged in ? ", isLoggedIn)
+    console.log("Logged in ? ", adminIsLoggedIn)
 
     try {
         const companies = await companyModel.getCompanies();
@@ -14,14 +14,14 @@ exports.home = async function (req, res, db) {
         res.render('home/index.ejs', { 
             companies, 
             error: null, 
-            isLoggedIn // Pass isLoggedIn to the view
+            adminIsLoggedIn // Pass adminIsLoggedIn to the view
         });
     } catch (error) {
         console.error('Error retrieving companies:', error);
         res.render('home/index.ejs', { 
             companies: [], 
             error: 'Failed to load companies.', 
-            isLoggedIn // Pass isLoggedIn to the view even in case of errors
+            adminIsLoggedIn // Pass adminIsLoggedIn to the view even in case of errors
         });
         req.flash('errors', error)
         req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch company information from database.' }));

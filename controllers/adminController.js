@@ -25,7 +25,7 @@ module.exports = {
 
             const errors = req.flash('errors');
             const success = req.flash('success');
-            const isLoggedIn = req.session && req.session.isLoggedIn;
+            const adminIsLoggedIn = req.session && req.session.adminIsLoggedIn;
 
             // Render the admin dashboard with stats, building data, and buildingExists flag
             res.render('admin/index', { 
@@ -34,7 +34,7 @@ module.exports = {
                 buildingExists, 
                 errors, 
                 success, 
-                isLoggedIn,
+                adminIsLoggedIn,
             });
             
         } catch (error) {

@@ -4,7 +4,7 @@ exports.login = async (req, res) => {
 
     try {
         await user.login();
-        req.session.isLoggedIn = true; // Set isLoggedIn to true
+        req.session.adminIsLoggedIn = true; // Set adminIsLoggedIn to true
         req.session.save(() => {
             req.flash('success', 'You have successfully logged in.');
             res.redirect('/admin'); // Redirect to /admin

@@ -40,12 +40,12 @@ async function startServer() {
         app.use(express.json({ limit: '5mb' }));
         app.use(express.urlencoded({ limit: '1mb', extended: true })); // Set URL-encoded body limit to 1 MB
 
-        // Pass isLoggedIn globally
+        // Pass adminIsLoggedIn globally
         app.use((req, res, next) => {
-            if (req.session.isLoggedIn === undefined) {
-                req.session.isLoggedIn = false; // Default to false
+            if (req.session.adminIsLoggedIn === undefined) {
+                req.session.adminIsLoggedIn = false; // Default to false
             }
-            // res.locals.isLoggedIn = req.session.isLoggedIn;
+            // res.locals.adminIsLoggedIn = req.session.adminIsLoggedIn;
             next();
         });
 
