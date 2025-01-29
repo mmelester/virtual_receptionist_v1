@@ -59,7 +59,7 @@ User.prototype.login = async function() {
             .findOne({ username: this.data.username })
             .then((attemptedUser) => {
                 if (attemptedUser && attemptedUser.password === this.data.password) {
-                    resolve("Congrats!");
+                    resolve(attemptedUser.role || 'user'); // Default role is 'user' if not defined
                 } else {
                     reject("Invalid username / password.  Please enter valid username / password.");
                 }
