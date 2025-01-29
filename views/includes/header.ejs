@@ -23,13 +23,10 @@
               </h4>
               <!-- Right-aligned form element -->
               <% if (adminIsLoggedIn) { %>
-
-                console.log("************Not logged in")
                 <!-- Display logout button when user is logged in -->
                 <button onclick="window.location.href='/logout'" class="logout-btn btn btn-primary btn-sm">Logout</button>
               <% } else { %>
 
-                console.log("************Logged in")
                 <!-- Display login form and signup button when user is not logged in -->
                 <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
                   <div class="row align-items-center">
@@ -40,7 +37,8 @@
                       <input name="password" class="form-control form-control-sm input-dark" type="password" placeholder="Password">
                     </div>
                     <div class="col-md-auto">
-                      <button onclick="logout" class="btn btn-primary btn-sm">Sign In</button>
+                      <!-- <button onclick="logout" class="btn btn-primary btn-sm">Sign In</button> -->
+                      <button class="btn btn-primary btn-sm">Sign In</button>
                     </div>
                   </div>
                 </form>

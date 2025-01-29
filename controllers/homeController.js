@@ -2,10 +2,8 @@ const CompanyModel = require('../models/CompanyModel');
 
 exports.home = async function (req, res, db) {
     const companyModel = new CompanyModel(db);
-
     // Check if the user is logged in
     const adminIsLoggedIn = req.session && req.session.adminIsLoggedIn;
-
     console.log("Logged in ? ", adminIsLoggedIn)
 
     try {

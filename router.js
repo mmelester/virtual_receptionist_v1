@@ -45,10 +45,10 @@ module.exports = (db) => {
     router.get('/companies/:id', (req, res) => {
         companiesController.getCompanyById(req, res, companyModelInstance);
     });
-    router.get('/companies/person/:id', (req, res) => {
-        const { id } = req.params;
-        peopleController.getPersonById(req, res, peopleModelInstance, id);
-    });
+    // router.get('/companies/person/:id', (req, res) => {
+    //     const { id } = req.params;
+    //     peopleController.getPersonById(req, res, peopleModelInstance, id);
+    // });
 
     // -------------------------------------
     // 🔒 Protected Admin Routes
