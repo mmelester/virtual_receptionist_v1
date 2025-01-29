@@ -3,21 +3,25 @@ exports.login = async (req, res) => {
     const user = new User(req.body);
 
     try {
-        await user.login();
-        req.session.adminIsLoggedIn = true; // Set adminIsLoggedIn to true
+        const role = await user.login(); // Get role from AuthModel
+        
+        req.session.isLoggedIn = true;
+        req.session.userRole = role; // Store user role in session
+        
         req.session.save(() => {
             req.flash('success', 'You have successfully logged in.');
-            res.redirect('/admin'); // Redirect to /admin
+            if (role === 'admin') {
+                res.redirect('/admin'); // Admins go to the admin panel
+            } else {
+                res.redirect('/dashboard'); // Standard users go to dashboard.ejs
+            }
         });
     } catch (error) {
-        req.flash('errors', error); // Store error in flash
-        console.log('Flash errors:', error); // Debug: Check flash content
-        req.session.save(() => {
-            console.log('Errors before rendering:', error);
-            res.redirect('/'); // Redirect back to the home/login page
-        });
+        req.flash('errors', error);
+        req.session.save(() => res.redirect('/'));
     }
 };
+
 
 exports.logout = function(req, res) {
     req.session.destroy( async function () {

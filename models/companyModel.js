@@ -24,12 +24,15 @@ class CompanyModel extends BaseModel {
 
     async getCompanies() {
         try {
-            return await this.getAll(); // Use BaseModel's `getAll` method
+            const companies = await this.getAll(); // Fetch all companies
+            console.log("Fetched companies:", companies); // Debugging
+            return companies;
         } catch (error) {
             console.error('Database error:', error);
             throw new Error('Failed to retrieve companies.');
         }
     }
+    
 
     async deleteItem(companyId) {
         if (!ObjectId.isValid(companyId)) {

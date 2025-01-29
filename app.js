@@ -40,15 +40,26 @@ async function startServer() {
         app.use(express.json({ limit: '5mb' }));
         app.use(express.urlencoded({ limit: '1mb', extended: true })); // Set URL-encoded body limit to 1 MB
 
-        // Pass adminIsLoggedIn globally
+        // Pass isLoggedIn globally
         app.use((req, res, next) => {
-            if (req.session.adminIsLoggedIn === undefined) {
-                req.session.adminIsLoggedIn = false; // Default to false
+            if (!req.session) {
+                return next();
             }
-            // res.locals.adminIsLoggedIn = req.session.adminIsLoggedIn;
+        
+            if (typeof req.session.isLoggedIn === 'undefined') {
+                req.session.isLoggedIn = false;
+            }
+        
+            if (typeof req.session.userRole === 'undefined') {
+                req.session.userRole = 'guest';
+            }
+        
+            res.locals.isLoggedIn = req.session.isLoggedIn;
+            res.locals.userRole = req.session.userRole;
+        
             next();
         });
-
+        
         app.set('views', 'views'); // Specify the views directory
         app.set('view engine', 'ejs'); // Set EJS as the default view engine
 

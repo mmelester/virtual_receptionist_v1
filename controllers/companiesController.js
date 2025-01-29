@@ -4,9 +4,9 @@ module.exports = {
             const companies = await CompanyModel.getCompanies(); // Aligns with CompanyModel's method name
             const errors = req.flash('errors');
             const success = req.flash('success');
-            const adminIsLoggedIn = req.session && req.session.adminIsLoggedIn;
+            const isLoggedIn = req.session && req.session.isLoggedIn;
 
-            res.render('admin/companies', { companies, errors, success, adminIsLoggedIn });
+            res.render('admin/companies', { companies, errors, success, isLoggedIn });
         } catch (error) {
             console.error('Error fetching companies:', error);
             req.flash('errors', ['Failed to retrieve companies.']);
@@ -120,7 +120,7 @@ module.exports = {
             const company = await CompanyModel.getCompanyById(companyId);
     
             if (!company) {
-                return res.status(404).render('error', { message: 'Company not found.', adminIsLoggedIn: req.session && req.session.adminIsLoggedIn });
+                return res.status(404).render('error', { message: 'Company not found.', isLoggedIn: req.session && req.session.isLoggedIn });
             }
     
             // Check if there's only one person in the company
@@ -132,13 +132,13 @@ module.exports = {
     
             res.render('companies/company', { 
                 company, 
-                adminIsLoggedIn: req.session && req.session.adminIsLoggedIn // Pass adminIsLoggedIn to the view
+                isLoggedIn: req.session && req.session.isLoggedIn // Pass isLoggedIn to the view
             });
         } catch (error) {
             console.error('Error fetching company details:', error);
             res.status(500).render('error', { 
                 message: 'Internal server error.', 
-                adminIsLoggedIn: req.session && req.session.adminIsLoggedIn 
+                isLoggedIn: req.session && req.session.isLoggedIn 
             });
         }
     }

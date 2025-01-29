@@ -25,14 +25,24 @@ module.exports = (db) => {
     // -------------------------------------
     // 🔒 Authentication Middleware
     // -------------------------------------
+     // Middleware: Ensure user is logged in
     function ensureAuthenticated(req, res, next) {
-        if (req.session && req.session.adminIsLoggedIn) {
+        if (req.session && req.session.isLoggedIn) {
             console.log('User is authenticated');
             return next();
         } else {
             console.log('Authentication failed.');
             req.flash('errors', 'You must be logged in to access this page.');
             return res.redirect('/');
+        }
+    }
+    // Middleware: Restrict admin-only pages
+    function ensureAdmin(req, res, next) {
+        if (req.session.userRole === 'admin') {
+            return next();
+        } else {
+            req.flash('errors', 'Admin access only.');
+            return res.redirect('/dashboard');
         }
     }
 
@@ -42,13 +52,56 @@ module.exports = (db) => {
     router.get('/', (req, res) => homeController.home(req, res, db));
     router.post('/login', authController.login);
     router.get('/logout', authController.logout);
+    // Show all staff for a company with matching ID
     router.get('/companies/:id', (req, res) => {
         companiesController.getCompanyById(req, res, companyModelInstance);
     });
+    // Show person notification page
     router.get('/companies/person/:id', (req, res) => {
         const { id } = req.params;
         peopleController.getPersonById(req, res, peopleModelInstance, id);
     });
+    // -------------------------------------
+    // 🔒 Restricted User Routes
+    // -------------------------------------
+    // router.get('/dashboard', ensureAuthenticated, (req, res) => {
+    //     res.render('home/dashboard.ejs', { userRole: req.session.userRole });
+    // });
+    // Middleware: Restrict standard users (prevent admins from accessing /dashboard)
+    function ensureUser(req, res, next) {
+        if (req.session.userRole === 'user') {
+            return next();
+        } else {
+            req.flash('errors', 'Access restricted.');
+            return res.redirect('/admin');
+        }
+    }
+
+    router.get('/dashboard', ensureAuthenticated, ensureUser, async (req, res) => {
+        try {
+            console.log("Fetching companies for dashboard...");
+            
+            // Use the already initialized companyModelInstance
+            const companies = await companyModelInstance.getCompanies(); 
+        
+            console.log("Companies retrieved:", companies);
+        
+            res.render('home/dashboard.ejs', { 
+                userRole: req.session.userRole, 
+                companies,
+                error: null // ✅ Always define 'error', even if empty
+            });
+        } catch (error) {
+            console.error("Error fetching companies:", error);
+            res.render('home/dashboard.ejs', { 
+                userRole: req.session.userRole, 
+                companies: [], 
+                error: "Failed to load companies." // ✅ Ensures 'error' is always present
+            });
+        }
+    });
+    
+    
 
     // -------------------------------------
     // 🔒 Protected Admin Routes
@@ -157,6 +210,5 @@ module.exports = (db) => {
         peopleController.receiveSms(req, res);
     });
     
-
     return router;
 };

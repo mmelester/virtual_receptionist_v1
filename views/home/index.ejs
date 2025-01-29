@@ -1,51 +1,29 @@
-       <%- include('../includes/header') %> 
-        <div class="page">
-            <% flashErrors = flash('errors')
-            if (flashErrors.length) { %>
-                <div class="alert alert-danger">
-                  <% flashErrors.forEach(function(error) { %>
-                    <p><%= error %></p>
-                  <% }); %>
-                </div>
-              <% } %>
-              
-              <% if (flash('success').length) { %>
-                <div class="alert alert-success">
-                  <% flash('success').forEach(function(message) { %>
-                    <p><%= message %></p>
-                  <% }); %>
-                </div>
-              <% } %>
-              
-            <section class="page-intro-section">
-                <h1>Hi I'm Vivi, Your Virtual Receptionist</h1>
-            </section>
-            <section class="companies-section">
-                <div class="flex-container">
-                    <% if (companies.length > 0) { %>
-                        <% companies.forEach(company => { %>
-                            <div class="flex-col-container">
-                              <a href="/companies/<%= company._id %>">
-                                <img 
-                                  class="logo"
-                                  src="<%= company.image %>" 
-                                  alt="<%= company.name %> logo"
-                                  data-id="<%= company._id %>" 
-                                  width="auto" 
-                                  height="100px"/>
-                            </a>
-                            </div>
-                        <% }); %>
-                    <% } else { %>
-                        <p>No companies available.</p>
-                    <% } %>
-                </div>
-                <% if (error) { %>
-                    <p style="color: red;"><%= error %></p>
-                <% } %>  
-            </section>
-            
+<%- include('../includes/header') %>
 
+<div class="page">
+    <% if (flash('errors').length) { %>
+        <div class="alert alert-danger">
+            <% flash('errors').forEach(function(error) { %>
+                <p><%= error %></p>
+            <% }); %>
         </div>
-        
-    <%- include('../includes/footer') %>
+    <% } %>
+
+    <% if (flash('success').length) { %>
+        <div class="alert alert-success">
+            <% flash('success').forEach(function(message) { %>
+                <p><%= message %></p>
+            <% }); %>
+        </div>
+    <% } %>
+
+    <section class="page-intro-section">
+        <h1>Welcome to My Virtual Receptionist</h1>
+    </section>
+
+    <% if (!isLoggedIn) { %>
+        <p>Please log in to access your dashboard.</p>
+    <% } %>
+</div>
+
+<%- include('../includes/footer') %>

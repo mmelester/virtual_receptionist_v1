@@ -7,8 +7,8 @@ module.exports = {
             const people = await PersonModel.getPeople(); // Aligns with Person Model's method name
             const errors = req.flash('errors');
             const success = req.flash('success');
-            const adminIsLoggedIn = req.session && req.session.adminIsLoggedIn;
-            res.render('admin/people', { people, errors, success, adminIsLoggedIn });
+            const isLoggedIn = req.session && req.session.isLoggedIn;
+            res.render('admin/people', { people, errors, success, isLoggedIn });
         } catch (error) {
             console.error('Error fetching people:', error);
             req.flash('errors', ['Failed to retrieve people.']);
@@ -35,8 +35,8 @@ module.exports = {
             // Render the EJS template for browser requests
             const errors = req.flash('errors');
             const success = req.flash('success');
-            const adminIsLoggedIn = req.session && req.session.adminIsLoggedIn;
-            res.render('admin/people', { people, errors, success, adminIsLoggedIn, companyId }); // Pass companyId here
+            const isLoggedIn = req.session && req.session.isLoggedIn;
+            res.render('admin/people', { people, errors, success, isLoggedIn, companyId }); // Pass companyId here
         } catch (error) {
             console.error('Error fetching people for company:', error);
             if (isApiRequest) {
@@ -210,7 +210,7 @@ module.exports = {
             if (!person) {
                 return res.status(404).render('error', {
                     message: 'Staff member not found.',
-                    adminIsLoggedIn: req.session && req.session.adminIsLoggedIn
+                    isLoggedIn: req.session && req.session.isLoggedIn
                 });
             }
 
@@ -224,13 +224,13 @@ module.exports = {
             // Render the person's detail page
             res.render('companies/person', {
                 person,
-                adminIsLoggedIn: req.session && req.session.adminIsLoggedIn
+                isLoggedIn: req.session && req.session.isLoggedIn
             });
         } catch (error) {
             console.error("Error fetching staff member's details:", error);
             res.status(500).render('error', {
                 message: 'Internal server error.',
-                adminIsLoggedIn: req.session && req.session.adminIsLoggedIn
+                isLoggedIn: req.session && req.session.isLoggedIn
             });
         }
     },   
@@ -253,7 +253,7 @@ module.exports = {
     //             companyId,
     //             errors: req.flash('errors'),
     //             success: req.flash('success'),
-    //             adminIsLoggedIn: req.session && req.session.adminIsLoggedIn,
+    //             isLoggedIn: req.session && req.session.isLoggedIn,
     //         });
     //     } catch (error) {
     //         console.error('Error rendering people page:', error);

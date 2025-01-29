@@ -12,49 +12,32 @@
         <link rel="stylesheet" href="/main.css">
         <link rel="stylesheet" href="/pages.css">
     </head>
-    <header>
-        <header class="header-bar">
-            <div class="d-flex justify-content-between align-items-center p-2">
-              <!-- Left-aligned h4 element -->
-              <h4 class="my-0 font-weight-normal">
-                <a href="/" class="text-white">
+    <header class="header-bar">
+      <div class="d-flex justify-content-between align-items-center p-2">
+          <h4 class="my-0 font-weight-normal">
+              <a href="/" class="text-white">
                   <img src="/images/logo.png" width="60" height="60" alt="building logo">
-                </a>
-              </h4>
-              <!-- Right-aligned form element -->
-              <% if (adminIsLoggedIn) { %>
-                <!-- Display logout button when user is logged in -->
-                <button onclick="window.location.href='/logout'" class="logout-btn btn btn-primary btn-sm">Logout</button>
-              <% } else { %>
-
-                <!-- Display login form and signup button when user is not logged in -->
-                <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
+              </a>
+          </h4>
+  
+          <% if (isLoggedIn) { %>
+            <button onclick="window.location.href='/logout'" class="logout-btn btn btn-primary btn-sm mr-3">Logout</button>
+          <% } else { %>
+              <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
                   <div class="row align-items-center">
-                    <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-                      <input name="username" class="form-control form-control-sm input-dark" type="text" placeholder="Username" autocomplete="off">
-                    </div>
-                    <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-                      <input name="password" class="form-control form-control-sm input-dark" type="password" placeholder="Password">
-                    </div>
-                    <div class="col-md-auto">
-                      <!-- <button onclick="logout" class="btn btn-primary btn-sm">Sign In</button> -->
-                      <button class="btn btn-primary btn-sm">Sign In</button>
-                    </div>
+                      <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+                          <input name="username" class="form-control form-control-sm input-dark" type="text" placeholder="Username" autocomplete="off">
+                      </div>
+                      <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+                          <input name="password" class="form-control form-control-sm input-dark" type="password" placeholder="Password">
+                      </div>
+                      <div class="col-md-auto">
+                          <button class="btn btn-primary btn-sm mr-3">Sign In</button>
+                      </div>
                   </div>
-                </form>
-              <% } %>
-            </div>
-          </header>
-          
-    </header>
-
-    <body>
-    <script>
-      function logout() {
-          fetch('/logout')
-              .then(() => {
-                  window.location.href = '/';
-                  window.location.reload(true);  // Force a fresh reload from the server
-              });
-      }
-    </script>
+              </form>
+          <% } %>
+      </div>
+  </header>
+  
+  
