@@ -2,6 +2,16 @@ section.companies-section,
 section.people-section {
   margin-bottom: 1rem;
 }
+.name {
+  min-width: 30%;
+}
+.intro-text {
+  display: block; /* Ensure it behaves as a block element */
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Add "..." when text overflows */
+  max-width: 50%;
+}
 
 .flex-container {
   display: flex;
@@ -173,7 +183,9 @@ i.muted {
 i.icon:hover {
   color: #ff5733;
 }
-
+.logo img {
+  height: 50px;
+}
 img.logo:hover {
   animation: tilt 0.6s ease-in-out infinite alternate;
 }
@@ -194,9 +206,21 @@ img.headshot {
 }
 
 /* Media Queries */
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   img.logo {
-    height: 75px;
+    height: 50px;
+  }
+
+  .name {
+    min-width: 20%;
+  }
+
+  .intro-text {
+    max-width: 40%;
+  }
+
+  .logo img {
+    height: 35px;
   }
 
   .add-company-flex-container,
@@ -214,5 +238,9 @@ img.headshot {
   }
   img.logo {
     height: 70px;
+  }
+
+  .intro-text {
+    max-width: 35%;
   }
 }

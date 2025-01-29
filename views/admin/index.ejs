@@ -83,14 +83,14 @@
     </div>
     </section>
     <% if (building) { %>
-        <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light">
-            <div class="building-logo pr-5">
-                <img class='text-center' src="<%= building.image %>" alt="<%= building.name %> logo" width="auto" height="50px" />
+        <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light overflow-hidden flex-wrap">
+            <div class="logo pr-3">
+                <img class='text-center' src="<%= building.image %>" alt="<%= building.name %> logo" width="auto" />
             </div>
-            <div class="building-name pr-5">
-                <%= building.name %>
+            <div class="name pr-5">
+                <%= building.name.length > 10 ? building.name.slice(0, 10) + "  . . .  " : building.name %>
             </div>
-            <div class="-intro-text pr-5">
+            <div class="intro-text pr-3">
                 <%= building.intro.length > 30 ? building.intro.slice(0, 30) + "  . . .  " : building.intro %>
             </div>
 
@@ -124,9 +124,9 @@
     import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
     document.addEventListener('DOMContentLoaded', () => {
 
-    setEqualWidths('.building-name');
-    setEqualWidths('.building-intro-text');
-    setEqualWidths('.building-logo');
+    setEqualWidths('.name');
+    setEqualWidths('.intro-text');
+    setEqualWidths('.logo');
 
     const closeBtn = document.getElementById('close-btn');
     closeBtn.addEventListener('click', function () {
