@@ -57,7 +57,7 @@ export async function handleBuildingFormSubmission(event) {
     console.log("buildingData", buildingData);
 
     try {
-        const url = flag === 'c' ? '/admin/building' : `/admin/building/edit/${Id}`;
+        const url = flag === 'c' ? '/admin/building' : `/admin/building`;
         const method = flag === 'c' ? 'POST' : 'PUT';
         // Make a POST or PUT request to the server to save/update the building data
         const response = await fetch(url, {

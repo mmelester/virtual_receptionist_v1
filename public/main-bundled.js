@@ -1269,7 +1269,7 @@ function _handleBuildingFormSubmission() {
           };
           console.log("buildingData", buildingData);
           _context.prev = 29;
-          url = flag === 'c' ? '/admin/building' : "/admin/building/edit/".concat(Id);
+          url = flag === 'c' ? '/admin/building' : "/admin/building";
           method = flag === 'c' ? 'POST' : 'PUT'; // Make a POST or PUT request to the server to save/update the building data
           _context.next = 34;
           return fetch(url, {
