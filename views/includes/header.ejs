@@ -15,9 +15,13 @@
     <header class="header-bar">
       <div class="d-flex justify-content-between align-items-center p-2">
           <h4 class="my-0 font-weight-normal">
-              <a href="/" class="text-white">
-                  <img src="/images/logo.png" width="60" height="60" alt="building logo">
-              </a>
+            <a href="/" class="text-white">
+                <% if (typeof building !== 'undefined' && building && building.image) { %>
+                    <img src="<%= building.image %>" width="60" height="60" alt="<%= building.name %> logo">
+                <% } else { %>
+                    <img src="/images/logo.png" width="60" height="60" alt="Default Logo">
+                <% } %>
+            </a>
           </h4>
   
           <% if (isLoggedIn) { %>
