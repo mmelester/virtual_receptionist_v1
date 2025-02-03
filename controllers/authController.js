@@ -7,9 +7,11 @@ exports.login = async (req, res) => {
         
         req.session.isLoggedIn = true;
         req.session.userRole = role; // Store user role in session
+
+        req.flash('success', 'You have successfully logged in.');
         
         req.session.save(() => {
-            req.flash('success', 'You have successfully logged in.');
+            
             if (role === 'admin') {
                 res.redirect('/admin'); // Admins go to the admin panel
             } else {
@@ -22,8 +24,8 @@ exports.login = async (req, res) => {
     }
 };
 
-
-exports.logout = function(req, res) {
+exports.logout = function (req, res) {
+    req.flash('success', 'You have been logged out successfully.');
     req.session.destroy( async function () {
         console.log('Session destroyed, redirecting to home...');
         await res.clearCookie('connect.sid'); // Clear the session cookie explicitly

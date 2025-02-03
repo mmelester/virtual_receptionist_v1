@@ -25,7 +25,7 @@ class CompanyModel extends BaseModel {
     async getCompanies() {
         try {
             const companies = await this.getAll(); // Fetch all companies
-            console.log("Fetched companies:", companies); // Debugging
+            // console.log("Fetched companies:", companies); // Debugging
             return companies;
         } catch (error) {
             console.error('Database error:', error);
