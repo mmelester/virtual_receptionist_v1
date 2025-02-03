@@ -16,7 +16,7 @@ module.exports = {
                     buildingExists = true; // Flag that building record exists
                     console.log("Building Record Present")
                 } else {
-                    buildingExist = false; // Flag the no building record has been created
+                    buildingExists = false; // Flag the no building record has been created
                 }
             } catch (buildingError) {
                 console.error('Error fetching building data:', buildingError);
