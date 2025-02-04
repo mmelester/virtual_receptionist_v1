@@ -6,6 +6,7 @@ module.exports = (db) => {
     const homeController = require('./controllers/homeController');
     const adminController = require('./controllers/adminController');
     const buildingController = require('./controllers/buildingController');
+    const notificationController = require('./controllers/notificationController');
     const companiesController = require('./controllers/companiesController');
     const peopleController = require('./controllers/peopleController');
     const authController = require('./controllers/authController');
@@ -13,12 +14,14 @@ module.exports = (db) => {
     // Import Models
     const AdminModel = require('./models/AdminModel');
     const BuildingModel = require('./models/BuildingModel');
+    const NotificationModel = require('./models/NotificationModel');
     const CompanyModel = require('./models/CompanyModel');
     const PersonModel = require('./models/PersonModel');
 
     // Initialize Model Instances
     const adminModelInstance = new AdminModel(db);
     const buildingModelInstance = new BuildingModel(db);
+    const notificationModelInstance = new NotificationModel(db);
     const companyModelInstance = new CompanyModel(db);
     const peopleModelInstance = new PersonModel(db);
 
@@ -118,6 +121,23 @@ module.exports = (db) => {
     router.get('/admin', ensureAuthenticated, (req, res) =>
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
+
+    router.get('/admin/notifications', ensureAuthenticated, async (req, res) => {
+        try {
+            const notifications = await notificationModelInstance.getNotifications(); 
+            res.render('admin/notifications.ejs', { 
+                notifications,
+                userRole: req.session.userRole, 
+                errors: req.flash('errors'),
+                success: req.flash('success')
+            });
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+            req.flash('errors', 'Failed to load notifications.');
+            res.redirect('/admin');
+        }
+    });
+
 
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.getBuilding(req, res, buildingModelInstance)

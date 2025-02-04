@@ -1,0 +1,50 @@
+<%- include('../includes/header') %> 
+<div id="notificationPage" class="page">
+
+    <h1 class="pt-md-5 pb-md-5 text-center" >Notification Message Configuration</h1>
+ 
+    <% if (errors && errors.length > 0) { %>
+        <div class="alert alert-danger">
+            <ul>
+                <% errors.forEach(function(error) { %>
+                    <li><%= error %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+    
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+    <% } %>    
+
+
+    <div class="text-center pb-5">
+        <a href="/admin" class=" btn btn-primary btn-sm">Go to Admin Dashboard</a>
+    </div>
+
+    <section class="add-item-section">
+        <div class="add-company-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
+
+            <h3 id="form-heading" class="text-center pb-3">SMS Notification Messages</h3>
+
+            <div class="d-flex sms-notification-flex-container align-items-center justify-content-lg-between">
+                <div class="info">
+                    <form id="notificationForm">
+                        <div class="form-group">
+                            <label class="form-data" for="lobbyNotificaton">Lobby Notifications (up to 160 characters):</label>
+                            <textarea id="lobbyNotification" name="lobbyNotification" maxlength="160" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-data" for="consentGranted">Consent Granted (up to 160 characters):</label>
+                            <textarea id="consentGranted" name="consentGranted" maxlength="160" required></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Load explicitly because DOM may not be available before main.js executes -->
+<%- include('../includes/footer') %>
