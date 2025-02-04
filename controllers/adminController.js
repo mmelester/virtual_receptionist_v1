@@ -11,7 +11,7 @@ module.exports = {
             try {
                 // Attempt to fetch building data
                 building = await buildingModel.getBuilding();
-                console.log("building = ", building);
+                // console.log("building = ", building);
                 if (building) {
                     buildingExists = true; // Flag that building record exists
                     console.log("Building Record Present")

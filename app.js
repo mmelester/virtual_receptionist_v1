@@ -8,13 +8,40 @@ const { connectDB, getClient } = require('./db');
 const flash = require("connect-flash");
 const dotenv = require('dotenv');
 dotenv.config();
+const NotificationModel = require('./models/NotificationModel');
+const Messages = require('./src/messages');
 
 const app = express();
+// Check if notification data record exist and if not create it with the default notifications in /src/messages
+async function initializeNotifications(db) {
+    try {
+        const notificationModel = new NotificationModel(db);
+        const notifications = await notificationModel.getNotifications();
+        
+        if (!notifications || notifications.length === 0) {
+            console.log('No notifications found. Creating default notification record...');
+            const defaultNotification = {
+                SMS: Messages.SMS,
+                EMAIL: Messages.EMAIL,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            await db.collection('notifications').insertOne(defaultNotification);
+            console.log('Default notifications created successfully.');
+        } else {
+            console.log('Notifications record found.');
+        }
+    } catch (error) {
+        console.error('Error initializing notifications:', error);
+    }
+}
 
 async function startServer() {
     try {
         const db = await connectDB(); // Connect to the database
         const client = getClient(); // Retrieve the MongoClient instance
+
+        await initializeNotifications(db); // Check and create notifications at startup
 
         // Session options
         const sessionOptions = session({
