@@ -124,20 +124,13 @@ module.exports = (db) => {
 
     router.get('/admin/notifications', ensureAuthenticated, async (req, res) => {
         try {
-            const notifications = await notificationModelInstance.getNotifications(); 
-            res.render('admin/notifications.ejs', { 
-                notifications,
-                userRole: req.session.userRole, 
-                errors: req.flash('errors'),
-                success: req.flash('success')
-            });
+            await notificationController.getNotifications(req, res, notificationModelInstance);
         } catch (error) {
-            console.error("Error fetching notifications:", error);
+            console.error("Error in notification route:", error);
             req.flash('errors', 'Failed to load notifications.');
             res.redirect('/admin');
         }
     });
-
 
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.getBuilding(req, res, buildingModelInstance)

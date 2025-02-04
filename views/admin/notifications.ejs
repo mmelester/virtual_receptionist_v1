@@ -1,4 +1,5 @@
 <%- include('../includes/header') %> 
+
 <div id="notificationPage" class="page">
 
     <% if (errors && errors.length > 0) { %>
@@ -17,82 +18,80 @@
         </div>
     <% } %>    
 
-
     <div class="text-center">
-        <a href="/admin" class=" btn btn-primary btn-sm mt-5 mb-3 p-2">Back to Admin Dashboard</a>
+        <a href="/admin" class="btn btn-primary btn-sm mt-5 mb-3 p-2">Back to Admin Dashboard</a>
     </div>
 
-    <h1 class="pt-md-3 pb-md-5 text-center" >Notification Message Configuration</h1>
+    <h1 class="pt-md-3 pb-md-5 text-center">Notification Message Configuration</h1>
 
     <section class="add-item-section">
         <!-- SMS Notification Messages -->
-        <div class="add-notification-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
-
+        <div class="add-notification-container border pt-3 pb-5 pl-5 pr-5 rounded mb-5 bg-light">
             <h3 id="form-heading" class="text-center pb-3">SMS Notification Messages</h3>
 
             <div class="d-flex notification-flex-container align-items-center justify-content-lg-between">
                 <div class="info">
-                    <form id="notificationForm">
+                    <form id="notificationForm" action="/admin/notifications/update" method="POST">
                         <div class="form-group">
-                            <label class="form-data" for="lobbyNotificaton">Lobby Notifications (up to 160 characters):</label>
-                            <textarea class="notifications" id="lobbyNotification" name="lobbyNotification" maxlength="160" required></textarea>
+                            <label for="lobbyNotification">Lobby Notification (up to 160 characters):</label>
+                            <textarea class="notifications" id="lobbyNotification" name="lobbyNotification" maxlength="160" required><%= notifications.SMS ? notifications.SMS.LOBBY_NOTIFICATION : '' %></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-data" for="consentGranted">Consent Granted (up to 160 characters):</label>
-                            <textarea class="notifications" id="consentGranted" name="consentGranted" maxlength="160" required></textarea>
+                            <label for="consentGranted">Consent Granted (up to 160 characters):</label>
+                            <textarea class="notifications" id="consentGranted" name="consentGranted" maxlength="160" required><%= notifications.SMS ? notifications.SMS.CONSENT_GRANTED : '' %></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-data" for="noConsent">No Consent Found (up to 160 characters):</label>
-                            <textarea class="notifications" id="noConsentNotification" name="noConsentNotification" maxlength="160" required></textarea>
+                            <label for="noConsentNotification">No Consent Found (up to 160 characters):</label>
+                            <textarea class="notifications" id="noConsentNotification" name="noConsentNotification" maxlength="160" required><%= notifications.SMS ? notifications.SMS.CONSENT_NOT_FOUND : '' %></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-data" for="consentError">Consent Error (up to 160 characters):</label>
-                            <textarea class="notifications" id="consentError" name="consentError" maxlength="160" required></textarea>
+                            <label for="consentError">Consent Error (up to 160 characters):</label>
+                            <textarea class="notifications" id="consentError" name="consentError" maxlength="160" required><%= notifications.SMS ? notifications.SMS.CONSENT_ERROR : '' %></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-data" for="unsubscribedNotificaton">Unsubscribed Notifications (up to 160 characters):</label>
-                            <textarea class="notifications" id="unsubscribedNotification" name="unsubscribedNotification" maxlength="160" required></textarea>
+                            <label for="unsubscribedNotification">Unsubscribed Notification (up to 160 characters):</label>
+                            <textarea class="notifications" id="unsubscribedNotification" name="unsubscribedNotification" maxlength="160" required><%= notifications.SMS ? notifications.SMS.UNSUBSCRIBED : '' %></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-data" for="invalidResponse">Invalid Response (up to 160 characters):</label>
-                            <textarea class="notifications" id="invalidResponse" name="invalidResponse" maxlength="160" required></textarea>
+                            <label for="invalidResponse">Invalid Response (up to 160 characters):</label>
+                            <textarea class="notifications" id="invalidResponse" name="invalidResponse" maxlength="160" required><%= notifications.SMS ? notifications.SMS.INVALID_RESPONSE : '' %></textarea>
                         </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
+                        </div> 
                     </form>
                 </div>
             </div>
-            <div class="text-center">
-                <button id="update-sms-notifications-btn" class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
-            </div> 
         </div>
-        <!-- Email Notification Messages -->
-        <div class="add-notification-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
 
-            <h3 id="form-heading" class="text-center pb-3">Email Lobby Notification Messages</h3>
+        <!-- Email Notification Messages -->
+        <div class="add-notification-container border pt-3 pb-5 pl-5 pr-5 rounded mb-5 bg-light">
+            <h3 id="form-heading" class="text-center pb-3">Email Notification Messages</h3>
 
             <div class="d-flex notification-flex-container align-items-center justify-content-lg-between">
                 <div class="info">
-                    <form id="notificationForm">
+                    <form id="notificationForm" action="/admin/notifications/update" method="POST">
                         <div class="form-group">
-                            <label class="form-data" for="emailSubjectNotificaton">Email Subject (up to 160 characters):</label>
-                            <textarea class="notifications" id="emailSubjectNotification" name="emailSubjectNotification" maxlength="160" required></textarea>
+                            <label for="emailSubjectNotification">Email Subject (up to 160 characters):</label>
+                            <textarea class="notifications" id="emailSubjectNotification" name="emailSubjectNotification" maxlength="160" required><%= notifications.EMAIL ? notifications.EMAIL.SUBJECT : '' %></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-data" for="emailTextNotificaton">Email Body (up to 160 characters):</label>
-                            <textarea class="notifications" id="emailTextNotification" name="emailTextNotification" maxlength="160" required></textarea>
+                            <label for="emailTextNotification">Email Body (up to 160 characters):</label>
+                            <textarea class="notifications" id="emailTextNotification" name="emailTextNotification" maxlength="160" required><%= notifications.EMAIL ? notifications.EMAIL.TEXT : '' %></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-data" for="emailHtmlNotificaton">Email HTML (up to 160 characters):</label>
-                            <textarea class="notifications" id="emailHtmlNotification" name="emailHtmlNotification" maxlength="160" required></textarea>
+                            <label for="emailHtmlNotification">Email HTML (up to 160 characters):</label>
+                            <textarea class="notifications" id="emailHtmlNotification" name="emailHtmlNotification" maxlength="160" required><%= notifications.EMAIL ? notifications.EMAIL.HTML : '' %></textarea>
                         </div>
-                        
+
+                        <div class="text-center">
+                            <button type="submit" class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
+                        </div> 
                     </form>
                 </div>
             </div>
-            <div class="text-center">
-                <button id="update-sms-notifications-btn" class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
-            </div> 
         </div>
     </section>
 
-<!-- Load explicitly because DOM may not be available before main.js executes -->
 <%- include('../includes/footer') %>
