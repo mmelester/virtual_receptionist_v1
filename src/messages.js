@@ -2,7 +2,7 @@
 
 const Messages = {
     SMS: {
-        LOBBY_NOTIFICATION: ` 🙂‍ Hello! It's Vivi. You have someone waiting for you in the lobby.\n\nReply STOP if you no longer wish to receive notifications from this number.`,
+        LOBBY_NOTIFICATION: `🙂‍ Hello! It's Vivi. You have someone waiting for you in the lobby.\n\nReply STOP if you no longer wish to receive notifications from this number.`,
         CONSENT_GRANTED: '✅ Consent granted! You will now receive notifications.',
         CONSENT_NOT_FOUND: "❌ Could not find your record. Please contact support.",
         CONSENT_ERROR: "❌ An error occurred while updating your consent. Please try again later.",

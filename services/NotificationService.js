@@ -2,7 +2,6 @@ const twilio = require('twilio');
 const sgMail = require('@sendgrid/mail');
 const { Client } = require('tplink-smarthome-api');
 const { connectDB } = require('../db');
-const Messages = require('../src/messages');  // Import centralized messages
 
 class NotificationService {
     constructor() {
@@ -11,14 +10,31 @@ class NotificationService {
         this.tplinkClient = new Client();
     }
 
+    // ✅ Fetch notifications from the database
+    async getNotificationMessages() {
+        try {
+            const db = await connectDB();
+            const notifications = await db.collection('notifications').findOne();
+            return notifications || {};  // Return empty object if no record exists
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+            return {};  // Fallback to prevent crashes
+        }
+    }
+
+    // ✅ Send SMS using database messages
     async sendSMS(person) {
         if (person.mobile) {
             try {
+                const notifications = await this.getNotificationMessages(); // Get messages from DB
+                const lobbyMessage = notifications.SMS?.LOBBY_NOTIFICATION || "Default SMS message"; // Fallback
+                
                 const message = await this.twilioClient.messages.create({
-                    body: Messages.SMS.LOBBY_NOTIFICATION(person.name),
+                    body: lobbyMessage.replace("{name}", person.name), // Replace name dynamically
                     from: process.env.TWILIO_PHONE_NUMBER,
                     to: person.mobile,
                 });
+
                 console.log(`SMS sent to: ${person.mobile}, Record: ${message.sid}`);
             } catch (error) {
                 console.error('Error sending SMS:', error);
@@ -26,16 +42,23 @@ class NotificationService {
         }
     }
 
+    // ✅ Send Email using database messages
     async sendEmail(person) {
         if (person.email) {
-            const msg = {
-                to: person.email,
-                from: "matt@intensivehope.com",
-                subject: Messages.EMAIL.SUBJECT,
-                text: Messages.EMAIL.TEXT,
-                html: Messages.EMAIL.HTML,
-                };
             try {
+                const notifications = await this.getNotificationMessages(); // Get messages from DB
+                const emailSubject = notifications.EMAIL?.SUBJECT || "Default Subject";
+                const emailText = notifications.EMAIL?.TEXT || "Default Email Text";
+                const emailHtml = notifications.EMAIL?.HTML || "<strong>Default Email HTML</strong>";
+
+                const msg = {
+                    to: person.email,
+                    from: "matt@intensivehope.com",
+                    subject: emailSubject,
+                    text: emailText,
+                    html: emailHtml,
+                };
+
                 await sgMail.send(msg);
                 console.log('Email sent successfully!');
             } catch (error) {
@@ -59,7 +82,7 @@ class NotificationService {
         }
     }
 
-    // New method for handling incoming SMS
+    // ✅ Process incoming SMS using database messages
     async processIncomingSms(message, fromNumber) {
         const MessagingResponse = twilio.twiml.MessagingResponse;
         const twiml = new MessagingResponse();
@@ -72,33 +95,35 @@ class NotificationService {
             fromNumber = fromNumber.slice(2);  // Removes '+1'
         }
 
+        // Fetch latest notification messages
+        const notifications = await this.getNotificationMessages();
+
         if (incomingMessage === 'consent') {
             try {
-                const db = await connectDB();  // Connect to the database
+                const db = await connectDB();
                 const personCollection = db.collection('companies');
 
                 // 🔎 Find the person by their mobile number
                 const result = await personCollection.updateMany(
-                    { 'people.mobile': fromNumber },  // Match mobile number
-                    { $set: { 'people.$.consent': 'GRANTED' } }  // Update consent
+                    { 'people.mobile': fromNumber },
+                    { $set: { 'people.$.consent': 'GRANTED' } }
                 );
 
                 if (result.modifiedCount > 0) {
                     console.log(`Consent updated to GRANTED for ${fromNumber}`);
-                    twiml.message(Messages.SMS.CONSENT_GRANTED);
+                    twiml.message(notifications.SMS?.CONSENT_GRANTED || "✅ Consent granted!");
                 } else {
                     console.log(`No matching record found for ${fromNumber}`);
-                    twiml.message(Messages.SMS.CONSENT_NOT_FOUND);
+                    twiml.message(notifications.SMS?.CONSENT_NOT_FOUND || "❌ Could not find your record.");
                 }
             } catch (error) {
                 console.error('Error updating consent:', error);
-                twiml.message(Messages.SMS.CONSENT_ERROR);
+                twiml.message(notifications.SMS?.CONSENT_ERROR || "❌ An error occurred.");
             }
         } else if (incomingMessage === 'stop') {
-            twiml.message(Messages.SMS.UNSUBSCRIBED);
-            // (Optional) Add logic to update the consent to 'REVOKED' if needed.
+            twiml.message(notifications.SMS?.UNSUBSCRIBED || "🛑 You have been unsubscribed.");
         } else {
-            twiml.message(Messages.SMS.INVALID_RESPONSE);
+            twiml.message(notifications.SMS?.INVALID_RESPONSE || "❓ Invalid response.");
         }
 
         return twiml.toString();
