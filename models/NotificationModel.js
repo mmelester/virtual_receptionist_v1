@@ -89,7 +89,6 @@ class NotificationModel extends BaseModel {
         }
     }
     
-    
 }
 
 module.exports = NotificationModel;
