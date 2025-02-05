@@ -2,6 +2,7 @@ const twilio = require('twilio');
 const sgMail = require('@sendgrid/mail');
 const { Client } = require('tplink-smarthome-api');
 const { connectDB } = require('../db');
+const Messages = require('../src/messages');  // Import centralized messages
 
 class NotificationService {
     constructor() {
@@ -27,10 +28,11 @@ class NotificationService {
         if (person.mobile) {
             try {
                 const notifications = await this.getNotificationMessages(); // Get messages from DB
-                const lobbyMessage = notifications.SMS?.LOBBY_NOTIFICATION || "Default SMS message"; // Fallback
+                const lobbyMessage = notifications.SMS?.LOBBY_NOTIFICATION || Messages.SMS.LOBBY_NOTIFICATION; // Fallback
                 
                 const message = await this.twilioClient.messages.create({
-                    body: lobbyMessage.replace("{name}", person.name), // Replace name dynamically
+                    // body: lobbyMessage.replace("{name}", person.name), // Replace name dynamically
+                    body: lobbyMessage,
                     from: process.env.TWILIO_PHONE_NUMBER,
                     to: person.mobile,
                 });
@@ -47,9 +49,9 @@ class NotificationService {
         if (person.email) {
             try {
                 const notifications = await this.getNotificationMessages(); // Get messages from DB
-                const emailSubject = notifications.EMAIL?.SUBJECT || "Default Subject";
-                const emailText = notifications.EMAIL?.TEXT || "Default Email Text";
-                const emailHtml = notifications.EMAIL?.HTML || "<strong>Default Email HTML</strong>";
+                const emailSubject = notifications.EMAIL?.SUBJECT || Messages.EMAIL.SUBJECT;
+                const emailText = notifications.EMAIL?.TEXT || Messages.EMAIL.TEXT;
+                const emailHtml = notifications.EMAIL?.HTML || Messages.EMAIL.HTML;
 
                 const msg = {
                     to: person.email,
@@ -111,19 +113,19 @@ class NotificationService {
 
                 if (result.modifiedCount > 0) {
                     console.log(`Consent updated to GRANTED for ${fromNumber}`);
-                    twiml.message(notifications.SMS?.CONSENT_GRANTED || "✅ Consent granted!");
+                    twiml.message(notifications.SMS?.CONSENT_GRANTED || Messages.SMS.CONSENT_GRANTED);
                 } else {
                     console.log(`No matching record found for ${fromNumber}`);
-                    twiml.message(notifications.SMS?.CONSENT_NOT_FOUND || "❌ Could not find your record.");
+                    twiml.message(notifications.SMS?.CONSENT_NOT_FOUND || Messages.SMS.CONSENT_NOT_FOUND);
                 }
             } catch (error) {
                 console.error('Error updating consent:', error);
-                twiml.message(notifications.SMS?.CONSENT_ERROR || "❌ An error occurred.");
+                twiml.message(notifications.SMS?.CONSENT_ERROR || Messages.SMS.CONSENT_ERROR);
             }
         } else if (incomingMessage === 'stop') {
-            twiml.message(notifications.SMS?.UNSUBSCRIBED || "🛑 You have been unsubscribed.");
+            twiml.message(notifications.SMS?.UNSUBSCRIBED || Messages.SMS.UNSUBSCRIBED);
         } else {
-            twiml.message(notifications.SMS?.INVALID_RESPONSE || "❓ Invalid response.");
+            twiml.message(notifications.SMS?.INVALID_RESPONSE || Messages.SMS.INVALID_RESPONSE);
         }
 
         return twiml.toString();

@@ -84,7 +84,7 @@ module.exports = (db) => {
             // Use the already initialized companyModelInstance
             const companies = await companyModelInstance.getCompanies(); 
         
-            console.log("Companies retrieved:", companies);
+            // console.log("Companies retrieved:", companies);
         
             res.render('home/dashboard.ejs', { 
                 userRole: req.session.userRole, 
