@@ -31,7 +31,7 @@
 
             <div class="d-flex notification-flex-container align-items-center justify-content-lg-between">
                 <div class="info">
-                    <form id="notificationForm" action="/admin/notifications/update" method="POST">
+                    <form id="smsNotificationForm" onsubmit="return false;">
                         <div class="form-group">
                             <label for="lobbyNotification">Lobby Notification (up to 160 characters):</label>
                             <textarea class="notifications" id="lobbyNotification" name="lobbyNotification" maxlength="160" required><%= notifications.SMS ? notifications.SMS.LOBBY_NOTIFICATION : '' %></textarea>
@@ -58,7 +58,7 @@
                         </div>
                         
                         <div class="text-center">
-                            <button type="submit" class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
+                            <button type="submit" id="sms-update-btn"  class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
                         </div> 
                     </form>
                 </div>
@@ -71,7 +71,7 @@
 
             <div class="d-flex notification-flex-container align-items-center justify-content-lg-between">
                 <div class="info">
-                    <form id="notificationForm" action="/admin/notifications/update" method="POST">
+                    <form id="emailNotificationForm1" onsubmit="return false;">
                         <div class="form-group">
                             <label for="emailSubjectNotification">Email Subject (up to 160 characters):</label>
                             <textarea class="notifications" id="emailSubjectNotification" name="emailSubjectNotification" maxlength="160" required><%= notifications.EMAIL ? notifications.EMAIL.SUBJECT : '' %></textarea>
@@ -86,12 +86,12 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="submit" class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
+                            <button type="submit" id="email-update-btn" class="update-notification-btn btn btn-primary btn-sm mt-3 pr-4 pl-4 pt-2 pb-2">Update</button>
                         </div> 
                     </form>
                 </div>
             </div>
         </div>
     </section>
-
+    <script type="module" src="../frontend-js/modules/updateNotifications.js"></script>
 <%- include('../includes/footer') %>

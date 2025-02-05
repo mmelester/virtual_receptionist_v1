@@ -132,6 +132,27 @@ module.exports = (db) => {
         }
     });
 
+    // Add routes for updating SMS and EMAIL separately
+    router.put('/admin/notifications/update-sms', ensureAuthenticated, async (req, res) => {
+        try {
+            await notificationController.updateSMS(req, res, notificationModelInstance);
+        } catch (error) {
+            console.error("❌ Error in updating SMS notifications:", error);
+            req.flash('errors', 'Failed to update SMS notifications.');
+            res.redirect('/admin/notifications');
+        }
+    });
+
+    router.put('/admin/notifications/update-email', ensureAuthenticated, async (req, res) => {
+        try {
+            await notificationController.updateEMAIL(req, res, notificationModelInstance);
+        } catch (error) {
+            console.error("❌ Error in updating EMAIL notifications:", error);
+            req.flash('errors', 'Failed to update EMAIL notifications.');
+            res.redirect('/admin/notifications');
+        }
+    });
+ 
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.getBuilding(req, res, buildingModelInstance)
     );

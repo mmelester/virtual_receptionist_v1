@@ -39,7 +39,7 @@ class NotificationService {
 
                 console.log(`SMS sent to: ${person.mobile}, Record: ${message.sid}`);
             } catch (error) {
-                console.error('Error sending SMS:', error);
+                console.error('No mobile number provided:', error);
             }
         }
     }
