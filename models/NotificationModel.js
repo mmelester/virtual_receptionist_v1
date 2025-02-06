@@ -26,33 +26,39 @@ class NotificationModel extends BaseModel {
     
             // 🔍 Retrieve the existing notification document
             const existingNotification = await this.getAll();
-            
+    
             if (!existingNotification || existingNotification.length === 0) {
                 console.error("❌ No existing notification record found. Creating a new one.");
-                return await this.add(safeData);
+                return await this.add({ SMS: safeData.SMS });
             }
     
-            const notificationId = existingNotification[0]._id; // MongoDB ObjectId
+            let notificationId = existingNotification[0]._id;
     
             console.log("🔍 Updating Notification ID:", notificationId);
     
-            if (!ObjectId.isValid(notificationId)) {
-                console.error("❌ Error: Retrieved _id is not a valid ObjectId.");
-                throw new Error(`Invalid MongoDB ObjectId: ${notificationId}`);
+            // Ensure notificationId is a valid ObjectId
+            if (!(notificationId instanceof ObjectId)) {
+                if (ObjectId.isValid(notificationId)) {
+                    notificationId = new ObjectId(notificationId);
+                } else {
+                    console.error("❌ Error: Retrieved _id is not a valid ObjectId.");
+                    throw new Error(`Invalid MongoDB ObjectId: ${notificationId}`);
+                }
             }
     
-            return await this.db.collection(this.collection).updateOne(
-                { _id: new ObjectId(notificationId) }, // ✅ Convert `_id` to MongoDB ObjectId
-                { $set: safeData },
-                { upsert: true }
+            return await this.collection.updateOne(
+                { _id: notificationId }, // ✅ Ensure valid ObjectId
+                { $set: { SMS: safeData.SMS } },
+                { upsert: false }
             );
         } catch (error) {
             console.error('❌ Database error while updating SMS:', error);
-            throw new Error('Failed to update SMS notifications.');
+            throw new Error('From NotificationModel: Failed to update SMS notifications.');
         }
     }
     
-    async updateEMAIL(updatedSMSData) {
+    
+    async updateEMAIL(updatedEMAILData) {
         try {
             console.log("🔍 From NotificationModel.updateEMAIL (Before Cleaning):", updatedEMAILData);
     
@@ -63,25 +69,30 @@ class NotificationModel extends BaseModel {
     
             // 🔍 Retrieve the existing notification document
             const existingNotification = await this.getAll();
-            
+    
             if (!existingNotification || existingNotification.length === 0) {
                 console.error("❌ No existing notification record found. Creating a new one.");
-                return await this.add(safeData);
+                return await this.add({ EMAIL: safeData.EMAIL });
             }
     
-            const notificationId = existingNotification[0]._id; // MongoDB ObjectId
+            let notificationId = existingNotification[0]._id;
     
             console.log("🔍 Updating Notification ID:", notificationId);
     
-            if (!ObjectId.isValid(notificationId)) {
-                console.error("❌ Error: Retrieved _id is not a valid ObjectId.");
-                throw new Error(`Invalid MongoDB ObjectId: ${notificationId}`);
+            // Ensure notificationId is a valid ObjectId
+            if (!(notificationId instanceof ObjectId)) {
+                if (ObjectId.isValid(notificationId)) {
+                    notificationId = new ObjectId(notificationId);
+                } else {
+                    console.error("❌ Error: Retrieved _id is not a valid ObjectId.");
+                    throw new Error(`Invalid MongoDB ObjectId: ${notificationId}`);
+                }
             }
     
-            return await this.db.collection(this.collection).updateOne(
-                { _id: new ObjectId(notificationId) }, // ✅ Convert `_id` to MongoDB ObjectId
-                { $set: safeData },
-                { upsert: true }
+            return await this.collection.updateOne(
+                { _id: notificationId }, // ✅ Ensure valid ObjectId
+                { $set: { EMAIL: safeData.EMAIL } },
+                { upsert: false }
             );
         } catch (error) {
             console.error('❌ Database error while updating EMAIL:', error);

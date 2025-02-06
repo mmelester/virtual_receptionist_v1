@@ -43,25 +43,27 @@ module.exports = {
                 }
             };
     
-            console.log("🔍 Before Cleaning in Controller:", updatedSMSData);
+            console.log("🔍 Before Cleaning in Controller:", typeof(updatedSMSData));
     
             // 🔥 Ensure JSON Safety
             const safeData = JSON.parse(JSON.stringify(updatedSMSData));
     
-            console.log("✅ Cleaned Data in Controller:", safeData);
+            console.log("✅ Cleaned Data in Controller:", typeof(safeData));
     
             const updateResult = await notificationModel.updateSMS(safeData);
+
+            console.log("updateResult ", updateResult);
     
             if (updateResult.success) {
                 req.flash('success', 'SMS Notifications updated successfully.');
             } else {
-                req.flash('errors', ['Failed to update SMS notifications.']);
+                req.flash('errors', ['From notificationController Results: Failed to update SMS notifications.']);
             }
     
             res.redirect('/admin/notifications');
         } catch (error) {
             console.error('❌ Error updating SMS notifications:', error);
-            req.flash('errors', ['Failed to update SMS notifications.']);
+            req.flash('errors', ['From notificationController catch: Failed to update SMS notifications.']);
             res.redirect('/admin/notifications');
         }
     },

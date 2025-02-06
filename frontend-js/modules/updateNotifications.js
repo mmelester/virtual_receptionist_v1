@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("SMS notifications updated successfully.");
                 window.location.reload();
             } else {
-                alert("Failed to update SMS notifications: " + result);
+                console.log("Failed to update SMS notifications: " + result);
             }
         } catch (error) {
             console.error("❌ Error updating SMS:", error);

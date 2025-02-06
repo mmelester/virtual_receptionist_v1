@@ -138,7 +138,7 @@ module.exports = (db) => {
             await notificationController.updateSMS(req, res, notificationModelInstance);
         } catch (error) {
             console.error("❌ Error in updating SMS notifications:", error);
-            req.flash('errors', 'Failed to update SMS notifications.');
+            req.flash('errors', 'From router: Failed to update SMS notifications.');
             res.redirect('/admin/notifications');
         }
     });
