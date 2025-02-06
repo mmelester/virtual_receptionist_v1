@@ -18,9 +18,12 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             let result = await response.text();
+
+            console.log("Result ", result)
+
             if (response.ok) {
                 alert("SMS notifications updated successfully.");
-                window.location.reload();
+                window.location.href = "/admin/notifications"; 
             } else {
                 console.log("Failed to update SMS notifications: " + result);
             }
@@ -50,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let result = await response.text();
             if (response.ok) {
                 alert("Email notifications updated successfully.");
-                window.location.reload();
+                window.location.href = "/admin/notifications"; 
             } else {
                 alert("Failed to update email notifications: " + result);
             }

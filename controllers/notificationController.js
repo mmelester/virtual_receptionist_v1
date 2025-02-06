@@ -54,17 +54,16 @@ module.exports = {
 
             console.log("updateResult ", updateResult);
     
-            if (updateResult.success) {
-                req.flash('success', 'SMS Notifications updated successfully.');
+            // Check if the update was successful
+            if (updateResult.modifiedCount > 0 || updateResult.matchedCount > 0) {
+                return res.json({ success: true, message: "SMS Notifications updated successfully." });
             } else {
-                req.flash('errors', ['From notificationController Results: Failed to update SMS notifications.']);
+                return res.status(400).json({ success: false, message: "Failed to update SMS notifications." });
             }
-    
-            res.redirect('/admin/notifications');
         } catch (error) {
             console.error('❌ Error updating SMS notifications:', error);
             req.flash('errors', ['From notificationController catch: Failed to update SMS notifications.']);
-            res.redirect('/admin/notifications');
+            return res.status(500).json({ success: false, message: "Internal server error while updating SMS notifications." });
         }
     },
     
@@ -82,17 +81,15 @@ module.exports = {
     
             const updateResult = await notificationModel.updateEMAIL(updatedEmailData);
     
-            if (updateResult.success) {
-                req.flash('success', 'Email Notifications updated successfully.');
+            // Check if the update was successful
+            if (updateResult.modifiedCount > 0 || updateResult.matchedCount > 0) {
+                return res.json({ success: true, message: "EMAIL Notifications updated successfully." });
             } else {
-                req.flash('errors', ['Failed to update Email notifications.']);
+                return res.status(400).json({ success: false, message: "Failed to update EMAIL notifications." });
             }
-    
-            res.redirect('/admin/notifications');
         } catch (error) {
             console.error('❌ Error updating EMAIL notifications:', error);
-            req.flash('errors', ['Failed to update Email notifications.']);
-            res.redirect('/admin/notifications');
+            return res.status(500).json({ success: false, message: "Internal server error while updating EMAIL notifications." });
         }
     }
 };
