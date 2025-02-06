@@ -5,6 +5,7 @@ module.exports = (db) => {
     // Import Controllers
     const homeController = require('./controllers/homeController');
     const adminController = require('./controllers/adminController');
+    const usersController = require('./controllers/usersController');
     const buildingController = require('./controllers/buildingController');
     const notificationController = require('./controllers/notificationController');
     const companiesController = require('./controllers/companiesController');
@@ -13,6 +14,7 @@ module.exports = (db) => {
 
     // Import Models
     const AdminModel = require('./models/AdminModel');
+    const UserModel = require('./models/UserModel');
     const BuildingModel = require('./models/BuildingModel');
     const NotificationModel = require('./models/NotificationModel');
     const CompanyModel = require('./models/CompanyModel');
@@ -20,6 +22,7 @@ module.exports = (db) => {
 
     // Initialize Model Instances
     const adminModelInstance = new AdminModel(db);
+    const userModelInstance = new UserModel(db);
     const buildingModelInstance = new BuildingModel(db);
     const notificationModelInstance = new NotificationModel(db);
     const companyModelInstance = new CompanyModel(db);
@@ -114,7 +117,6 @@ module.exports = (db) => {
     // Apply this middleware globally or to specific routes
     router.use(fetchBuildingData);
     
-
     // -------------------------------------
     // 🔒 Protected Admin Routes
     // -------------------------------------
@@ -122,11 +124,21 @@ module.exports = (db) => {
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
 
+    router.get('/admin/users', ensureAuthenticated, async (req, res) => {
+        try {
+            await usersController.getUsers(req, res, userModelInstance);
+        } catch (error) {
+            console.error("Error in /admin/users route:", error);
+            req.flash('errors', 'Failed to load users.');
+            res.redirect('/admin');
+        }
+    });
+
     router.get('/admin/notifications', ensureAuthenticated, async (req, res) => {
         try {
             await notificationController.getNotifications(req, res, notificationModelInstance);
         } catch (error) {
-            console.error("Error in notification route:", error);
+            console.error("Error in /admin/notification route:", error);
             req.flash('errors', 'Failed to load notifications.');
             res.redirect('/admin');
         }

@@ -1,0 +1,100 @@
+<%- include('../includes/header') %> 
+<div id="usersPage" class="page">
+
+    <h1 class="pt-md-5 pb-md-5 text-center" >Authorized Users</h1>
+ 
+    <% if (errors && errors.length > 0) { %>
+        <div class="alert alert-danger">
+            <ul>
+                <% errors.forEach(function(error) { %>
+                    <li><%= error %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+    
+    
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+    <% } %>    
+
+    <div class="text-center pb-5">
+        <button id="create-user-btn" class="create-user-btn btn btn-primary btn-sm">Add New User</button>
+    </div>
+    
+
+    <section class="users-section">
+        <div>
+            <% if (users.length > 0) { %>
+
+                <% users.forEach(user => { %>
+                    <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light">
+                        <div class="user-username pr-3">
+                            <%= users.username %>
+                        </div>
+                        <div class="user-password pr-5">
+                            <%= users.password %>
+                        </div>
+                        <div class="user-email pr-5">
+                            <%= users.email %>
+                        </div>
+                        <div class="user-email pr-5">
+                            <%= users.role %>
+                        </div>
+                        <div class="edit-delete-people ml-auto pt-1">
+                            <i
+                                id="showUser"
+                                class="showUser icon fa fa-user pr-3 muted" 
+                                aria-hidden="true"
+                                data-id="<%= user._id %>">
+                            </i>
+                            <i 
+                                class="editUser icon fa fa-pencil-square-o pr-3" 
+                                aria-hidden="true" 
+                                data-id="<%= user._id %>"
+                                data-section-id="add-user-section"
+                                data-form-id="userForm"
+                                data-heading-id="form-heading">
+                            </i>
+                            <i 
+                                class="delete-btn icon fa fa-trash pr-3 muted" 
+                                aria-hidden="true" 
+                                data-route="/admin/user/delete" 
+                                data-id="<%= user._id %>">
+                            </i>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>No users present.</p>
+            <% } %>
+        </div>
+        
+        %>  
+    </section>
+</div>
+<!-- Load explicitly because DOM may not be available before main.js executes -->
+<script src="/main-bundled.js"></script>
+<script type="module" src="../frontend-js/modules/create-user.js"></script>
+<script type="module">
+    import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
+    document.addEventListener('DOMContentLoaded', () => {
+
+    setEqualWidths('.user-username');
+    setEqualWidths('.user-password');
+    setEqualWidths('.user-email');
+    setEqualWidths('.user-role');
+
+    const closeBtn = document.getElementById('close-btn');
+    closeBtn.addEventListener('click', function () {
+        window.location.reload(); // Force a page refresh
+    });
+
+});
+</script>
+
+<%- include('../includes/footer') %>
+
+

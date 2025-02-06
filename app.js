@@ -8,10 +8,35 @@ const { connectDB, getClient } = require('./db');
 const flash = require("connect-flash");
 const dotenv = require('dotenv');
 dotenv.config();
+const UserModel = require('./models/UserModel');
 const NotificationModel = require('./models/NotificationModel');
 const Messages = require('./src/messages');
 
 const app = express();
+
+// Check if user data record exist and if not create it.
+async function initializeUsers(db) {
+    try {
+        const userModel = new UserModel(db);
+        const users = await userModel.getUsers();
+        
+        if (!users || users.length === 0) {
+            console.log('No users found. Creating default user record...');
+            const defaultUser = {
+                username: "admin",
+                password: "admin123",
+                email: "dummyemail@gmail.com"
+            };
+            await db.collection('users').insertOne(defaultNotification);
+            console.log('Default users database entry created successfully.');
+        } else {
+            console.log('users database record found.');
+        }
+    } catch (error) {
+        console.error('Error initializing users:', error);
+    }
+}
+
 // Check if notification data record exist and if not create it with the default notifications in /src/messages
 async function initializeNotifications(db) {
     try {
