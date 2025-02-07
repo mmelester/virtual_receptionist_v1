@@ -25,51 +25,106 @@
     </div>
     
 
-    <section class="users-section">
+    <section class="users-section-admin">
+        <h3 class="pt-2 pb-1">Administrator Privileges</h3>
         <div>
             <% if (users.length > 0) { %>
-
                 <% users.forEach(user => { %>
-                    <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light">
-                        <div class="user-username pr-3">
-                            <%= user.username %>
+                    <% if (user.role === 'admin') { %>
+                        <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light">
+                            <div class="user-username pr-5">
+                                <%= user.username %>
+                            </div>
+                            <div class="user-password pr-5">
+                                <%= user.password %>
+                            </div>
+                            <div class="user-email pr-5">
+                                <%= user.email %>
+                            </div>
+                            <div class="user-role pr-5">
+                                <%= user.role %>
+                            </div>
+                            <div class="edit-delete-people ml-auto pt-1">
+                                <i
+                                    id="showUser"
+                                    class="showUser icon fa fa-user pr-3 muted" 
+                                    aria-hidden="true"
+                                    data-id="<%= user._id %>">
+                                </i>
+                                <i 
+                                    class="editUser icon fa fa-pencil-square-o pr-3" 
+                                    aria-hidden="true" 
+                                    data-id="<%= user._id %>"
+                                    data-section-id="add-user-section"
+                                    data-form-id="userForm"
+                                    data-heading-id="form-heading">
+                                </i>
+                                <i 
+                                    class="delete-btn icon fa fa-trash pr-3 muted" 
+                                    aria-hidden="true" 
+                                    data-route="/admin/user/delete" 
+                                    data-id="<%= user._id %>">
+                                </i>
+                            </div>
                         </div>
-                        <div class="user-password pr-5">
-                            <%= user.password %>
-                        </div>
-                        <div class="user-email pr-5">
-                            <%= user.email %>
-                        </div>
-                        <div class="user-email pr-5">
-                            <%= user.role %>
-                        </div>
-                        <div class="edit-delete-people ml-auto pt-1">
-                            <i
-                                id="showUser"
-                                class="showUser icon fa fa-user pr-3 muted" 
-                                aria-hidden="true"
-                                data-id="<%= user._id %>">
-                            </i>
-                            <i 
-                                class="editUser icon fa fa-pencil-square-o pr-3" 
-                                aria-hidden="true" 
-                                data-id="<%= user._id %>"
-                                data-section-id="add-user-section"
-                                data-form-id="userForm"
-                                data-heading-id="form-heading">
-                            </i>
-                            <i 
-                                class="delete-btn icon fa fa-trash pr-3 muted" 
-                                aria-hidden="true" 
-                                data-route="/admin/user/delete" 
-                                data-id="<%= user._id %>">
-                            </i>
-                        </div>
-                    </div>
+                    <% } %>
                 <% }); %>
             <% } else { %>
                 <p>No users present.</p>
             <% } %>
+            
+        </div>
+        
+        %>  
+    </section>
+    <section class="users-section-users">
+        <h3 class="pt-4 pb-1">User Privileges</h3>
+        <div>
+            <% if (users.length > 0) { %>
+                <% users.forEach(user => { %>
+                    <% if (user.role === 'user') { %>
+                        <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light">
+                            <div class="user-username pr-5">
+                                <%= user.username %>
+                            </div>
+                            <div class="user-password pr-5">
+                                <%= user.password %>
+                            </div>
+                            <div class="user-email pr-5">
+                                <%= user.email %>
+                            </div>
+                            <div class="user-role pr-5">
+                                <%= user.role %>
+                            </div>
+                            <div class="edit-delete-people ml-auto pt-1">
+                                <i
+                                    id="showUser"
+                                    class="showUser icon fa fa-user pr-3 muted" 
+                                    aria-hidden="true"
+                                    data-id="<%= user._id %>">
+                                </i>
+                                <i 
+                                    class="editUser icon fa fa-pencil-square-o pr-3" 
+                                    aria-hidden="true" 
+                                    data-id="<%= user._id %>"
+                                    data-section-id="add-user-section"
+                                    data-form-id="userForm"
+                                    data-heading-id="form-heading">
+                                </i>
+                                <i 
+                                    class="delete-btn icon fa fa-trash pr-3 muted" 
+                                    aria-hidden="true" 
+                                    data-route="/admin/user/delete" 
+                                    data-id="<%= user._id %>">
+                                </i>
+                            </div>
+                        </div>
+                    <% } %>
+                <% }); %>
+            <% } else { %>
+                <p>No users present.</p>
+            <% } %>
+            
         </div>
         
         %>  
