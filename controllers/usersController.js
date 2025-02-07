@@ -5,6 +5,8 @@ module.exports = {
         try {
             const users = await userModel.getUsers(); // Use the instance method
 
+            console.log("From usersController.getUsers ", users);
+
             if (!users || users.length === 0) {
                 req.flash('errors', ['No users found.']);
                 return res.render('admin/users.ejs', {

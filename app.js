@@ -19,6 +19,8 @@ async function initializeUsers(db) {
     try {
         const userModel = new UserModel(db);
         const users = await userModel.getUsers();
+
+        console.log("Users = ", users);
         
         if (!users || users.length === 0) {
             console.log('No users found. Creating default user record...');
@@ -66,7 +68,8 @@ async function startServer() {
         const db = await connectDB(); // Connect to the database
         const client = getClient(); // Retrieve the MongoClient instance
 
-        await initializeNotifications(db); // Check and create notifications at startup
+        await initializeUsers(db); // Check and create users if absent at startup
+        await initializeNotifications(db); // Check and create notifications if absent  at startup
 
         // Session options
         const sessionOptions = session({
