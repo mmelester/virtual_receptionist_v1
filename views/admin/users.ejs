@@ -23,8 +23,32 @@
     <div class="text-center pb-5">
         <button id="create-user-btn" class="create-user-btn btn btn-primary btn-sm">Add New User</button>
     </div>
+    <div class="user-info mb-5 border boader-2 border-success p-4 rounded">
+        <form id="userForm" class="d-flex flex-wrap justify-content-between">
+            <div class="user-form-group w-md">
+                <label class="form-data" for="username">Username (up to 20 characters):</label>
+                <input class="user-form-control" type="text" id="username" name="username" maxlength="20" required>
+            </div>
+            <div class="user-form-group w-md">
+                <label class="form-data" for="password">Password (up to 20 characters):</label>
+                <input class="user-form-control" type="text" id="password" name="password" maxlength="20" required>
+            </div>
+            <div class="user-form-group w-lg">
+                <label class="form-data" for="email">Email (up to 40 characters):</label>
+                <input class="user-form-control" type="text" id="email" name="email" maxlength="40" required>
+            </div>
+            <div class="user-form-group w-sm">
+                <label class="form-data" for="role">Role</label>
+                <select name="role" id="role" class="form-control">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+        </form>
+    </div>
     
-
+    
+    
     <section class="users-section-admin">
         <h3 class="pt-2 pb-1">Administrator Privileges</h3>
         <div>
