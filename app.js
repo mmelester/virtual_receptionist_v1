@@ -25,8 +25,8 @@ async function initializeUsers(db) {
         if (!users || users.length === 0) {
             console.log('No users found. Creating default user record...');
             const defaultUser = {
-                username: "admin",
-                password: "admin123",
+                username: process.env.DEFAULT_USERNAME,
+                password: process.env.DEFAULT_PASSWORD,
                 email: "dummyemail@gmail.com"
             };
             await db.collection('users').insertOne(defaultNotification);
