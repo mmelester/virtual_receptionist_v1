@@ -152,6 +152,10 @@ button.delete.hidden {
 .user-info {
 }
 
+.close-sm {
+  font-size: 0.75rem;
+}
+
 /* Ensure labels wrap naturally while keeping inputs aligned below */
 label.form-data {
   display: block;

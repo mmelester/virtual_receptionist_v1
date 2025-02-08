@@ -23,7 +23,10 @@
     <div class="text-center pb-5">
         <button id="create-user-btn" class="create-user-btn btn btn-primary btn-sm">Add New User</button>
     </div>
-    <div class="user-info mb-5 border boader-2 border-success p-4 rounded">
+    <div id="add-user-section" class="user-info mb-5 border boader-2 border-success pl-4 pr-4 pb-4 pt-2 rounded d-none">
+        <div class="d-flex">
+            <span id="close-btn" class="close-sm ml-auto bg-secondary pl-2 pr-2 border rounded text-white font-weight-bold">X</span>
+       </div>
         <form id="userForm" class="d-flex flex-wrap justify-content-between">
             <div class="user-form-group w-md">
                 <label class="form-data" for="username">Username (up to 20 characters):</label>
@@ -45,6 +48,9 @@
                 </select>
             </div>
         </form>
+
+            <button id="save-user-btn" class="save-img-btn d-block mx-auto btn btn-primary btn-sm pr-4 pl-4 pt-2 pb-2 mt-4">Create User</button>
+
     </div>
     
     
@@ -156,7 +162,7 @@
 </div>
 <!-- Load explicitly because DOM may not be available before main.js executes -->
 <!-- <script src="/main-bundled.js"></script> -->
-<script type="module" src="../frontend-js/modules/create-user.js"></script>
+<script type="module" src="../frontend-js/modules/create-user.js"></script>s
 <script type="module">
     import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
     document.addEventListener('DOMContentLoaded', () => {
