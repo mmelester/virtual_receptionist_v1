@@ -94,7 +94,7 @@ module.exports = {
     async deleteItem(req, res, UserModel) {
         try {
             const userId = req.params.id;
-            const result = await userModel.deleteItem(userId); 
+            const result = await UserModel.deleteItem(userId); 
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
