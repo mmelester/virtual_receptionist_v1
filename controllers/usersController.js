@@ -31,4 +31,29 @@ module.exports = {
             });
         }
     },
+    
+    async saveUser(req, res, UserModel) {
+        const { username, password, email, role } = req.body;
+
+        if (!username || !password || !role) {
+            return res.status(400).json({ success: false, message: 'Username, password, and role are required; email optional.' });
+        }
+
+        try {
+            // Create a new record
+            const result = await UserModel.addUser({ username, password, email, role });
+            if (result.success) {
+                req.flash('success', 'User record added successfully!');
+                return req.session.save(() => res.status(200).json({ success: true, refresh: true, message: 'User added successfully!' }));
+            } else {
+                req.flash('errors', [result.message]);
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
+            }
+        } catch (error) {
+            console.error('Error saving user:', error);
+            req.flash('errors', ['Failed to add usr.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' }));
+        }
+    },
 };
+
