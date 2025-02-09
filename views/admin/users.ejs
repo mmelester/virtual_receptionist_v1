@@ -75,12 +75,6 @@
                                 <%= user.role %>
                             </div>
                             <div class="edit-delete-people ml-auto pt-1">
-                                <i
-                                    id="showUser"
-                                    class="showUser icon fa fa-user pr-3 muted" 
-                                    aria-hidden="true"
-                                    data-id="<%= user._id %>">
-                                </i>
                                 <i 
                                     class="editUser icon fa fa-pencil-square-o pr-3" 
                                     aria-hidden="true" 
@@ -127,12 +121,7 @@
                                 <%= user.role %>
                             </div>
                             <div class="edit-delete-people ml-auto pt-1">
-                                <i
-                                    id="showUser"
-                                    class="showUser icon fa fa-user pr-3 muted" 
-                                    aria-hidden="true"
-                                    data-id="<%= user._id %>">
-                                </i>
+                                
                                 <i 
                                     class="editUser icon fa fa-pencil-square-o pr-3" 
                                     aria-hidden="true" 
@@ -163,6 +152,7 @@
 <!-- Load explicitly because DOM may not be available before main.js executes -->
 <!-- <script src="/main-bundled.js"></script> -->
 <script type="module" src="../frontend-js/modules/create-user.js"></script>
+<script type="module" src="../frontend-js/modules/editUser.js"></script>
 <script type="module" src="../frontend-js/modules/deleteItem.js"></script>
 <script type="module">
     import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';

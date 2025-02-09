@@ -186,12 +186,17 @@ module.exports = (db) => {
             res.redirect('/admin');
         }
     });
+    // Get a specific user
+    router.get('/admin/user/edit/:id', ensureAuthenticated, (req, res) =>
+        userController.editUser(req, res, companyModelInstance)
+    );
     // Add new user information
     router.post('/admin/user', ensureAuthenticated, (req, res) =>
         userController.saveUser(req, res, userModelInstance)
     );
-    router.put('/admin/user', ensureAuthenticated, (req, res) =>
-        userController.editUser(req, res, userModelInstance)
+    // Edit user information
+    router.put('/admin/user/edit/:id', ensureAuthenticated, (req, res) =>
+        userController.updateUser(req, res, userModelInstance)
     );
     // Delete user
     router.delete('/admin/user/delete/:id', ensureAuthenticated, (req, res) => userController.deleteItem(req, res, userModelInstance)
@@ -205,11 +210,13 @@ module.exports = (db) => {
     router.post('/admin/companies/add', ensureAuthenticated, (req, res) =>
         companiesController.addCompany(req, res, companyModelInstance)
     );
+
+
     // Edit company information
     router.get('/admin/companies/:id/people', ensureAuthenticated, (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
     );
-    // Get all people
+    // Get a specific company
     router.get('/admin/companies/edit/:id', ensureAuthenticated, (req, res) =>
         companiesController.editCompany(req, res, companyModelInstance)
     );

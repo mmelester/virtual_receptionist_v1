@@ -50,6 +50,19 @@ class UserModel extends BaseModel {
         }
     }
 
+    async getUserById(userId) {
+        if (!ObjectId.isValid(userId)) {
+            throw new Error('Invalid ObjectId.');
+        }
+
+        try {
+            return await this.getById(userId); // Use BaseModel's `getById` method
+        } catch (error) {
+            console.error('Database error:', error);
+            throw new Error('Failed to retrieve user information.');
+        }
+    }
+
     async deleteItem(userId) {
         if (!ObjectId.isValid(userId)) {
             return { success: false, message: 'Invalid ObjectId.' };

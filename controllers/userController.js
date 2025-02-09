@@ -31,6 +31,26 @@ module.exports = {
             });
         }
     },
+
+    async editUser(req, res, UserModel) {
+        try {
+            const userId = req.params.id;
+    
+            // Fetch the company details
+            const user = await UserModel.getUserById(userId);
+    
+            if (!user) {
+                return res.status(404).json({ success: false, message: 'User not found or invalid ID.' });
+            }
+    
+            // Return the user details
+            res.status(200).json({ success: true, data: user });
+        } catch (error) {
+            console.error('Error editing user information:', error);
+            req.flash('errors', ['Failed to edit user.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch user information from database.' }));
+        }
+    },
     
     async saveUser(req, res, UserModel) {
         const { username, password, email, role } = req.body;
