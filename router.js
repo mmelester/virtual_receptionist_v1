@@ -5,7 +5,7 @@ module.exports = (db) => {
     // Import Controllers
     const homeController = require('./controllers/homeController');
     const adminController = require('./controllers/adminController');
-    const usersController = require('./controllers/usersController');
+    const userController = require('./controllers/userController');
     const buildingController = require('./controllers/buildingController');
     const notificationController = require('./controllers/notificationController');
     const companiesController = require('./controllers/companiesController');
@@ -179,7 +179,7 @@ module.exports = (db) => {
     // Get all users
     router.get('/admin/users', ensureAuthenticated, async (req, res) => {
         try {
-            await usersController.getUsers(req, res, userModelInstance);
+            await userController.getUsers(req, res, userModelInstance);
         } catch (error) {
             console.error("Error in /admin/users route:", error);
             req.flash('errors', 'Failed to load users.');

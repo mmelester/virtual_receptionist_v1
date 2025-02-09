@@ -51,7 +51,7 @@ module.exports = {
             }
         } catch (error) {
             console.error('Error saving user:', error);
-            req.flash('errors', ['Failed to add usr.']);
+            req.flash('errors', ['Failed to add user.']);
             req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' }));
         }
     },

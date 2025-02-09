@@ -17,8 +17,8 @@ export async function handleUserFormSubmission(event) {
     console.log("user info ", username, password, email, role);
 
     // Validate form inputs
-    if (!user) errors.push('Username is required.');
-    if (!passwork) errors.push('Password is required.'); // add password validation
+    if (!username) errors.push('Username is required.');
+    if (!password) errors.push('Password is required.'); // add password validation
     if (!role) errors.push('User role is required.');
 
     // If there are errors, send them to the server and stop further execution
