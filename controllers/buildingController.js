@@ -91,24 +91,24 @@ module.exports = {
         }
     },
    
-    async editBuilding(req, res, BuildingModel) {
-        try {
+    // async editBuilding(req, res, BuildingModel) {
+    //     try {
     
-            // Fetch the building details
-            const building = await BuildingModel.getBuilding();
+    //         // Fetch the building details
+    //         const building = await BuildingModel.getBuilding();
     
-            if (!building) {
-                return res.status(404).json({ success: false, message: 'Building not found or invalid ID.' });
-            }
+    //         if (!building) {
+    //             return res.status(404).json({ success: false, message: 'Building not found or invalid ID.' });
+    //         }
     
-            // Return the building details
-            res.status(200).json({ success: true, data: building });
-        } catch (error) {
-            console.error('Error editing staff member:', error);
-            req.flash('errors', ['Failed to edit staff member.']);
-            req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch building information from database.' }));
-        }
-    },
+    //         // Return the building details
+    //         res.status(200).json({ success: true, data: building });
+    //     } catch (error) {
+    //         console.error('Error editing staff member:', error);
+    //         req.flash('errors', ['Failed to edit staff member.']);
+    //         req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch building information from database.' }));
+    //     }
+    // },
     async deleteItem(req, res, buildingModel) {
         try {
             const buildingId = req.params.id;

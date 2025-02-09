@@ -35,8 +35,8 @@ module.exports = {
     async saveUser(req, res, UserModel) {
         const { username, password, email, role } = req.body;
 
-        if (!username || !password || !role) {
-            return res.status(400).json({ success: false, message: 'Username, password, and role are required; email optional.' });
+        if (!username || !password || !email || !role) {
+            return res.status(400).json({ success: false, message: 'Username, password, email, and role are required.' });
         }
 
         try {
@@ -53,6 +53,41 @@ module.exports = {
             console.error('Error saving user:', error);
             req.flash('errors', ['Failed to add usr.']);
             req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred on the server.' }));
+        }
+    },
+
+    async updateUser(req, res, UserModel) {
+        console.log("userController.updateUser Called");
+        const { username, password, email, role } = req.body;
+    
+        if (!username || !password || !email || !role) {
+            return res.status(400).json({ success: false, message: 'Username, password, email, and role are required;' });
+        }
+    
+        try {
+            // Check if the new data is identical to the existing data
+            const isUnchanged = 
+            existingUser.username === username &&
+            existingUser.password === password &&
+            existingUser.password === email &&
+            existingUser.role === role;
+
+            if (isUnchanged) {
+                return res.status(200).json({ success: true, message: 'No changes detected.' });
+            }
+
+            // Proceed with the update
+    
+            const result = await UserModel.updateBuilding(existingUser._id, { username, password, email, role });
+    
+            if (result.success) {
+                return res.status(200).json({ success: true, message: 'User updated successfully!' });
+            } else {
+                return res.status(400).json({ success: false, message: 'Failed to update the user.' });
+            }
+        } catch (error) {
+            console.error('Error updating user:', error);
+            res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
         }
     },
 };
