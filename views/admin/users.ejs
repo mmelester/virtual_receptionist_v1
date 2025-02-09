@@ -30,20 +30,20 @@
         <form id="userForm" class="d-flex flex-wrap justify-content-between">
             <div class="user-form-group w-md">
                 <label class="form-data" for="username">Username (up to 20 characters):</label>
-                <input class="user-form-control" type="text" id="username" name="username" maxlength="20" required>
+                <input class="user-form-control" type="text" id="username" name="username" maxlength="20" required placeholder="Username">
             </div>
             <div class="user-form-group w-md">
                 <label class="form-data" for="password">Password (up to 20 characters):</label>
-                <input class="user-form-control" type="text" id="password" name="password" maxlength="20" required>
+                <input class="user-form-control" id="password" name="password" maxlength="20" required type="password" placeholder="Password">
             </div>
             <div class="user-form-group w-lg">
                 <label class="form-data" for="email">Email (up to 40 characters):</label>
-                <input class="user-form-control" type="text" id="email" name="email" maxlength="40" required>
+                <input class="user-form-control" type="text" id="email" name="email" maxlength="40" required placeholder="Email address">
             </div>
             <div class="user-form-group w-sm">
                 <label class="form-data" for="role">Role</label>
                 <select name="role" id="role" class="form-control">
-                    <option value="user">User</option>
+                    <option class="fs-5" value="user">User</option>
                     <option value="admin">Admin</option>
                 </select>
             </div>
