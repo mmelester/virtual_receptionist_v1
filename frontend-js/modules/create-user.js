@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const createUserButton = document.getElementById('create-user-btn');
     const addUserSection = document.getElementById('add-user-section');
 
+    localStorage.setItem('editFlag', 'c');
+
     // Add click event listener to the button
     createUserButton.addEventListener('click', function () {
         // Hide the button

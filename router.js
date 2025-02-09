@@ -124,16 +124,6 @@ module.exports = (db) => {
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
 
-    router.get('/admin/users', ensureAuthenticated, async (req, res) => {
-        try {
-            await usersController.getUsers(req, res, userModelInstance);
-        } catch (error) {
-            console.error("Error in /admin/users route:", error);
-            req.flash('errors', 'Failed to load users.');
-            res.redirect('/admin');
-        }
-    });
-
     router.get('/admin/notifications', ensureAuthenticated, async (req, res) => {
         try {
             await notificationController.getNotifications(req, res, notificationModelInstance);
@@ -164,69 +154,86 @@ module.exports = (db) => {
             res.redirect('/admin/notifications');
         }
     });
- 
-    router.get('/admin/building', ensureAuthenticated, (req, res) =>
-        buildingController.getBuilding(req, res, buildingModelInstance)
-    );
     
     // Post errors
     router.post('/admin', ensureAuthenticated, (req, res) =>
-        adminController.index(req, res, adminModelInstance, buildingModelInstance)
+        adminController.index(req, res, adminModelInstance, buildingModelInstance, userModelInstance)
     );
 
+    // Get building information
+    router.get('/admin/building', ensureAuthenticated, (req, res) =>
+        buildingController.getBuilding(req, res, buildingModelInstance)
+    );
+    // Add new building information
     router.post('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.saveBuilding(req, res, buildingModelInstance)
     );
-
     // Edit building information
     router.put('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.updateBuilding(req, res, buildingModelInstance)
     );
 
-    router.delete('/admin/building/delete/:id', ensureAuthenticated, (req, res) => buildingController.deleteItem(req, res, buildingModelInstance)
+    // Get all users
+    router.get('/admin/users', ensureAuthenticated, async (req, res) => {
+        try {
+            await usersController.getUsers(req, res, userModelInstance);
+        } catch (error) {
+            console.error("Error in /admin/users route:", error);
+            req.flash('errors', 'Failed to load users.');
+            res.redirect('/admin');
+        }
+    });
+    // Add new user information
+    router.post('/admin/user', ensureAuthenticated, (req, res) =>
+        userController.saveUser(req, res, userModelInstance)
+    );
+    router.put('/admin/user', ensureAuthenticated, (req, res) =>
+        userController.editUser(req, res, userModelInstance)
+    );
+    // Delete user
+    router.delete('/admin/user/delete/:id', ensureAuthenticated, (req, res) => userController.deleteItem(req, res, userModelInstance)
     );
 
+    // Get all companies
     router.get('/admin/companies', ensureAuthenticated, (req, res) =>
         companiesController.getCompanies(req, res, companyModelInstance)
     );
-
+    // Add new company information
     router.post('/admin/companies/add', ensureAuthenticated, (req, res) =>
         companiesController.addCompany(req, res, companyModelInstance)
     );
-
+    // Edit company information
     router.get('/admin/companies/:id/people', ensureAuthenticated, (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
     );
-
+    // Get all people
     router.get('/admin/companies/edit/:id', ensureAuthenticated, (req, res) =>
         companiesController.editCompany(req, res, companyModelInstance)
     );
-
+    // Edit company information
     router.put('/admin/companies/edit/:id', ensureAuthenticated, (req, res) =>
         companiesController.updateCompany(req, res, companyModelInstance)
     );
-
+    // Delete company information using ID
     router.delete('/admin/companies/delete/:id', ensureAuthenticated, (req, res) => companiesController.deleteItem(req, res, companyModelInstance)
     );
 
+    // Get person using ID
     router.get('/admin/companies/:id/people', ensureAuthenticated, (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance)
     ); // Route for rendering people.ejs template in browser
 
-    router.get('/api/companies/:id/people', ensureAuthenticated, (req, res) =>
-        peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
-    );  // API route for fetching JSON data (fetch API request in client-side js)
-
+    // Edit person information
     router.get('/admin/companies/:companyId/people/edit/:personId', ensureAuthenticated, (req, res) => {
         const { companyId, personId } = req.params;
         console.log("From router: ", companyId, personId);
         peopleController.editPerson(req, res, peopleModelInstance, companyId, personId);
     });
-
+    // Add new person information
     router.post('/admin/companies/people/add', ensureAuthenticated, (req, res) =>
         peopleController.addPerson(req, res, peopleModelInstance)
     );
-
+    // Delete person information using ID
     router.delete('/admin/companies/:companyId/people/delete/:personId', ensureAuthenticated, (req, res) => {
         const { companyId, personId } = req.params;
         console.log("From router: ", companyId, personId);
@@ -243,6 +250,11 @@ module.exports = (db) => {
     router.get('/api/companies/:id/people', ensureAuthenticated, (req, res) =>
         peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
     );
+
+    // Get all people - API route for fetching JSON data (fetch API request in client-side js)
+    router.get('/api/companies/:id/people', ensureAuthenticated, (req, res) =>
+        peopleController.getPeopleByCompanyId(req, res, peopleModelInstance, true)
+    );  
 
     router.post('/api/companies/:id/people/errors', ensureAuthenticated, (req, res) => {
         const companyId = req.params.id;

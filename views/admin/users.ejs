@@ -173,9 +173,13 @@
     setEqualWidths('.user-role');
 
     const closeBtn = document.getElementById('close-btn');
+    const saveUserBtn = document.getElementById('save-user-btn')
+    
     closeBtn.addEventListener('click', function () {
         window.location.reload(); // Force a page refresh
     });
+
+    saveUserBtn.addEventListener('click', handleUserFormSubmission);
 
 });
 </script>

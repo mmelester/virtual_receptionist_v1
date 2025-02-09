@@ -1679,7 +1679,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_getPeople__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_modules_getPeople__WEBPACK_IMPORTED_MODULE_7__);
 
 
-// import CreateCompany from './modules/create-company'
 
 
 

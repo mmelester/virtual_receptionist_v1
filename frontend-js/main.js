@@ -1,6 +1,5 @@
 import DragNDrop from './modules/drag-n-drop'
 import GetFormInfo from './modules/getFormInfo'
-// import CreateCompany from './modules/create-company'
 import EditBuilding from './modules/editBuilding'
 import EditCompany from './modules/editCompany'
 import EditPerson from './modules/editPerson'
