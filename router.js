@@ -188,7 +188,7 @@ module.exports = (db) => {
     });
     // Get a specific user
     router.get('/admin/user/edit/:id', ensureAuthenticated, (req, res) =>
-        userController.editUser(req, res, companyModelInstance)
+        userController.editUser(req, res, userModelInstance)
     );
     // Add new user information
     router.post('/admin/user', ensureAuthenticated, (req, res) =>
