@@ -172,6 +172,9 @@ module.exports = (db) => {
     router.put('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.updateBuilding(req, res, buildingModelInstance)
     );
+    // Delete building information using ID
+    router.delete('/admin/building/delete/:id', ensureAuthenticated, (req, res) => buildingController.deleteItem(req, res, buildingModelInstance)
+    );
 
     // Get all users
     router.get('/admin/users', ensureAuthenticated, async (req, res) => {

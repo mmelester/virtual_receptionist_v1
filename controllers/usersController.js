@@ -90,5 +90,23 @@ module.exports = {
             res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
         }
     },
+
+    async deleteItem(req, res, UserModel) {
+        try {
+            const userId = req.params.id;
+            const result = await userModel.deleteItem(userId); 
+            if (!result.success) {
+                req.flash('errors', [result.message]);
+                return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
+            }
+
+            req.flash('success', 'User record deleted successfully!');
+            req.session.save(() => res.status(200).json({ success: true, message: 'Building record deleted successfully!' }));
+        } catch (error) {
+            console.error('Error deleting building record:', error);
+            req.flash('errors', ['Failed to delete building.']);
+            req.session.save(() => res.status(500).json({ success: false, message: 'An unexpected error occurred while deleting the building record.' }));
+        }
+    },
 };
 

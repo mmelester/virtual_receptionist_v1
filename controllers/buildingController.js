@@ -109,10 +109,10 @@ module.exports = {
     //         req.session.save(() => res.status(500).json({ success: false, message: 'Failed to fetch building information from database.' }));
     //     }
     // },
-    async deleteItem(req, res, buildingModel) {
+    async deleteItem(req, res, BuildingModel) {
         try {
             const buildingId = req.params.id;
-            const result = await buildingModel.deleteItem(buildingId); 
+            const result = await BuildingModel.deleteItem(buildingId); 
             if (!result.success) {
                 req.flash('errors', [result.message]);
                 return req.session.save(() => res.status(400).json({ success: false, message: result.message }));
