@@ -85,6 +85,12 @@ module.exports = {
         }
     
         try {
+            const existingUser = await UserModel.getUserById(req.params.id);
+            console.log('Updating user with ID:', existingUser._id);
+    
+            if (!existingUser || !existingUser._id) {
+                return res.status(404).json({ success: false, message: 'User record not found.' });
+            }
             // Check if the new data is identical to the existing data
             const isUnchanged = 
             existingUser.username === username &&
@@ -97,8 +103,7 @@ module.exports = {
             }
 
             // Proceed with the update
-    
-            const result = await UserModel.updateBuilding(existingUser._id, { username, password, email, role });
+            const result = await UserModel.updateUser(existingUser._id, { username, password, email, role });
     
             if (result.success) {
                 return res.status(200).json({ success: true, message: 'User updated successfully!' });

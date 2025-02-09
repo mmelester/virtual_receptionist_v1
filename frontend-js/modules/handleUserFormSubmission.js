@@ -4,7 +4,7 @@ export async function handleUserFormSubmission(event) {
     console.log("handleUserFormSubmission Called!");
     let errors = []; // Initialize an array to store validation errors
 
-    // Retrieve the company Id and editFlag from localStorage
+    // Retrieve the user Id and editFlag from localStorage
     const Id = localStorage.getItem('editId');
     const flag = localStorage.getItem('editFlag');
 
@@ -25,7 +25,7 @@ export async function handleUserFormSubmission(event) {
     if (errors.length > 0) {
          
         console.log("Errors present");
-        
+        // Post errors to server
         try {
             await fetch('/admin', {
                 method: 'POST',
@@ -50,14 +50,18 @@ export async function handleUserFormSubmission(event) {
     console.log("userData", userData);
 
     try {
-        const url = flag === 'c' ? '/admin/user' : `/admin/user`;
+        const url = flag === 'c' ? '/admin/user' : `/admin/user/edit/${Id}`;
         const method = flag === 'c' ? 'POST' : 'PUT';
+
+        console.log("url = ", url, " method = ", method);
+
         // Make a POST or PUT request to the server to save/update the building data
         const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData),
         });
+
 
         const result = await response.json();
 
