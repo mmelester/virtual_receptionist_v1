@@ -46,7 +46,7 @@ take a look if i need to change package.json
 
     Forwarding https://abcd1234.ngrok.io -> http://localhost:3000
 
-5.  Update the webhoork URL in Twilio. this the first URL above followed by /twilio/sms
+5.  Update the webhook URL in Twilio. this the first URL above followed by /twilio/sms
 
      Go to Phone numbers > Manage > Active numbers, then select the number. 
  
