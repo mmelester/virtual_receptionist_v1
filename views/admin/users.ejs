@@ -23,6 +23,18 @@
     <div class="text-center pb-5">
         <button id="create-user-btn" class="create-user-btn btn btn-primary btn-sm">Add New User</button>
     </div>
+    <% 
+        const defaultUsername = process.env.DEFAULT_USERNAME;
+        const defaultPassword = process.env.DEFAULT_PASSWORD;
+        const hasDefaultAdmin = users.some(user => user.role === "admin" && user.username === defaultUsername && user.password === defaultPassword);
+    %>
+    
+    <% if (hasDefaultAdmin) { %>
+        <div class="alert alert-danger text-center">
+            <strong>Warning:</strong> Please change or delete the default admin username and password (<%= defaultUsername %> / <%= defaultPassword %>) immediately.
+        </div>
+    <% } %>
+    
     <div id="add-user-section" class="user-info mb-5 border boader-2 border-success pl-4 pr-4 pb-4 pt-2 rounded d-none">
         <div class="d-flex">
             <span id="close-btn" class="close-sm ml-auto bg-secondary pl-2 pr-2 border rounded text-white font-weight-bold">X</span>
@@ -158,27 +170,8 @@
 <script type="module" src="../frontend-js/modules/editUser.js"></script>
 <script type="module" src="../frontend-js/modules/deleteItem.js"></script>
 <script type="module" src="../frontend-js/modules/unhidePassword.js"></script>
-<script type="module">
-    import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
-    import { handleUserFormSubmission } from '/frontend-js/modules/handleUserFormSubmission.js';
-    document.addEventListener('DOMContentLoaded', () => {
-
-    setEqualWidths('.user-username');
-    setEqualWidths('.user-password');
-    setEqualWidths('.user-email');
-    setEqualWidths('.user-role');
-
-    const closeBtn = document.getElementById('close-btn');
-    const saveUserBtn = document.getElementById('save-user-btn')
-    
-    closeBtn.addEventListener('click', function () {
-        window.location.reload(); // Force a page refresh
-    });
-
-    saveUserBtn.addEventListener('click', handleUserFormSubmission);
-
-});
-</script>
+<script type="module" src="../frontend-js/modules/user-page-script
+.js"></script>
 
 <%- include('../includes/footer') %>
 
