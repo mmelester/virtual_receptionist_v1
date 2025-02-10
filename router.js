@@ -123,6 +123,11 @@ module.exports = (db) => {
     router.get('/admin', ensureAuthenticated, (req, res) =>
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
+        
+    // Post errors - admin page
+    router.post('/admin', ensureAuthenticated, (req, res) =>
+        adminController.index(req, res, adminModelInstance, buildingModelInstance, userModelInstance)
+    );
 
     router.get('/admin/notifications', ensureAuthenticated, async (req, res) => {
         try {
@@ -154,11 +159,6 @@ module.exports = (db) => {
             res.redirect('/admin/notifications');
         }
     });
-    
-    // Post errors
-    router.post('/admin', ensureAuthenticated, (req, res) =>
-        adminController.index(req, res, adminModelInstance, buildingModelInstance, userModelInstance)
-    );
 
     // Get building information
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
@@ -175,7 +175,28 @@ module.exports = (db) => {
     // Delete building information using ID
     router.delete('/admin/building/delete/:id', ensureAuthenticated, (req, res) => buildingController.deleteItem(req, res, buildingModelInstance)
     );
+    
+    // Post errors on user page
+    router.post('/admin/users', ensureAuthenticated, async (req, res) => {
+        try {
+            const { errors } = req.body;
 
+            console.log("Errors from user page:", errors);
+            
+            if (errors && errors.length > 0) {
+                req.flash('errors', errors);
+                req.session.save(() => res.json({ success: false }));
+                return;
+            }
+    
+            await userController.getUsers(req, res, userModelInstance);
+        } catch (error) {
+            console.error("Error in /admin/users route:", error);
+            req.flash('errors', 'Failed to load users.');
+            req.session.save(() => res.redirect('/admin/users'));
+        }
+    });
+    
     // Get all users
     router.get('/admin/users', ensureAuthenticated, async (req, res) => {
         try {
@@ -191,7 +212,7 @@ module.exports = (db) => {
         userController.editUser(req, res, userModelInstance)
     );
     // Add new user information
-    router.post('/admin/user', ensureAuthenticated, (req, res) =>
+    router.post('/admin/user/add', ensureAuthenticated, (req, res) =>
         userController.saveUser(req, res, userModelInstance)
     );
     // Edit user information
@@ -210,7 +231,6 @@ module.exports = (db) => {
     router.post('/admin/companies/add', ensureAuthenticated, (req, res) =>
         companiesController.addCompany(req, res, companyModelInstance)
     );
-
 
     // Edit company information
     router.get('/admin/companies/:id/people', ensureAuthenticated, (req, res) =>

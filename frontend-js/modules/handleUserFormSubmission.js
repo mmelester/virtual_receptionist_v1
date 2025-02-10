@@ -16,10 +16,28 @@ export async function handleUserFormSubmission(event) {
 
     console.log("user info ", username, password, email, role);
 
-    // Validate form inputs
-    if (!username) errors.push('Username is required.');
-    if (!password) errors.push('Password is required.'); // add password validation
-    if (!role) errors.push('User role is required.');
+    // Validate user form inputs
+    if (!username) {
+        errors.push('Username is required.');
+    } else if (username.length < 3 || username.length > 12) {
+        errors.push('Username must be between 3 and 12 characters.');
+    }
+
+    if (!password) {
+        errors.push('Password is required.');
+    } else if (password.length < 8 || password.length > 21) {
+        errors.push('Password must be between 8 and 21 characters.');
+    }
+
+    if (!email) {
+        errors.push('Email is required.');
+    } else if (!email.includes('@')) {
+        errors.push('Email must contain "@" character.');
+    }
+
+    if (!role) {
+        errors.push('User role is required.');
+    }
 
     // If there are errors, send them to the server and stop further execution
     if (errors.length > 0) {
@@ -27,7 +45,7 @@ export async function handleUserFormSubmission(event) {
         console.log("Errors present");
         // Post errors to server
         try {
-            await fetch('/admin', {
+            await fetch('/admin/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ errors }),
@@ -50,7 +68,7 @@ export async function handleUserFormSubmission(event) {
     console.log("userData", userData);
 
     try {
-        const url = flag === 'c' ? '/admin/user' : `/admin/user/edit/${Id}`;
+        const url = flag === 'c' ? '/admin/user/add' : `/admin/user/edit/${Id}`;
         const method = flag === 'c' ? 'POST' : 'PUT';
 
         console.log("url = ", url, " method = ", method);
