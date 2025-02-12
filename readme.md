@@ -120,3 +120,36 @@ Note:
     Note this bypasses Twilio entirely show it wont show in the message log.
 
 4.  To inspect the ngrok message log, go to http://127.0.0.1:4040
+
+# Email Server
+
+SendGrid is used for the mail server.  You must have an active SendGrid account (currently using Matt Melester's account). If changed to another account, a new API key must be generated and a new authorized sender must be set.  See below for details on both.  With the free account, there can only be a single authorized sender.
+
+The email server js code is contained in server.js. In this file, the sender's email address is hard coded.
+
+**Limitation:** This site currently uses the Free SendGrid Plan. With this plan, there is 100 email/day limit and limited to single team member.
+
+## Generating a New SendGrid API Key
+
+To create an API Key go to https://app.sendgrid.com/guide/integrate/langs/nodejs or follow the steps below.   Note that SendGrid will only send emails from an authorized email address (go to https://app.sendgrid.com/settings/sender_auth/senders).
+
+1.Login into the SendGrid account.  This should direct you to the Dashboard; navigate to this page if not.
+2.Go to Settings at the bottom of the left sidebar. Then select "API Keys".
+3.Once there click on the blue "Create API Key" located at the top-right of the page.
+4.Key it a representative, unique name.  Selected "Full Access".  Click "Create and View".
+5.Make sure you add the API to config.env.  This will allow server.js to access the API key.
+6.Delete any API keys no longer in use.
+
+## Defining the Authorized Sender
+
+The authorized sender is hard coded in server.js (I should have added this to the notification setting page).  To find it, search on "const msg". This sender must be explicitly authorized in the SendGrid account associated with the API key.  Below are the steps required to setup an authorized sender:
+
+1.1.Login into the SendGrid account.  This should direct you to the Dashboard; navigate to this page if not.
+2.Go to Settings at the bottom of the left sidebar. Then select "Sender Authorization".
+3.In the middle of the page, see Single Sender Verification.  At the far right of that section, click on the current sender email address.
+4.This bring a page that will allow the sender information, including email address, to be changed.
+5.Make sure to update the hard coded authorized sender email address in server.js.
+
+For this application, I setup I used the existing single authorization that I setup for intensivehope.com, instead of a domain authorization. For domain authorization, see https://www.twilio.com/docs/sendgrid/ui/account-and-settings/how-to-set-up-domain-authentication
+
+Also, please make the modifications the DNS records (see domain registrar, e.g., Go Daddy).
