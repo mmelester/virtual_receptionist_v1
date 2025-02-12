@@ -75,7 +75,7 @@ module.exports = (db) => {
         if (req.session.userRole === 'user') {
             return next();
         } else {
-            req.flash('errors', 'Access restricted.');
+            req.flash('errors', 'Access restricted to user accounts only.  If logged in as an admin, please log out and log back in as a user.');
             return res.redirect('/admin');
         }
     }
