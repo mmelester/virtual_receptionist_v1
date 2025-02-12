@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "watch": "start nodemon app --ignore frontend-js --ignore public/ && start webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --mode production",
+    "start": "NODE_ENV=production node app.js"
   },
   "keywords": [],
   "author": "",
