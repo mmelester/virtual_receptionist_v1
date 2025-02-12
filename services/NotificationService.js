@@ -105,7 +105,7 @@ class NotificationService {
                 const db = await connectDB();
                 const personCollection = db.collection('companies');
 
-                // 🔎 Find the person by their mobile number
+                // 🔎 Find the person by their mobile number and update their consent
                 const result = await personCollection.updateMany(
                     { 'people.mobile': fromNumber },
                     { $set: { 'people.$.consent': 'GRANTED' } }
@@ -123,9 +123,14 @@ class NotificationService {
                 twiml.message(notifications.SMS?.CONSENT_ERROR || Messages.SMS.CONSENT_ERROR);
             }
         } else if (incomingMessage === 'stop') {
+            // 🔎 Find the person by their mobile number and withdraw their consent
+            const result = await personCollection.updateMany(
+                { 'people.mobile': fromNumber },
+                { $set: { 'people.$.consent': 'WITHDRAWN' } }
+            );
             twiml.message(notifications.SMS?.UNSUBSCRIBED || Messages.SMS.UNSUBSCRIBED);
         } else {
-            twiml.message(notifications.SMS?.INVALID_RESPONSE || Messages.SMS.INVALID_RESPONSE);
+            twiml.message(notifications.SMS?.INVALID_RESPONSE || Messages.SMS.INVALID_RESPONSE);s
         }
 
         return twiml.toString();
