@@ -1,9 +1,8 @@
-document.getElementById("scan-outlets-link").addEventListener("click", async (event) => {
-    event.preventDefault(); // Prevent default link behavior\
+const outletList = document.getElementById("outlet-list");
+scanOutlets();
 
+async function scanOutlets() {
     console.log("Scanning for Kasa smart plugs...");
-
-    const outletList = document.getElementById("outlet-list");
     outletList.innerHTML = "<li>Scanning for devices...</li>";
 
     try {
@@ -24,4 +23,8 @@ document.getElementById("scan-outlets-link").addEventListener("click", async (ev
         console.error("Error scanning outlets:", error);
         outletList.innerHTML = "<li>Error scanning for smart plugs.</li>";
     }
+}
+document.getElementById("scan-outlets-link").addEventListener("click", async (event) => {
+    event.preventDefault(); // Prevent default link behavior\
+    scanOutlets();
 });
