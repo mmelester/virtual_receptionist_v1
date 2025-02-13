@@ -137,11 +137,13 @@ class NotificationService {
     }
 
     async scanOutlets() {
-        const devicesFound = [];
-        
-        try {
+        return new Promise((resolve, reject) => {
+            const kasaClient = new Client(); // Create a new client instance each time
+            let devicesFound = [];
+    
             console.log("Scanning for Kasa smart plugs...");
-            this.tplinkClient.startDiscovery({ discoveryTimeout: 5000 })
+    
+            kasaClient.startDiscovery({ discoveryTimeout: 5000 })
                 .on('device-new', (device) => {
                     devicesFound.push({
                         alias: device.alias,
@@ -151,14 +153,15 @@ class NotificationService {
                     });
                 });
     
-            // Wait for devices to be discovered
-            await new Promise(resolve => setTimeout(resolve, 6000));
-            return devicesFound;
-        } catch (error) {
-            console.error("Error scanning for smart plugs:", error);
-            throw new Error("Failed to scan for smart plugs");
-        }
+            // Stop discovery after timeout
+            setTimeout(() => {
+                console.log("Stopping Kasa device discovery...");
+                kasaClient.stopDiscovery(); // Correct method to stop discovery
+                resolve(devicesFound);
+            }, 6000);
+        });
     }
+    
 
 }
 
