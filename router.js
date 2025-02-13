@@ -160,6 +160,9 @@ module.exports = (db) => {
         }
     });
 
+    router.get('/admin/scan-outlets', notificationController.scanOutlets);
+
+
     // Get building information
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
         buildingController.getBuilding(req, res, buildingModelInstance)

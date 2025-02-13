@@ -135,6 +135,31 @@ class NotificationService {
 
         return twiml.toString();
     }
+
+    async scanOutlets() {
+        const devicesFound = [];
+        
+        try {
+            console.log("Scanning for Kasa smart plugs...");
+            this.tplinkClient.startDiscovery({ discoveryTimeout: 5000 })
+                .on('device-new', (device) => {
+                    devicesFound.push({
+                        alias: device.alias,
+                        ip: device.host,
+                        model: device.model,
+                        mac: device.mac
+                    });
+                });
+    
+            // Wait for devices to be discovered
+            await new Promise(resolve => setTimeout(resolve, 6000));
+            return devicesFound;
+        } catch (error) {
+            console.error("Error scanning for smart plugs:", error);
+            throw new Error("Failed to scan for smart plugs");
+        }
+    }
+
 }
 
 module.exports = new NotificationService();

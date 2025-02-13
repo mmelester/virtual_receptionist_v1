@@ -1,4 +1,5 @@
 const NotificationModel = require('../models/NotificationModel');
+const NotificationService = require('../services/NotificationService');
 
 module.exports = {
     async getNotifications(req, res, notificationModel) {
@@ -91,5 +92,15 @@ module.exports = {
             console.error('❌ Error updating EMAIL notifications:', error);
             return res.status(500).json({ success: false, message: "Internal server error while updating EMAIL notifications." });
         }
-    }
+    },
+
+    async scanOutlets(req, res) {
+        try {
+            const devices = await NotificationService.scanOutlets();
+            res.json(devices);
+        } catch (error) {
+            res.status(500).json({ error: "Failed to scan for smart plugs" });
+        }
+    },
+    
 };

@@ -1,5 +1,7 @@
 document.getElementById("scan-outlets-link").addEventListener("click", async (event) => {
-    event.preventDefault(); // Prevent default link behavior
+    event.preventDefault(); // Prevent default link behavior\
+
+    console.log("Scanning for Kasa smart plugs...");
 
     const outletList = document.getElementById("outlet-list");
     outletList.innerHTML = "<li>Scanning for devices...</li>";

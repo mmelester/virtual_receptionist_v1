@@ -36,6 +36,9 @@
         <a href="/admin/users" class="btn-companies-staff btn btn-primary btn-sm">
             User Credentials
         </a>
+        <a href="#" id="scan-outlets-link" class="btn btn-primary btn-sm">
+            Scan Outlets
+        </a>
     </div>
     <section id="add-building-section" class="add-item-section d-none">
         <div class="add-building-container border pt-3 pb-5  pl-5 pr-5 rounded mb-5 bg-light">
@@ -83,6 +86,7 @@
         </div> 
     </div>
     </section>
+    <h3>Building Information</h3>
     <% if (building) { %>
         <div class="d-flex border border-dark-grey mb-3 p-3 pt-4 rounded bg-light overflow-hidden flex-wrap">
             <div class="logo pr-3">
@@ -116,12 +120,16 @@
     <% } else { %>
         <p>The building information has not been added.</p>
     <% } %>
-
+    <div id="outlet-results" class="mt-5">
+        <h3>Available Smart Plugs</h3>
+        <ul id="outlet-list"></ul>
+    </div>
 
 </div>
 <!-- Load explicitly because DOM may not be available before main.js executes -->
 <script src="/main-bundled.js"></script>
 <script type="module" src="../frontend-js/modules/create-building.js"></script>
+<script type="module" src="../frontend-js/modules/scanOutlets.js"></script>
 <script type="module">
     import { setEqualWidths } from '/frontend-js/modules/setEqualWidths.js';
     document.addEventListener('DOMContentLoaded', () => {
