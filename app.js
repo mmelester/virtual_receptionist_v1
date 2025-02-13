@@ -15,7 +15,7 @@ const Messages = require('./src/messages');
 const app = express();
 
 // Check if user data record exist and if not create it.
-async function initializeUsers(d    ) {
+async function initializeUsers(db) {
     try {
         const userModel = new UserModel(db);
         const users = await userModel.getUsers();

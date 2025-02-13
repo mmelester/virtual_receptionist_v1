@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("Email notifications updated successfully.");
                 window.location.href = "/admin/notifications"; 
             } else {
-                alert("Failed to update email notifications: " + result);
+                console.log("Failed to update email notifications: " + result);
             }
         } catch (error) {
             console.error("❌ Error updating email:", error);
