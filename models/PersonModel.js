@@ -1,43 +1,33 @@
+/**
+ * PersonModel Module
+ *
+ * This module defines the PersonModel class which extends the BaseModel to manage operations 
+ * related to staff members ("people") within a company record in the 'companies' collection.
+ *
+ * Key functionalities include:
+ * - Retrieving all people or people for a specific company.
+ * - Adding a new person to a company.
+ * - Updating or editing an existing person's details within a company's "people" array.
+ * - Deleting a person from a company.
+ * - Fetching a person by either their MongoDB ObjectId or a custom ID.
+ *
+ * The class employs proper validation (e.g., ObjectId checks) and error handling to ensure 
+ * reliable database operations. Additionally, it integrates with the NotificationService to support 
+ * notification-related features.
+ */
+
+// Import BaseModel and ObjectId
 const BaseModel = require('./BaseModel');
 const { ObjectId } = require('mongodb'); // Import ObjectId for MongoDB operations
 const notificationService = require('../services/NotificationService'); // Import NotificationService
 
+// Define the PersonModel class by extending BaseModel
 class PersonModel extends BaseModel {
     constructor(database) {
         super(database, 'companies'); // Pass the database and collection name to BaseModel
     }
 
-    // async addPerson(personData) {
-    //     const { name, reply, mobile, email, outlet, image, consent } = personData;
-
-    //     console.log("addPerson ", name, consent);
-
-    //     // Validation
-    //     if (!name || !reply || !image) {
-    //         return { success: false, message: 'Name, reply, and logo image are required.' };
-    //     }
-
-    //     try {
-    //         result = await this.add({ name, reply, mobile, email, outlet, image, consent }); // Use BaseModel's `add` method
-    //         // If person was added successfully, send consent SMS
-    //         if (result.success && mobile) {
-    //             console.log("I got here!")
-    //             await notificationService.twilioClient.messages.create({
-    //                 body: "Reply CONSENT if you wish to receive client notifications from this number.",
-    //                 from: process.env.TWILIO_PHONE_NUMBER,
-    //                 to: mobile
-    //             });
-    //             console.log(`Consent SMS sent to: ${mobile}`);
-    //         }
-
-    //         return result;
-
-    //     } catch (error) {
-    //         console.error('Database error:', error);
-    //         return { success: false, message: 'Failed to add the person due to a database error.' };
-    //     }
-    // }
-
+    //  Define the getPeople method to fetch all people from the database
     async getPeople() {
         try {
             return await this.getAll(); // Use BaseModel's `getAll` method
@@ -47,7 +37,9 @@ class PersonModel extends BaseModel {
         }
     }
 
+    // Define the addPerson method to insert a new person into the database
     async getCompanyPeople(companyId) {
+        // Validate the company ID
         if (!ObjectId.isValid(companyId)) {
             throw new Error('Invalid ObjectId.');
         }
@@ -61,14 +53,17 @@ class PersonModel extends BaseModel {
         }
     }
 
+    // Define the addPerson method to insert a new person into the database
     async deletePersonFromCompany(companyId, personId) {
     
+        // Validate the company and person IDs
         if (!ObjectId.isValid(companyId)) {
             console.error('Invalid Company ID');
             return { success: false, message: 'Invalid Company ID.' };
         }
     
         try {
+            // Perform a nested update to remove the person from the company
             const result = await this.collection.updateOne(
                 { _id: ObjectId.createFromHexString(companyId) },
                 { $pull: { people: { id: personId } } }
@@ -81,8 +76,10 @@ class PersonModel extends BaseModel {
         }
     }    
 
+    // Define the addPerson method to insert a new person into the database
     async editPersonFromCompany(companyId, personId) {
     
+        // Validate the company and person IDs
         if (!ObjectId.isValid(companyId)) {
             console.error('Invalid Company ID');
             return { success: false, message: 'Invalid Company ID.' };
@@ -106,8 +103,10 @@ class PersonModel extends BaseModel {
             return { success: false, message: 'Failed to fetch person data.' };
         }
     }     
-        
+    
+    // Define the addPerson method to insert a new person into the database
     async getPersonById(personId) {
+        // Validate the person ID
         if (!ObjectId.isValid(personId)) {
             throw new Error('Invalid ObjectId.');
         }
@@ -120,16 +119,19 @@ class PersonModel extends BaseModel {
         }
     }
 
+    // Define the addPerson method to insert a new person into the database
     async updateCompanyPeople(companyId, personData) {
 
-        console.log("From PersonModel.update ", companyId);
+        console.log("From PersonModel.update ", companyId); 
 
+        //  Validate the company ID
         if (!ObjectId.isValid(companyId)) {
             console.error('Invalid ObjectId');
             return { success: false, message: 'Invalid Company ID.' };
         }
     
         try {
+            // Perform a nested update to push the new person into the company
             const result = await this.collection.updateOne(
                 { _id: ObjectId.createFromHexString(companyId) }, // Match the company by its ID
                 { $push: { people: personData } } // Push the new person into the `people` array
@@ -144,13 +146,16 @@ class PersonModel extends BaseModel {
         }
     }
 
+    // Define the addPerson method to insert a new person into the database
     async updatePerson(companyId, personId, personData) {
         console.log("PersonModel.updatePerson called", companyId, personId, personData.name);
     
+        // Validate the company and person IDs
         if (!ObjectId.isValid(companyId)) {
             return { success: false, message: 'Invalid Company ID.' };
         }
     
+        // Validate the person data
         if (!personData.name || !personData.reply || !personData.image) {
             return { success: false, message: 'Invalid data for update.' };
         }
@@ -169,8 +174,10 @@ class PersonModel extends BaseModel {
         }
     }
     
+    // Define the addPerson method to insert a new person into the database
     async getPersonByCustomId(customId) {
         try {
+            // Find the person by their custom ID
             const person = await this.collection.findOne(
                 { 'people.id': customId }, 
                 { projection: { 'people.$': 1 } } // Projection to return only the matched person

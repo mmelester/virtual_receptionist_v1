@@ -1,10 +1,28 @@
+/**
+ * BuildingModel Module
+ *
+ * This module defines the BuildingModel class that extends BaseModel to interact with the "building" collection in the database.
+ *
+ * Key functionalities include:
+ * - getBuilding(): Retrieves the single building record.
+ * - addBuilding(buildingData): Adds a new building record after validating that the name, intro, and image are provided.
+ * - updateBuilding(id, buildingData): Updates an existing building record, ensuring the provided ID is a valid ObjectId.
+ * - deleteItem(buildingId): Deletes a building record after validating the buildingId.
+ *
+ * Each method includes error handling to log issues and return clear error messages when database operations fail.
+ */
+
+// Import the BaseModel class
 const BaseModel = require('./BaseModel');
 const { ObjectId } = require('mongodb');
+
+// Create a new class that extends the base model
 class BuildingModel extends BaseModel {
     constructor(database) {
         super(database, 'building'); // Use "building" as the collection name
     }
 
+    // Define methods to retrieve building records
     async getBuilding() {
         try {
             return await this.collection.findOne({}); // Fetch the single building record
@@ -14,6 +32,7 @@ class BuildingModel extends BaseModel {
         }
     }
 
+    //  Define methods to add a building record
     async addBuilding(buildingData) {
         const { name, intro, image } = buildingData;
 
@@ -29,6 +48,7 @@ class BuildingModel extends BaseModel {
         }
     }
 
+    // Define methods to update a building record
     async updateBuilding(id, buildingData) {
         try {
 
@@ -49,6 +69,7 @@ class BuildingModel extends BaseModel {
         }
     }
 
+    // Define methods to delete a building record
     async deleteItem(buildingId) {
         if (!ObjectId.isValid(buildingId)) {
             return { success: false, message: 'Invalid ObjectId.' };
