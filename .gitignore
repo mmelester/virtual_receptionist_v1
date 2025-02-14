@@ -16,4 +16,4 @@ node_modules/
 .env.*.local
 
 # Temporarily Ignore public/main-bundled.js files
-public/main-bundled.js.map
+# public/main-bundled.js.map
