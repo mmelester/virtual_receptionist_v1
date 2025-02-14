@@ -1,4 +1,47 @@
+/**
+ * Express Router Module
+ *
+ * This module exports a function that receives a database connection (db) and returns a configured Express Router.
+ * It is responsible for setting up all application routes, including public, user, admin, API, and webhook 
+ * endpoints.
+ *
+ * Key functionalities:
+ *
+ * 1. Imports Controllers and Models:
+ *    - Loads controllers (home, admin, user, building, notification, companies, people, auth) to handle various 
+ * requests.
+ *    - Imports models and initializes their instances with the provided database connection.
+ *
+ * 2. Authentication and Authorization Middleware:
+ *    - Implements middleware (ensureAuthenticated, ensureAdmin, ensureUser) to protect routes and restrict access 
+ * based on user role.
+ *
+ * 3. Public Routes:
+ *    - Routes for the home page, login, logout, and viewing company or person details.
+ *
+ * 4. Restricted User Routes:
+ *    - Routes for the user dashboard and other user-specific functionalities.
+ *
+ * 5. Protected Admin Routes:
+ *    - Routes for admin functionalities including dashboard, notifications, building management, user management,
+ *      company management, and people management.
+ *
+ * 6. API Routes:
+ *    - Provides endpoints to fetch JSON data (e.g., people details) for client-side consumption.
+ *
+ * 7. Twilio Webhook:
+ *    - Sets up a route to handle incoming SMS messages via Twilio.
+ *
+ * 8. Additional Middleware:
+ *    - Uses a middleware function to fetch building data and attach it to response locals for use in views.
+ *
+ * Overall, this router module centralizes the routing logic and middleware setup, ensuring that each request is 
+ * properly
+ * authenticated and routed to the corresponding controller action.
+ */
+
 module.exports = (db) => {
+    // Import required modules
     const express = require('express');
     const router = express.Router();
 
@@ -80,7 +123,9 @@ module.exports = (db) => {
         }
     }
 
+    // User dashboard route - only accessible to logged-in users (not admins)
     router.get('/dashboard', ensureAuthenticated, ensureUser, async (req, res) => {
+
         try {
             console.log("Fetching companies for dashboard...");
             
@@ -94,7 +139,9 @@ module.exports = (db) => {
                 companies,
                 error: null // ✅ Always define 'error', even if empty
             });
+
         } catch (error) {
+            // Handle errors by rendering the dashboard with an error message
             console.error("Error fetching companies:", error);
             res.render('home/dashboard.ejs', { 
                 userRole: req.session.userRole, 
@@ -104,6 +151,7 @@ module.exports = (db) => {
         }
     });
     
+    // User dashboard route - only accessible to logged-in users (not admins)
     async function fetchBuildingData(req, res, next) {
         try {
             const building = await buildingModelInstance.getBuilding();
@@ -120,6 +168,8 @@ module.exports = (db) => {
     // -------------------------------------
     // 🔒 Protected Admin Routes
     // -------------------------------------
+    
+    // Admin dashboard route
     router.get('/admin', ensureAuthenticated, (req, res) =>
         adminController.index(req, res, adminModelInstance, buildingModelInstance)
     );
@@ -129,6 +179,7 @@ module.exports = (db) => {
         adminController.index(req, res, adminModelInstance, buildingModelInstance, userModelInstance)
     );
 
+    // Get all notifications
     router.get('/admin/notifications', ensureAuthenticated, async (req, res) => {
         try {
             await notificationController.getNotifications(req, res, notificationModelInstance);
@@ -138,8 +189,7 @@ module.exports = (db) => {
             res.redirect('/admin');
         }
     });
-
-    // Add routes for updating SMS and EMAIL separately
+    // Add routes for updating SMS message
     router.put('/admin/notifications/update-sms', ensureAuthenticated, async (req, res) => {
         try {
             await notificationController.updateSMS(req, res, notificationModelInstance);
@@ -149,7 +199,7 @@ module.exports = (db) => {
             res.redirect('/admin/notifications');
         }
     });
-
+    // Add routes for updating EMAIL message
     router.put('/admin/notifications/update-email', ensureAuthenticated, async (req, res) => {
         try {
             await notificationController.updateEMAIL(req, res, notificationModelInstance);
@@ -160,8 +210,8 @@ module.exports = (db) => {
         }
     });
 
+    // Scan outlets for IP addresses
     router.get('/admin/scan-outlets', notificationController.scanOutlets);
-
 
     // Get building information
     router.get('/admin/building', ensureAuthenticated, (req, res) =>
@@ -181,8 +231,9 @@ module.exports = (db) => {
     
     // Post errors on user page
     router.post('/admin/users', ensureAuthenticated, async (req, res) => {
+
         try {
-            const { errors } = req.body;
+            const { errors } = req.body; // Destructure errors from request body
 
             console.log("Errors from user page:", errors);
             
@@ -191,20 +242,24 @@ module.exports = (db) => {
                 req.session.save(() => res.json({ success: false }));
                 return;
             }
-    
+            // If no errors, proceed to fetch users and render the page
             await userController.getUsers(req, res, userModelInstance);
         } catch (error) {
+            // Handle errors by rendering the users page with an error message
             console.error("Error in /admin/users route:", error);
             req.flash('errors', 'Failed to load users.');
             req.session.save(() => res.redirect('/admin/users'));
         }
     });
-    
     // Get all users
     router.get('/admin/users', ensureAuthenticated, async (req, res) => {
+
         try {
+            // Fetch users and render the page using the userModelInstance
             await userController.getUsers(req, res, userModelInstance);
+
         } catch (error) {
+            // Handle errors by rendering the users page with an error message
             console.error("Error in /admin/users route:", error);
             req.flash('errors', 'Failed to load users.');
             res.redirect('/admin');
