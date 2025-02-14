@@ -1,3 +1,24 @@
+<!--
+    Header Template for "My Virtual Receptionist"
+    ------------------------------------------------
+    This EJS template provides the header section for the application pages. It includes:
+
+    1. HTML Head Section:
+       - Meta tags for character encoding, viewport, and compatibility.
+       - The page title.
+       - Preconnection and inclusion of Google Fonts (Roboto).
+       - Inclusion of Bootstrap CSS from a CDN.
+       - Links to local CSS files (main.css and pages.css).
+
+    2. Header Bar:
+       - Displays a logo that links to the dashboard:
+         - If a building object is provided and contains an image, it shows that image with an alt text based on the building name.
+         - Otherwise, a default logo image is displayed.
+       
+       - User Authentication Logic:
+         - If the user is logged in (isLoggedIn is true), a "Logout" button is shown.
+         - If not logged in, a login form with fields for username and password is rendered.
+-->
 <!DOCTYPE html>
 <html>
     <head>
