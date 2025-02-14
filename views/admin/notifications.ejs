@@ -1,3 +1,37 @@
+<!--
+  Notification Message Configuration Page Template
+
+  This EJS template is used to render the Notification Message Configuration page for administrators.
+  It provides forms to update both SMS and Email notification messages used within the application.
+
+  Key Features:
+  1. Includes a common header and footer for consistent layout.
+  2. Displays flash messages for errors and success, if any exist.
+  3. Provides a "Back to Admin Dashboard" button for easy navigation.
+  4. Renders a title indicating the page's purpose.
+  5. Contains two main sections:
+     - SMS Notification Messages:
+       • A form (id="smsNotificationForm") with text areas for configuring various SMS messages:
+         - Lobby Notification
+         - Consent Granted
+         - No Consent Found
+         - Consent Error
+         - Unsubscribed Notification
+         - Invalid Response
+       • Each text area is pre-populated with existing values (if available) from the notifications object.
+       • An update button to submit the SMS settings.
+     - Email Notification Messages:
+       • A form (id="emailNotificationForm1") with text areas for configuring email notifications:
+         - Email Subject
+         - Email Body
+         - Email HTML content
+       • Each field is pre-populated with existing values (if available) from the notifications object.
+       • An update button to submit the email settings.
+  6. Loads a module script (updateNotifications.js) to handle the form submission logic.
+
+  Overall, this template provides administrators with an interface to customize the notification messages 
+  that are sent via SMS and email.
+-->
 <%- include('../includes/header') %> 
 
 <div id="notificationPage" class="page">

@@ -1,3 +1,51 @@
+<!--
+    Company Configuration Settings Page Template (admin access only)
+
+    This EJS template renders the Company Configuration Settings page for the Virtual Receptionist application.
+    It provides administrators with an interface to manage company records, including adding new companies,
+    editing existing ones, and deleting companies. The page is structured to display flash messages, a form for
+    adding or editing a company, and a list of current companies with action icons.
+
+    Key Features:
+    
+    1. Header and Footer:
+       - Includes a common header (<%- include('../includes/header') %>) and footer (<%- include('../includes/footer') %>) 
+         to maintain consistent branding and navigation across the site.
+    
+    2. Flash Messages:
+       - Retrieves and displays flash error messages in a red alert box if there are any errors.
+       - Retrieves and displays flash success messages in a green alert box if there are any success messages.
+    
+    3. Company Management:
+       - Displays a page title "Company Configuration Settings" at the top.
+       - Provides a button ("Add New Company") that, when clicked, reveals a hidden section for adding or editing a company.
+       - The "Add Company" section includes:
+         • A form for entering the company name (up to 50 characters) and intro text (up to 160 characters).
+         • A drag-and-drop area for uploading an image, with a canvas element to preview the uploaded image.
+         • A "Save" button to submit the company information.
+         • A close button ("X") to cancel the operation and refresh the page.
+    
+    4. Companies List:
+       - Iterates through the "companies" array to display existing companies.
+       - For each company, displays:
+         • The company name.
+         • A truncated version of the company's intro text (if longer than 30 characters).
+         • The company logo.
+         • Action icons for:
+           - Viewing staff members (showPeople icon).
+           - Editing the company (editCompany icon).
+           - Deleting the company (delete-btn icon).
+    
+    5. Client-Side Scripting:
+       - Loads external JavaScript files:
+         • A bundled main script (main-bundled.js) to handle general page functionality.
+         • A module script for managing company creation (create-company.js).
+         • An inline module script that sets equal widths for specific elements (.company-name, .company-intro-text, .company-logo)
+           and attaches an event listener to the close button to refresh the page.
+    
+    This template utilizes EJS syntax to dynamically render data, handle conditional display of elements, and
+    manage client-side interactions for a responsive and user-friendly administrative interface.
+-->
 <%- include('../includes/header') %> 
 <div id="companyPage" class="page">
 

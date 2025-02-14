@@ -1,3 +1,17 @@
+<!--
+  Authorized Users Page Template
+
+  This EJS template renders the "Authorized Users" page in the admin dashboard.
+  
+  Key Features:
+  - Displays flash messages for errors and successes.
+  - Provides a button to reveal a form for adding a new user.
+  - Checks for default admin credentials and warns if they are still in use.
+  - Separates users into two sections: one for administrator privileges and one for standard user privileges.
+  - Lists each user with details (username, password, email, role) along with action icons for editing and deleting.
+  - Loads several client-side module scripts to handle user creation, editing, deletion, and password visibility toggling.
+-->
+
 <%- include('../includes/header') %> 
 <div id="usersPage" class="page">
 

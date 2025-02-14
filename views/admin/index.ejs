@@ -1,3 +1,55 @@
+<!--
+    Building Page Template for Admin Dashboard (Admin pages entry point)
+    --------------------------------------------
+    This EJS template renders the building management section of the admin dashboard.
+    It provides an interface for administrators to view, add, edit, and delete building information,
+    as well as to scan for available smart plugs.
+
+    Key Components:
+    
+    1. Hidden Field:
+       - A hidden input ("buildingPresent") indicates whether building data exists.
+    
+    2. Flash Messages:
+       - Displays error messages (in an alert-danger box) and success messages (in an alert-success box)
+         if any are passed from the server.
+    
+    3. Admin Dashboard Navigation:
+       - A header section with buttons/links for navigating between:
+           • Building management ("Building" button)
+           • Companies/Staff
+           • Messages
+           • User Credentials
+           • Re-scanning smart plugs
+    
+    4. Add/Edit Building Section:
+       - A hidden section that toggles into view when adding or editing a building.
+       - Contains a form for entering:
+           • Building Name (max 50 characters)
+           • Intro Text (max 160 characters)
+       - Provides a drag-and-drop area for image upload, a canvas for image preview, and a delete button.
+       - A "Save" button submits the building information.
+    
+    5. Display Existing Building Information:
+       - If building data exists, the template displays:
+           • The building image.
+           • The building name (truncated if longer than 10 characters).
+           • The building intro text (truncated if longer than 30 characters).
+       - Action icons allow editing or deletion of the building record.
+    
+    6. Smart Plug Section:
+       - Displays a list of available smart plugs in an unordered list.
+    
+    7. Client-Side Scripts:
+       - Loads external scripts:
+           • A bundled main script ("main-bundled.js").
+           • Module scripts for creating/updating a building ("create-building.js") and scanning outlets ("scanOutlets.js").
+       - An inline module script sets equal widths for building detail elements and attaches a click event
+         to the close button to force a page refresh.
+    
+    This template uses EJS syntax to conditionally render content based on the presence of building data,
+    flash messages, and other dynamic values passed from the server.
+-->
 <%- include('../includes/header') %>
 <input type="hidden" id="buildingPresent" value="<%= !!building %>">
 
