@@ -1,4 +1,24 @@
-// src/messages.js
+/**
+ * Messages Module /src/messages.js
+ *
+ * This module defines the default SMS and EMAIL notification messages for the Virtual Receptionist application.
+ *
+ * SMS Messages:
+ * - LOBBY_NOTIFICATION: Notifies a user when someone is waiting in the lobby and provides instructions for unsubscribing.
+ * - CONSENT_GRANTED: Confirms that consent was successfully granted for notifications.
+ * - CONSENT_NOT_FOUND: Indicates that the user's record could not be found.
+ * - CONSENT_ERROR: Notifies the user of an error during the consent update process.
+ * - UNSUBSCRIBED: Confirms that the user has been unsubscribed from notifications.
+ * - INVALID_RESPONSE: Alerts the user when an invalid response is received and provides correct reply instructions.
+ *
+ * EMAIL Messages:
+ * - SUBJECT: Specifies the email subject line for lobby notifications.
+ * - TEXT: Provides the plain text content for email notifications.
+ * - HTML: Provides the HTML formatted content for email notifications.
+ *
+ * The Messages object is exported for use in notification services throughout the application.
+ */
+
 
 const Messages = {
     SMS: {
