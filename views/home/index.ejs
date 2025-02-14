@@ -1,3 +1,19 @@
+<!--
+    Landing Page Template for My Virtual Receptionist
+
+    This EJS view template renders the main landing page of the Virtual Receptionist application.
+    
+    Key Features:
+    - Includes common header and footer partials for a consistent look across the site.
+    - Retrieves and displays flash messages for both errors and success:
+        • Flash error messages (if any) are displayed inside a red alert box.
+        • Flash success messages (if any) are displayed inside a green alert box.
+    - Displays a welcome message in the "page-intro-section" to greet the user.
+    - Checks if the user is logged in (via the 'isLoggedIn' variable):
+        • If not logged in, a prompt instructs the user to log in to access the dashboard.
+    
+    This template utilizes EJS syntax to conditionally render content and loop through flash message arrays.
+-->
 <%- include('../includes/header') %>
 
 <div class="page">

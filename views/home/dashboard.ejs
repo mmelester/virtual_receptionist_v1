@@ -1,3 +1,28 @@
+<!--
+  Client Dashboard Page Template (dashboard.ejs)
+
+  This EJS view renders the companies page for the Virtual Receptionist application and includes the following functionality:
+
+  1. Header and Footer:
+     - Includes a common header (<%- include('../includes/header') %>) and footer (<%- include('../includes/footer') %>) for consistent layout and styling.
+
+  2. Flash Messages:
+     - Checks for and displays any flash error messages passed from the server.
+     - Errors are rendered in an alert box if present.
+
+  3. Page Introduction:
+     - Displays an introductory section with the message "Hi I'm Vivi, Your Virtual Receptionist".
+
+  4. Companies Section:
+     - Iterates over the "companies" array:
+         - If companies exist, each company is displayed as a clickable link containing its logo image.
+         - Each image is set with an alt text and dimensions for proper display.
+     - If no companies are available, a message "No companies available." is shown.
+     - Additionally, if an "error" variable is passed, it is displayed in red text.
+
+  Overall, this template dynamically presents a list of companies while providing user feedback through flash messages and error displays.
+-->
+
 <%- include('../includes/header') %> 
 <div class="page">
     <% flashErrors = flash('errors')
