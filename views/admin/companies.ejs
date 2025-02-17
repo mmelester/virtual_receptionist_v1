@@ -47,9 +47,10 @@
     manage client-side interactions for a responsive and user-friendly administrative interface.
 -->
 <%- include('../includes/header') %> 
+
 <div id="companyPage" class="page">
 
-    <h1 class="pt-md-5 pb-md-5 text-center" >Company Configuration Settings</h1>
+    <h1 class="pt-md-5 pb-md-4 text-center" >Company Configuration Settings</h1>
  
     <% if (errors && errors.length > 0) { %>
         <div class="alert alert-danger">
@@ -68,8 +69,9 @@
         </div>
     <% } %>    
 
-    <div class="text-center pb-5">
-        <button id="create-company-btn" class="create-company-btn btn btn-primary btn-sm">Add New Company</button>
+    <div class="d-flex justify-content-center text-center pb-5">
+        <a href="/admin" class="btn btn-primary btn-sm mr-5">Admin Dashboard</a>
+        <button id="create-company-btn" class="create-company-btn btn btn-primary btn-sm ml-5">Add New Company</button>
     </div>
     
     <section id="add-company-section" class="add-item-section d-none">

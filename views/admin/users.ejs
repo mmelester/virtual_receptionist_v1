@@ -15,7 +15,7 @@
 <%- include('../includes/header') %> 
 <div id="usersPage" class="page">
 
-    <h1 class="pt-md-5 pb-md-5 text-center" >Authorized Users</h1>
+    <h1 class="pt-md-5 pb-md-4 text-center" >Authorized Users Configuration</h1>
  
     <% if (errors && errors.length > 0) { %>
         <div class="alert alert-danger">
@@ -34,8 +34,9 @@
         </div>
     <% } %>    
 
-    <div class="text-center pb-5">
-        <button id="create-user-btn" class="create-user-btn btn btn-primary btn-sm">Add New User</button>
+    <div class="d-flex justify-content-center text-center pb-5">
+        <a href="/admin" class="btn btn-primary btn-sm mr-5">Admin Dashboard</a>
+        <button id="create-user-btn" class="create-user-btn btn btn-primary btn-sm ml-5">Add New User</button>
     </div>
     <% 
         const defaultUsername = process.env.DEFAULT_USERNAME;
