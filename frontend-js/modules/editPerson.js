@@ -1,3 +1,25 @@
+/*
+ * This script enables the editing of a staff member's information in the admin interface.
+ *
+ * Workflow:
+ *  - Attaches a click event listener to every element with the class "editPerson".
+ *  - On click, retrieves the staff member's ID, associated company ID, and the API route from data attributes.
+ *  - Prompts the user for confirmation to edit the staff member's information.
+ *  - If confirmed, it:
+ *      • Retrieves and updates key DOM elements (edit form, buttons, section, and heading).
+ *      • Stores the company ID, person ID, and an edit flag ('e') in localStorage.
+ *      • Modifies the UI to display the editing section and update the form heading.
+ *      • Replaces the delete icon with an edit icon for clarity.
+ *
+ *  - It then fetches the staff member's current information from the server using the provided route.
+ *  - On a successful response:
+ *      • Populates the form fields (name, title, reply text, mobile, email, and outlet) with the retrieved data.
+ *      • If an image is provided, it creates an Image object, waits for it to load, fetches its data as a blob,
+ *        converts the blob into a File object, and calls previewFile() to preload the image into the cropping 
+ *        interface.
+ *
+ *  - If any errors occur during the fetch or image processing, they are caught and reported to the user.
+ */
 import { previewFile } from './drag-n-drop'
 
 document.querySelectorAll('.editPerson').forEach((icon) => {

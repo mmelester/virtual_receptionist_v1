@@ -1,3 +1,15 @@
+/*
+ * This script handles the display of people associated with a company.
+ *
+ * Workflow:
+ *  - Attaches click event listeners to all elements with the "showPeople" class.
+ *  - When clicked, it retrieves the company ID from the element's data attribute and stores it in localStorage 
+ *    (using keys "editId" and "addId"), and sets an "editFlag" to 'c'.
+ *  - It then makes an asynchronous API call to fetch the people data for that company.
+ *  - If the response is successful and the API returns a success flag, the user is redirected to the company's 
+ *    people page in the admin interface.
+ *  - Any errors during fetching are logged to the console.
+ */
 document.querySelectorAll('.showPeople').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
         const companyId = event.target.getAttribute('data-id');

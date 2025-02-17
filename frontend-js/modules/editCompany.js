@@ -1,3 +1,26 @@
+/*
+ * This script enables editing of company information in the admin interface:
+ *
+ * - It attaches click event listeners to all elements with the class "editCompany".
+ *
+ * - When an edit icon is clicked:
+ *     • The user is prompted to confirm whether they want to edit the company information.
+ *     • If confirmed, the script retrieves key DOM elements (e.g., the create company button, the company form, the 
+ *       editing section, and the delete icon).
+ *     • It stores the company ID and an edit flag ('e') in localStorage.
+ *     • The form heading is updated to "Edit Company Information" and the delete icon is replaced with an edit icon.
+ *     • The company editing section is displayed while hiding the create company button.
+ *
+ * - The script then fetches the company record from the server using the company ID:
+ *     • If the fetch is successful, it populates the form fields (company name and intro text) with the retrieved 
+ *       data.
+ *     • If an image is provided, it creates an Image object, loads it, converts it to a File object, and calls 
+ *       previewFile() 
+ *       to display the image preview and initialize cropping functionality.
+ *
+ * - Errors during the fetch or image processing are caught and handled by alerting the user and logging error 
+ *   details.
+ */
 import { previewFile } from './drag-n-drop'
 
 document.querySelectorAll('.editCompany').forEach((icon) => {

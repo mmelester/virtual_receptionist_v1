@@ -1,3 +1,13 @@
+/*
+ * This script handles the UI interaction for adding a new company:
+ * - It retrieves the button (with class "create-company-btn"), the section to add a company (with class 
+ * "add-item-section"), and the form heading element.
+ * - When the button is clicked, the script:
+ *     • Hides the button by adding the 'd-none' class.
+ *     • Updates the form heading to display "Add a New Company".
+ *     • Reveals the company section by removing the 'd-none' class.
+ */
+
 // Get the button and section elements
 const createCompanyButton = document.getElementsByClassName('create-company-btn')[0];
 const addCompanySection = document.getElementsByClassName('add-item-section')[0];

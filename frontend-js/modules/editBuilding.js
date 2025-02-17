@@ -1,3 +1,23 @@
+/*
+ * This script enables the editing of building information in the admin interface.
+ *
+ * Key functionalities:
+ *  - Listens for click events on elements with the class "editBuilding".
+ *  - When an edit icon is clicked, prompts the user to confirm if they want to edit the building info.
+ *  - Upon confirmation:
+ *      • Retrieves necessary DOM elements (e.g., edit form, buttons, heading, delete icon).
+ *      • Stores the selected building's ID and sets an "edit" flag in localStorage.
+ *      • Updates the UI by:
+ *            - Changing the form heading to "Edit Building Information".
+ *            - Replacing the delete icon with an edit icon.
+ *            - Toggling visibility: displaying the edit section and hiding the create button.
+ *      • Fetches the building record from the server.
+ *      • If successful:
+ *            - Populates the form fields (name and intro) with the retrieved data.
+ *            - If an image exists, preloads it and processes it via the previewFile function.
+ *  - Handles errors by logging messages and alerting the user as needed.
+ */
+
 import { previewFile } from './drag-n-drop'
 
 document.querySelectorAll('.editBuilding').forEach((icon) => {
@@ -49,17 +69,7 @@ document.querySelectorAll('.editBuilding').forEach((icon) => {
                      
                         const img = new Image();
                         img.src = image; // Assuming `image` contains the Base64 or URL
-                        // img.onload = async function () {
-                        //     // Fetch the image data
-                        //     const response = await fetch(img.src);
-                        //     const blob = await response.blob(); // Convert to Blob
-                        
-                        //     // Create a File object from the Blob if needed
-                        //     const file = new File([blob], "uploadedImage.jpg", { type: blob.type });
-                        
-                        //     // Call the previewFile function with the File
-                        //     previewFile(file);
-                        // };
+
                         img.onload = async function () {
                             try {
                                 // Fetch the image data

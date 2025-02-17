@@ -1,3 +1,15 @@
+/*
+ * This script attaches click event listeners to all elements with the class 'delete-btn'
+ * once the DOM has fully loaded. For each delete button, it:
+ *  - Retrieves the item's ID and deletion route from data attributes.
+ *  - Prompts the user with a confirmation dialog before deletion.
+ *  - If confirmed, sends an asynchronous DELETE request to the server using the fetched route and ID.
+ *  - Processes the server's JSON response:
+ *       • If deletion is successful, reloads the page to update the item list.
+ *       • If unsuccessful, displays an error message to the user.
+ *  - Catches and logs any errors that occur during the deletion process.
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.delete-btn').forEach((icon) => {
 

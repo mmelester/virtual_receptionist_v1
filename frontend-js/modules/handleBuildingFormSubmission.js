@@ -1,3 +1,38 @@
+/*
+ * handleBuildingFormSubmission(event)
+ *
+ * This asynchronous function handles the submission of the building form, performing image validation,
+ * cropping, and data submission to the server.
+ *
+ * Workflow:
+ *  1. Prevents the default form submission.
+ *
+ *  2. Retrieves form input values (building name and intro text) and validates that both fields are filled.
+ *
+ *  3. Obtains the current image using getImg() and ensures that an image is present.
+ *
+ *  4. Calls drawSavedImage() to extract the cropped portion of the image from the canvas. The cropped image
+ *     is then converted to a Base64-encoded PNG string.
+ *
+ *  5. If any validation errors occur (missing text fields or image), the errors are sent to the server,
+ *     and the page is reloaded to display error messages.
+ *
+ *  6. If there are no errors, prepares the building data (name, intro text, and image) and sends it to the server
+ *     using either a POST request (for creating a new building) or a PUT request (for updating an existing 
+ *     building), based on the edit flag stored in localStorage.
+ *
+ *  7. Upon receiving the server response:
+ *       - If successful, the page is refreshed and the user is alerted with a success message.
+ *       - If unsuccessful, an error alert is displayed.
+ *
+ * Dependencies:
+ *  - drawSavedImage: Returns a canvas element containing the cropped image.
+ *  - getImg: Retrieves the current image object.
+ *  - previewFile: (Imported for image preview functionality, used elsewhere.)
+ *
+ * The function uses localStorage to store and retrieve the edit flag ('c' for create, 'e' for edit) and the current
+ * building identifier.
+ */
 import { drawSavedImage, getImg, previewFile } from './drag-n-drop';
 
 export async function handleBuildingFormSubmission(event) {

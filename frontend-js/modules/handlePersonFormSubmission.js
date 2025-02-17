@@ -1,3 +1,42 @@
+/*
+ * handlePersonFormSubmission(event)
+ *
+ * This function manages the submission process for a person (staff member) form, handling both creation and update operations.
+ *
+ * Workflow:
+ *  - Prevents the default form submission behavior.
+ *  - Collects and trims input values for person name, title, reply text, mobile, email, and outlet.
+ *  - Retrieves the company ID and edit flag from localStorage to determine if the operation is a creation ('c') or 
+ *    an update.
+ *  - Validates the form inputs:
+ *      • Ensures that the person's name and reply text are provided.
+ *      • Requires at least one contact detail (mobile, email, or outlet).
+ *  - Obtains the current image using getImg() and extracts the cropped image using drawSavedImage().
+ *      • If the image or cropped canvas is missing, validation errors are pushed.
+ *
+ *  - If any validation errors exist:
+ *      • Sends the errors to the server endpoint specific to the company.
+ *      • Reloads the page to display error messages.
+ *
+ *  - If validation passes:
+ *      • Converts the cropped canvas to a Base64-encoded PNG string.
+ *      • Determines the person ID:
+ *            - For creation (flag 'c'): generates a new UUID and sets consent to "PENDING".
+ *            - For update: retrieves the existing person ID from localStorage.
+ *      • Constructs a personData object containing all form data, the image, and consent status.
+ *
+ *  - Prepares the API endpoint URL based on the operation type:
+ *      • For creation: uses the endpoint to add a new person.
+ *      • For update: uses the endpoint to edit an existing person.
+ *
+ *  - Sends a PUT request with the personData in JSON format.
+ *  - If the server response indicates an error, alerts the user with the error message.
+ *  - On success, reloads the page to reflect the updated information.
+ *
+ * Dependencies:
+ *  - getImg: Retrieves the current image object.
+ *  - drawSavedImage: Returns a canvas element containing the cropped image.
+ */
 import { drawSavedImage, getImg } from './drag-n-drop';
 
 export async function handlePersonFormSubmission(event) {

@@ -1,4 +1,18 @@
 
+/*
+ * This script enables editing of user information in the admin interface:
+ *
+ * - Attaches click event listeners to all elements with the "editUser" class.
+ * - When an edit icon is clicked:
+ *      • Prompts the user for confirmation to edit the user's details.
+ *      • Retrieves the user ID from the clicked element's data attributes.
+ *      • Stores the user ID and an edit flag ('e') in localStorage.
+ *      • Updates the UI by hiding the "create user" button and showing the "add user" section.
+ *      • Changes the save button text to "Update User" to indicate edit mode.
+ * - Fetches the user's current data from the server using the user ID.
+ * - On a successful response, populates the form fields (username, password, email, role) with the retrieved data.
+ * - Handles errors by alerting the user and logging the error details to the console.
+ */
 document.querySelectorAll('.editUser').forEach((icon) => {
     icon.addEventListener('click', async (event) => {
         const Id = event.target.dataset.id;

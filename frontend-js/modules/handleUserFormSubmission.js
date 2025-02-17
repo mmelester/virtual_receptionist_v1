@@ -1,4 +1,40 @@
-
+/*
+ * handleUserFormSubmission(event)
+ *
+ * This asynchronous function manages the submission of the user form for creating or editing a user.
+ *
+ * Workflow:
+ *  1. Prevents the default form submission behavior.
+ *
+ *  2. Retrieves the user ID and edit flag from localStorage to determine if the form is for creating ('c') or 
+ *     editing a user.
+ *
+ *  3. Collects and trims form input values: username, password, email, and role.
+ *
+ *  4. Validates the inputs:
+ *      - Username: must be provided and be between 3 and 12 characters.
+ *      - Password: must be provided and be between 8 and 21 characters.
+ *      - Email: must be provided and contain the "@" character.
+ *      - Role: must be provided.
+ *
+ *  5. If any validation errors are found:
+ *      - Sends the errors to the server via a POST request to '/admin/users'.
+ *      - Reloads the page to display any flash error messages.
+ *      - Halts further execution.
+ *
+ *  6. If validation passes:
+ *      - Constructs a userData object with the validated input values.
+ *
+ *  7. Determines the API endpoint and HTTP method:
+ *      - For creation (edit flag 'c'): sends a POST request to '/admin/user/add'.
+ *      - For editing: sends a PUT request to '/admin/user/edit/{Id}'.
+ *
+ *  8. Sends the userData to the server using fetch, then:
+ *      - If the response is not OK, alerts the user with an error message.
+ *      - Otherwise, reloads the page and alerts the user of a successful operation.
+ *
+ *  9. Catches and logs any errors during the submission process, displaying an alert if necessary.
+ */
 export async function handleUserFormSubmission(event) {
     event.preventDefault(); // Prevent default form submission behavior
     console.log("handleUserFormSubmission Called!");
