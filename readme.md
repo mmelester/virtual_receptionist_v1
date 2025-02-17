@@ -121,6 +121,16 @@ Note:
 
 4.  To inspect the ngrok message log, go to http://127.0.0.1:4040
 
+# Enabling Full Screen Mode on IOS Safari
+
+The following meta tags have been included in header.ejs:
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+To enable full screen, open this app. Then tap the "Share" icon and select the option "Add to Home Screen".  This will create an app on the home screen that will launch the app in full screen.
+
 # Email Server
 
 SendGrid is used for the mail server.  You must have an active SendGrid account (currently using Matt Melester's account). If changed to another account, a new API key must be generated and a new authorized sender must be set.  See below for details on both.  With the free account, there can only be a single authorized sender.
