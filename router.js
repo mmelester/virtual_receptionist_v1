@@ -113,6 +113,19 @@ module.exports = (db) => {
     // -------------------------------------
     // 🔒 Restricted User Routes
     // -------------------------------------
+     // User dashboard route - only accessible to logged-in users (not admins)
+     async function fetchBuildingData(req, res, next) {
+        try {
+            const building = await buildingModelInstance.getBuilding();
+            res.locals.building = building; // Make building data available as a local variable in views
+        } catch (error) {
+            console.error('Failed to fetch building data:', error);
+        }
+        next();
+    }
+    
+    // Apply this middleware globally or to specific routes
+    router.use(fetchBuildingData);
     // Middleware: Restrict standard users (prevent admins from accessing /dashboard)
     function ensureUser(req, res, next) {
         if (req.session.userRole === 'user') {
@@ -150,20 +163,6 @@ module.exports = (db) => {
             });
         }
     });
-    
-    // User dashboard route - only accessible to logged-in users (not admins)
-    async function fetchBuildingData(req, res, next) {
-        try {
-            const building = await buildingModelInstance.getBuilding();
-            res.locals.building = building; // Make building data available as a local variable in views
-        } catch (error) {
-            console.error('Failed to fetch building data:', error);
-        }
-        next();
-    }
-    
-    // Apply this middleware globally or to specific routes
-    router.use(fetchBuildingData);
     
     // -------------------------------------
     // 🔒 Protected Admin Routes
