@@ -110,6 +110,19 @@ module.exports = (db) => {
         const { id } = req.params;
         peopleController.getPersonById(req, res, peopleModelInstance, id);
     });
+        router.get('/twilio/sms', (req, res) => {
+        res.send('✅ Twilio Webhook is active and waiting for POST requests.');
+    }); 
+    // -------------------------------------
+    // ✅ Twilio Incoming SMS Webhook
+    // -------------------------------------
+    router.get('/twilio/sms', (req, res) => {
+        res.send('✅ Twilio Webhook is active and waiting for POST requests.');
+    }); // Test route - not needed
+    router.post('/twilio/sms', (req, res) => {
+        console.log("🔔 Webhook route hit!");  // Debug log
+        peopleController.receiveSms(req, res);
+    });
     // -------------------------------------
     // 🔒 Restricted User Routes
     // -------------------------------------
