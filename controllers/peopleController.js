@@ -19,9 +19,11 @@
  *
  * 3. addPerson(req, res, PersonModel)
  *    - Adds or updates a person (staff member) for a given company.
- *    - Validates required fields (name, reply, image) and ensures at least one contact method (mobile, email, or outlet) is provided.
+ *    - Validates required fields (name, reply, image) and ensures at least one contact method (mobile, email, or 
+ * outlet) is provided.
  *    - Updates the company’s people list via PersonModel.
- *    - If the consent flag is "PENDING" and a mobile number is provided, sends a consent SMS using NotificationService.
+ *    - If the consent flag is "PENDING" and a mobile number is provided, sends a consent SMS using 
+ * NotificationService.
  *    - Returns a JSON response indicating success or failure.
  *
  * 4. deletePerson(req, res, peopleModelInstance, companyId, personId)
@@ -33,7 +35,8 @@
  *    - Returns the person's data as a JSON response along with a success message.
  *
  * 6. updatePerson(req, res, PersonModel)
- *    - Updates a person's details after validating input fields (name, reply, image) and comparing them with existing data.
+ *    - Updates a person's details after validating input fields (name, reply, image) and comparing them with 
+ * existing data.
  *    - If no changes are detected, it informs the user; otherwise, it updates the record using PersonModel.
  *    - Returns a JSON response indicating success or failure.
  *
@@ -51,9 +54,11 @@
  *    - Flashes error messages and returns a JSON response indicating failure.
  *
  * Error Handling and Notifications:
- *    - All functions include error handling with logging, flash messaging, and session management to ensure that errors
+ *    - All functions include error handling with logging, flash messaging, and session management to ensure that 
+ * errors
  *      are communicated effectively to the user.
- *    - The module integrates with external notification services to send SMS, email, and control outlet behavior as needed.
+ *    - The module integrates with external notification services to send SMS, email, and control outlet behavior as 
+ * needed.
  */
 
 // Required modules and files for the people controller module
