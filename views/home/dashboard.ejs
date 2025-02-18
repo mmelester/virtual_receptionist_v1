@@ -24,7 +24,7 @@
 -->
 
 <%- include('../includes/header') %> 
-<div class="page">
+<div class="page flex-grow-1">
     <% flashErrors = flash('errors')
     if (flashErrors.length) { %>
         <div class="alert alert-danger">
@@ -33,7 +33,6 @@
           <% }); %>
         </div>
       <% } %>
-      
     <section class="page-intro-section">
         <h1>Hi I'm Vivi, Your Virtual Receptionist</h1>
     </section>
@@ -61,8 +60,8 @@
             <p style="color: red;"><%= error %></p>
         <% } %>  
     </section>
-    
 
 </div>
+<h2 class="text-center pt-3">Please tap on the company you're here to see!</h2>
 
 <%- include('../includes/footer') %>
