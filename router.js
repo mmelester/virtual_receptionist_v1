@@ -110,9 +110,6 @@ module.exports = (db) => {
         const { id } = req.params;
         peopleController.getPersonById(req, res, peopleModelInstance, id);
     });
-        router.get('/twilio/sms', (req, res) => {
-        res.send('✅ Twilio Webhook is active and waiting for POST requests.');
-    }); 
     // -------------------------------------
     // ✅ Twilio Incoming SMS Webhook
     // -------------------------------------

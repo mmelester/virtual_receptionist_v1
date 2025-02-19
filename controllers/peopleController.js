@@ -335,7 +335,7 @@ module.exports = {
         const incomingMessage = req.body.Body; // Extract the incoming message
         const fromNumber = req.body.From; // Extract the sender's number
 
-        console.log("Message Received");
+        console.log("Consent Message Received");
 
         // Delegate the processing to NotificationService
         const responseMessage = await notificationService.processIncomingSms(incomingMessage, fromNumber);
