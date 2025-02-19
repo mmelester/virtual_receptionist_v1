@@ -155,6 +155,7 @@ class NotificationService {
                     { 'people.mobile': fromNumber },
                     { $set: { 'people.$.consent': 'GRANTED' } }
                 );
+                console.log('Update result:', result);
 
                 if (result.modifiedCount > 0) {
                     console.log(`Consent updated to GRANTED for ${fromNumber}`);
