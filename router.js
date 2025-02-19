@@ -101,11 +101,19 @@ module.exports = (db) => {
         // -------------------------------------
     // ✅ Twilio Incoming SMS Webhook
     // -------------------------------------
+    // Test Route
     router.get('/twilio/sms', (req, res) => {
+        res.set({
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+            'Surrogate-Control': 'no-store'
+        });
+        console.log("GET /twilio/sms hit. Request headers:", req.headers);
         res.send('✅ Twilio Webhook is active and waiting for POST requests.');
-    }); // Test route - not needed
+    });
     router.post('/twilio/sms', (req, res) => {
-        console.log("🔔 Webhook route hit!");  // Debug log
+        console.log("POST /twilio/sms hit. Request body:", req.body);
         peopleController.receiveSms(req, res);
     });
     router.get('/', (req, res) => homeController.home(req, res, db));
