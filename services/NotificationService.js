@@ -153,8 +153,9 @@ class NotificationService {
                 const personCollection = db.collection('companies');
                 const result = await personCollection.updateMany(
                     { 'people.mobile': fromNumber },
-                    { $set: { 'people.$.consent': 'GRANTED' } }
-                );
+                    { $set: { 'people.$[elem].consent': 'GRANTED' } },
+                    { arrayFilters: [{ 'elem.mobile': fromNumber }] }
+                  );
                 console.log('Update result:', result);
 
                 if (result.modifiedCount > 0) {
