@@ -72,6 +72,18 @@ module.exports = (db) => {
     const peopleModelInstance = new PersonModel(db);
 
     // -------------------------------------
+    // Middleware to log response headers before sending
+    // -------------------------------------
+    router.use((req, res, next) => {
+        const originalSend = res.send;
+        res.send = function (body) {
+            console.log("Response Headers:", res.getHeaders());
+            return originalSend.call(this, body);
+        };
+        next();
+    });
+
+    // -------------------------------------
     // 🔒 Authentication Middleware
     // -------------------------------------
      // Middleware: Ensure user is logged in
@@ -103,15 +115,19 @@ module.exports = (db) => {
     // -------------------------------------
     // Test Route
     router.get('/twilio/sms', (req, res) => {
+        console.log("GET /twilio/sms hit. Request headers:", req.headers);
+        // Disable ETag for this response
+        res.set('ETag', '');
+        // Also explicitly disable caching if desired
         res.set({
             'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0',
             'Surrogate-Control': 'no-store'
         });
-        console.log("GET /twilio/sms hit. Request headers:", req.headers);
         res.send('✅ Twilio Webhook is active and waiting for POST requests.');
     });
+    
     router.post('/twilio/sms', (req, res) => {
         console.log("POST /twilio/sms hit. Request body:", req.body);
         peopleController.receiveSms(req, res);
