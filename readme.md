@@ -163,3 +163,23 @@ The authorized sender is hard coded in server.js (I should have added this to th
 For this application, I setup I used the existing single authorization that I setup for intensivehope.com, instead of a domain authorization. For domain authorization, see https://www.twilio.com/docs/sendgrid/ui/account-and-settings/how-to-set-up-domain-authentication
 
 Also, please make the modifications the DNS records (see domain registrar, e.g., Go Daddy).
+
+# Development
+
+1. Use npm run watch.  This will launch a webpack and server console window.  All backend console logs will be displayed in the server console window.  
+2. Note launching the site from LiveServer doesn't work.  Instead enter localhost:3000 into the browser. 
+
+# Production
+
+1. Use npm run build.
+2. Stage and commit build.
+3. Push changes up to GitHub (i.e., git push).
+4. Go to the host server. Then cd virtual_receptionist_v1.
+5. Pull changes from GitHub (i.e., git pull).
+6. Go to intensivehope.com (i.e., cd intensivehope.com)
+7. Enter pm2 start ./ecosystem.config.cjs
+
+
+# Testing POST Route
+
+curl -X POST -d "Body=consent&From=2146623093" -H "Content-Type: application/x-www-form-urlencoded" https://3dayintensives.com/twilio/sms
