@@ -66,6 +66,19 @@ take a look if i need to change package.json
 
 # Setting Up Twilio to Receive SMS Messages
 
+Make sure the Message Service (i.e., Low Volume Mixed A2P Messaging Service) is configured with appropriate webhook. i.e.,
+
+1. Login to Twilio at https://console.twilio.com/
+2. In the Develop tab (left sidebar), go to Message > Service
+3. Select the Low Volume Mixed A2P Messaging Service with Sid MGa67f1bed601dc6a2943f8afe35485fd7
+4. Select Integration (left sidebar).
+5. Scroll to you see "Send a webhook".  Select it.
+6. Enter https://3dayintensives.com/twilio/sms in the Request URL.  Make sure HTTP Post is selected in 
+    right drop-down field.
+7.  Scroll all the way to bottom and click on Save.
+
+Recieved SMS messages will now be posted to https://3dayintensives.com/twilio/sms.
+
 ## Production
 
 1.  Update the Messaging Service webhook URL to:
@@ -178,6 +191,8 @@ Also, please make the modifications the DNS records (see domain registrar, e.g.,
 5. Pull changes from GitHub (i.e., git pull).
 6. Go to intensivehope.com (i.e., cd intensivehope.com)
 7. Enter pm2 start ./ecosystem.config.cjs
+
+
 
 
 # Testing POST Route

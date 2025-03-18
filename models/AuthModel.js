@@ -38,6 +38,7 @@ let User = function(data) {
     this.errors = [];
 };
 
+// Add methods to every instance of User
 User.prototype.cleanUp = function() {
     if (typeof this.data.username !== "string") this.data.username = "";
     if (typeof this.data.email !== "string") this.data.email = "";
