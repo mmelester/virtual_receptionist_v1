@@ -269,9 +269,9 @@ img.headshot {
 
 /* Media Queries */
 @media (max-width: 1200px) {
-  img.logo {
+  /* img.logo {
     height: 50px;
-  }
+  } */
 
   .name {
     min-width: 20%;
@@ -279,10 +279,6 @@ img.headshot {
 
   .intro-text {
     max-width: 40%;
-  }
-
-  .logo img {
-    height: 35px;
   }
 
   .add-company-flex-container,
