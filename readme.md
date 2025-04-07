@@ -58,6 +58,7 @@ take a look if i need to change package.json
 
 1.  Enter npx webpack --mode development
 2.  Then rebuild, i.e., npm run watch
+3.  It will not work by clicking on Port:3000 and the Go Live.  Instead, open the browser and type localhost:3000
 
 ## Production Mode
 
