@@ -56,6 +56,7 @@ class NotificationService {
 
     // Sends an SMS if a valid mobile number exists and consent is granted
     async sendSMS(person) {
+   
         if (!person.mobile) {
             console.error('SMS not sent: No mobile number provided.');
             return;
@@ -64,7 +65,7 @@ class NotificationService {
             console.error('SMS not sent: Invalid mobile number format.', person.mobile);
             return;
         }
-        if (person.consent !== "CONSENT") {
+        if (person.consent !== "GRANTED") {
             console.log('SMS not sent: Consent not granted.');
             return;
         }
