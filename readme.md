@@ -48,9 +48,17 @@ The smart outlet option is only compatible with Kasa Smart Plugs.
 
 1.  Remove public/main-bundled.js from the gitignore file
 2.  Rebuild webpack (i.e., npx webpack --mode development)
-3.  Rebuild main-bundled.js (npm run watch)
-
-take a look if i need to change package.json
+3.  Rebuild main-bundled.js (npm run build)
+4.  Stage build package, i.e. git add .
+5.  Commit build package, i.e., git commit -m "build"
+6.  Push changes up to gitHub, i.e., git push
+7.  Log into the server console, i.e., https://cloud.digitalocean.com/droplets/417835812/graphs?i=290e3f&period=hour
+8.  Select Intensive Hope (this was initially setup as a single domain).  Go to the console.
+9.  Change to the root directory, i.e., cd ~
+10. Change to the virtual_receptionist_V1 directory, i.e., cd virtual_receptionist_v1/
+11. Pull changes from gitHub, i.e., git pull
+12. Change back to the intensivehope.com directory, i.e., cd ~ then cd intensivehope.com  (the ecosyste,.cjs file is there)
+13. Restart server, i.e., pm2 start ./ecosystem.config.cjs clear
 
 # Webpack
 
