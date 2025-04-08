@@ -126,8 +126,9 @@ async function startServer() {
                 collectionName: 'cookies'
             }),
             resave: false, // Don't save session if unmodified
-            saveUninitialized: false, // Don't create session until something stored
-            cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, sameSite: "strict" }
+            // saveUninitialized: false, // Don't create session until something stored
+            // cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, sameSite: "strict" }
+            cookie: { httpOnly: true, sameSite: "strict" }
         });
 
         // Middleware setup
