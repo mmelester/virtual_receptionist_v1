@@ -168,6 +168,20 @@ module.exports = (db) => {
         res.render('home/checkin.ejs');
 
     });
+
+    // User checkin form submission route - only accessible to logged-in users (not admins)
+    router.post('/submit', ensureAuthenticated, ensureUser, (req, res) => {
+        // Extract the form inputs from req.body
+        const { name, apptTime, notes } = req.body;
+        
+        // Save the data to the session so that NotificationService can access it later
+        req.session.checkinData = { name, apptTime, notes };
+    
+        // Redirect to /dashboard after handling the submission.
+        res.redirect('/dashboard');
+  });
+  
+
     // User dashboard route - only accessible to logged-in users (not admins)
     router.get('/dashboard', ensureAuthenticated, ensureUser, async (req, res) => {
 
