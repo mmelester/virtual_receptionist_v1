@@ -55,56 +55,76 @@ class NotificationService {
     }
 
     // Sends an SMS if a valid mobile number exists and consent is granted
-    async sendSMS(person) {
-   
-        if (!person.mobile) {
-            console.error('SMS not sent: No mobile number provided.');
-            return;
-        }
-        if (!this.isValidPhoneNumber(person.mobile)) {
-            console.error('SMS not sent: Invalid mobile number format.', person.mobile);
-            return;
-        }
-        if (person.consent !== "GRANTED") {
-            console.log('SMS not sent: Consent not granted.');
-            return;
-        }
+// Sends an SMS if a valid mobile number exists and consent is granted
+async sendSMS(person, checkinData) {
+    if (!person.mobile) {
+        console.error('SMS not sent: No mobile number provided.');
+        return;
+    }
+    if (!this.isValidPhoneNumber(person.mobile)) {
+        console.error('SMS not sent: Invalid mobile number format.', person.mobile);
+        return;
+    }
+    if (person.consent !== "GRANTED") {
+        console.log('SMS not sent: Consent not granted.');
+        return;
+    }
+    try {
+        const notifications = await this.getNotificationMessages();
+        
+        // Extract dynamic fields from checkinData
+        const { name, apptTime } = checkinData || {};
+
+        // If notifications from DB provide a function, use it;
+        // otherwise, call the default function from Messages.
+        const lobbyMessage = (notifications.SMS && typeof notifications.SMS.LOBBY_NOTIFICATION === 'function')
+            ? notifications.SMS.LOBBY_NOTIFICATION(apptTime, name)
+            : Messages.SMS.LOBBY_NOTIFICATION(apptTime, name);
+
+        const message = await this.twilioClient.messages.create({
+            body: lobbyMessage,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to: person.mobile,
+        });
+        console.log(`SMS sent to: ${person.mobile}, Record: ${message.sid}`);
+    } catch (error) {
+        console.error('Error sending SMS:', error);
+    }
+}
+
+// Sends an email if an email address exists
+async sendEmail(person, checkinData) {
+    if (person.email) {
         try {
             const notifications = await this.getNotificationMessages();
-            const lobbyMessage = notifications.SMS?.LOBBY_NOTIFICATION || Messages.SMS.LOBBY_NOTIFICATION;
-            const message = await this.twilioClient.messages.create({
-                body: lobbyMessage,
-                from: process.env.TWILIO_PHONE_NUMBER,
-                to: person.mobile,
-            });
-            console.log(`SMS sent to: ${person.mobile}, Record: ${message.sid}`);
-        } catch (error) {
-            console.error('Error sending SMS:', error);
-        }
-    }
+            
+            // Extract dynamic fields from checkinData
+            const { name, apptTime } = checkinData || {};
 
-    // Sends an email if an email address exists
-    async sendEmail(person) {
-        if (person.email) {
-            try {
-                const notifications = await this.getNotificationMessages();
-                const emailSubject = notifications.EMAIL?.SUBJECT || Messages.EMAIL.SUBJECT;
-                const emailText = notifications.EMAIL?.TEXT || Messages.EMAIL.TEXT;
-                const emailHtml = notifications.EMAIL?.HTML || Messages.EMAIL.HTML;
-                const msg = {
-                    to: person.email,
-                    from: "matt@intensivehope.com",
-                    subject: emailSubject,
-                    text: emailText,
-                    html: emailHtml,
-                };
-                await sgMail.send(msg);
-                console.log('Email sent successfully!');
-            } catch (error) {
-                console.error('Error sending email:', error);
-            }
+            console.log("Name is ", name);
+            console.log("Appt time is ", apptTime);
+
+            // Use the dynamic SUBJECT function if available.
+            const emailSubject = (notifications.EMAIL && typeof notifications.EMAIL.SUBJECT === 'function')
+                ? notifications.EMAIL.SUBJECT(apptTime, name)
+                : Messages.EMAIL.SUBJECT(apptTime, name);
+            const emailText = notifications.EMAIL?.TEXT || Messages.EMAIL.TEXT;
+            const emailHtml = notifications.EMAIL?.HTML || Messages.EMAIL.HTML;
+            const msg = {
+                to: person.email,
+                from: "matt@intensivehope.com",
+                subject: emailSubject,
+                text: emailText,
+                html: emailHtml,
+            };
+            await sgMail.send(msg);
+            console.log('Email sent successfully!');
+        } catch (error) {
+            console.error('Error sending email:', error);
         }
     }
+}
+
 
     // Toggles a smart plug outlet if a valid outlet IP is provided
     async toggleOutlet(person) {

@@ -174,13 +174,12 @@ module.exports = (db) => {
         // Extract the form inputs from req.body
         const { name, apptTime, notes } = req.body;
         
-        // Save the data to the session so that NotificationService can access it later
+        // Store the check‑in data in the session (instead of using flash)
         req.session.checkinData = { name, apptTime, notes };
-    
-        // Redirect to /dashboard after handling the submission.
+        
+        // Redirect to /dashboard
         res.redirect('/dashboard');
-  });
-  
+    });
 
     // User dashboard route - only accessible to logged-in users (not admins)
     router.get('/dashboard', ensureAuthenticated, ensureUser, async (req, res) => {

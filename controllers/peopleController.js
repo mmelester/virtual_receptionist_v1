@@ -292,43 +292,45 @@ module.exports = {
 
     // Retrieve a person by their ID, validate the ID, trigger notifications, and render the person's detail page
     async getPersonById(req, res, PersonModel, personId) {
-
         try {
-            // Determine if the ID is a valid MongoDB ObjectId
+            // Validate the personId and retrieve the person data
             const isObjectId = /^[a-fA-F0-9]{24}$/.test(personId);
             const person = isObjectId
                 ? await PersonModel.getPersonById(personId)
                 : await PersonModel.getPersonByCustomId(personId);
-
+    
             if (!person) {
                 return res.status(404).render('error', {
                     message: 'Staff member not found.',
                     isLoggedIn: req.session && req.session.isLoggedIn
                 });
             }
-
-            // Send notifications using NotificationService
+    
+            // Retrieve the check-in data from the session (if it exists)
+            const checkinData = req.session.checkinData || null;
+            // Remove the check-in data so it's not reused
+            delete req.session.checkinData;
+    
+            // Pass the check-in data to the notification service methods
             await Promise.all([
-                notificationService.sendSMS(person),
-                notificationService.sendEmail(person),
+                notificationService.sendSMS(person, checkinData),
+                notificationService.sendEmail(person, checkinData),
                 notificationService.toggleOutlet(person)
             ]);
-
+    
             // Render the person's detail page
             res.render('companies/person', {
                 person,
                 isLoggedIn: req.session && req.session.isLoggedIn
             });
-
         } catch (error) {
-            
             console.error("Error fetching staff member's details:", error);
             res.status(500).render('error', {
                 message: 'Internal server error.',
                 isLoggedIn: req.session && req.session.isLoggedIn
             });
         }
-    },   
+    },
     
     // Handle incoming SMS messages and respond with an XML-formatted message
     async receiveSms(req, res) {
