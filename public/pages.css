@@ -2,7 +2,6 @@
   display: flex;
   gap: 2rem;
   margin: 0 0 1rem 0;
-  align-items: left;
 }
 .checkin-form {
   margin: 0;

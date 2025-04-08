@@ -15,13 +15,16 @@
         <form action="/submit" method="POST">
     
             <div class="form-row">
-                <label class="check-in-form" for="name">Name:</label>
+                <div class="name-field">
+                    <label class="check-in-form" for="name">Name:</label>
                 <input type="text" name="name" id="name" required>
-
-                <label class="check-in-form" for="appt-time">Appointment Time:</label>
-                <select name="apptTime" id="appt-time">
+                </div>
+                <div class="time-field">
+                    <label class="check-in-form" for="appt-time">Appointment Time:</label>
+                    <select name="apptTime" id="appt-time">
                     <!-- Options are inserted by JS -->
-                </select>
+                    </select>
+                </div>
             </div>
 
             <div class="message-textarea">
