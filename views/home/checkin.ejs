@@ -1,3 +1,4 @@
+<%- include('../includes/header') %>
 <div class="page flex-grow-1">
     <% flashErrors = flash('errors')
     if (flashErrors.length) { %>
@@ -8,25 +9,29 @@
         </div>
       <% } %>
     <section class="page-intro-section">
-        <h1>Hi I'm Vivi, Your Virtual Receptionist.  Please checkin.</h1>
+        <h1>Hi I'm Vivi, Your Virtual Receptionist.  Please check in.</h1>
     </section>
-    <section class="checkin-form">
+    <section class="checkin-form mt-5">
         <form action="/submit" method="POST">
+    
             <div class="form-row">
-            <label for="name">Name:</label>
-            <input type="text" name="name" id="name" required>
+                <label class="check-in-form" for="name">Name:</label>
+                <input type="text" name="name" id="name" required>
 
-            <label for="appt-time">Appointment Time:</label>
-            <select name="apptTime" id="appt-time">
-                <!-- Options will be inserted by JS -->
-            </select>
+                <label class="check-in-form" for="appt-time">Appointment Time:</label>
+                <select name="apptTime" id="appt-time">
+                    <!-- Options are inserted by JS -->
+                </select>
             </div>
 
-            <div class="form-row">
-            <textarea name="notes" placeholder="Enter any additional details here..."></textarea>
+            <div class="message-textarea">
+                <label class="checkin-form d-block message" for="message">Message:</label>
+                <textarea class="check-in-form" name="notes" placeholder="If you do not have a scheduled appointment, please state your business; otherwise, this field is optional."></textarea>
             </div>
-
-            <button type="submit">Submit</button>
+            <div class="btn-center-container">
+                <button class="btn btn-primary btn-sm check-in" type="submit">Submit</button>
+            </div>
+           
         </form>
 
     </section>

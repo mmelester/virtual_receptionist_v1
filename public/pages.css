@@ -1,12 +1,37 @@
 .form-row {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  align-items: center;
+  gap: 2rem;
+  margin: 0 0 1rem 0;
+  align-items: left;
 }
-textarea {
-  width: 100%;
-  min-height: 100px;
+.checkin-form {
+  margin: 0;
+  font-weight: 500;
+
+  textarea {
+    min-width: 250px;
+    max-width: 90%;
+    min-height: 100px;
+  }
+}
+#name {
+  width: 250px;
+}
+#appt-time {
+  width: 125px;
+}
+.message-textarea {
+  margin: 2rem 0;
+}
+.message {
+  margin-bottom: 0.25rem;
+}
+
+.btn-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 section.companies-section,
 section.people-section {

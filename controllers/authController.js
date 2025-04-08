@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
             if (role === 'admin') {
                 res.redirect('/admin'); // Admins go to the admin panel
             } else {
-                res.redirect('/dashboard'); // Standard users go to dashboard.ejs
+                res.redirect('/checkin'); // Standard users go to dashboard.ejs
             }
         });
     } catch (error) {

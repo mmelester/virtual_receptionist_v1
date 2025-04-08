@@ -163,6 +163,11 @@ module.exports = (db) => {
         }
     }
 
+    // User checkin route - only accessible to logged-in users (not admins)
+    router.get('/checkin', ensureAuthenticated, ensureUser, async (req, res) => {
+        res.render('home/checkin.ejs');
+
+    });
     // User dashboard route - only accessible to logged-in users (not admins)
     router.get('/dashboard', ensureAuthenticated, ensureUser, async (req, res) => {
 
