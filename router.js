@@ -135,15 +135,7 @@ module.exports = (db) => {
     router.get('/', (req, res) => homeController.home(req, res, db));
     router.post('/login', authController.login);
     router.get('/logout', authController.logout);
-    // Show all staff for a company with matching ID
-    router.get('/companies/:id', (req, res) => {
-        companiesController.getCompanyById(req, res, companyModelInstance);
-    });
-    // Show person notification page
-    router.get('/companies/person/:id', (req, res) => {
-        const { id } = req.params;
-        peopleController.getPersonById(req, res, peopleModelInstance, id);
-    });
+   
 
     // -------------------------------------
     // 🔒 Restricted User Routes
@@ -198,7 +190,15 @@ module.exports = (db) => {
             });
         }
     });
-    
+     // Show all staff for a company with matching ID
+     router.get('/companies/:id', ensureAuthenticated, ensureUser, (req, res) => {
+        companiesController.getCompanyById(req, res, companyModelInstance);
+    });
+    // Show person notification page
+    router.get('/companies/person/:id', ensureAuthenticated, ensureUser, (req, res) => {
+        const { id } = req.params;
+        peopleController.getPersonById(req, res, peopleModelInstance, id);
+    });
     // -------------------------------------
     // 🔒 Protected Admin Routes
     // -------------------------------------

@@ -1,3 +1,13 @@
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+textarea {
+  width: 100%;
+  min-height: 100px;
+}
 section.companies-section,
 section.people-section {
   margin-bottom: 1rem;

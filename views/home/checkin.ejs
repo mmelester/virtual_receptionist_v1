@@ -1,0 +1,35 @@
+<div class="page flex-grow-1">
+    <% flashErrors = flash('errors')
+    if (flashErrors.length) { %>
+        <div class="alert alert-danger">
+          <% flashErrors.forEach(function(error) { %>
+            <p><%= error %></p>
+          <% }); %>
+        </div>
+      <% } %>
+    <section class="page-intro-section">
+        <h1>Hi I'm Vivi, Your Virtual Receptionist.  Please checkin.</h1>
+    </section>
+    <section class="checkin-form">
+        <form action="/submit" method="POST">
+            <div class="form-row">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" required>
+
+            <label for="appt-time">Appointment Time:</label>
+            <select name="apptTime" id="appt-time">
+                <!-- Options will be inserted by JS -->
+            </select>
+            </div>
+
+            <div class="form-row">
+            <textarea name="notes" placeholder="Enter any additional details here..."></textarea>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+    </section>
+</div>
+<script type="module" src="../frontend-js/modules/getTimeOptions.js"></script>
+<%- include('../includes/footer') %>
