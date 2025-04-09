@@ -77,9 +77,7 @@ async sendSMS(person, checkinData) {
         
         // If notifications from DB provide a function, use it;
         // otherwise, call the default function from Messages.
-        const lobbyMessage = (notifications.SMS && typeof notifications.SMS.LOBBY_NOTIFICATION === 'function')
-            ? notifications.SMS.LOBBY_NOTIFICATION(apptTime, name, notes)
-            : Messages.SMS.LOBBY_NOTIFICATION(apptTime, name, notes);
+        const lobbyMessage = Messages.SMS.LOBBY_NOTIFICATION(apptTime, name, notes);
 
         const message = await this.twilioClient.messages.create({
             body: lobbyMessage,
@@ -106,17 +104,13 @@ async sendEmail(person, checkinData) {
             //     ? notifications.EMAIL.SUBJECT(apptTime, name, notes)
             //     : Messages.EMAIL.SUBJECT(apptTime, name, notes);
             
-            const emailSubject = (notifications.EMAIL && typeof notifications.EMAIL.SUBJECT === 'function')
-            ? notifications.EMAIL.SUBJECT(apptTime, name, notes)
-            : Messages.EMAIL.SUBJECT(apptTime, name, notes);
-            
-            const emailText = (notifications.EMAIL && typeof notifications.EMAIL.TEXT === 'function')
-            ? notifications.EMAIL.TEXT(apptTime, name, notes)
-                : Messages.EMAIL.TEXT(apptTime, name, notes);
-            
-            const emailHtml = (notifications.EMAIL && typeof notifications.EMAIL.HTML === 'function')
-            ? notifications.EMAIL.HTML(apptTime, name, notes)
-            : Messages.EMAIL.HTML(apptTime, name, notes);
+            const emailSubject = Messages.EMAIL.SUBJECT(apptTime, name);
+            const emailText = Messages.EMAIL.TEXT(notes);
+            const emailHtml = Messages.EMAIL.HTML(notes);
+
+            if (emailHtml === undefined || emailHtml === "") {
+                emailHtml = '<p>No content provided.</p>';
+            };
 
             const msg = {
                 to: person.email,
