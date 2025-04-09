@@ -73,8 +73,14 @@ async sendSMS(person, checkinData) {
         const notifications = await this.getNotificationMessages();
         
         // Extract dynamic fields from checkinData
-        const { name, apptTime, notes } = checkinData || {};
-        
+        let { name, apptTime, notes } = checkinData || {};
+
+        if(notes === undefined || notes === "" || notes === null) {
+            notes = "No message provided.";
+        }
+
+        console.log('Message', notes);
+            
         // If notifications from DB provide a function, use it;
         // otherwise, call the default function from Messages.
         const lobbyMessage = Messages.SMS.LOBBY_NOTIFICATION(apptTime, name, notes);
