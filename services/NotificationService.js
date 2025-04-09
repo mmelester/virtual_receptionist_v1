@@ -73,13 +73,13 @@ async sendSMS(person, checkinData) {
         const notifications = await this.getNotificationMessages();
         
         // Extract dynamic fields from checkinData
-        const { name, apptTime } = checkinData || {};
-
+        const { name, apptTime, notes } = checkinData || {};
+        
         // If notifications from DB provide a function, use it;
         // otherwise, call the default function from Messages.
         const lobbyMessage = (notifications.SMS && typeof notifications.SMS.LOBBY_NOTIFICATION === 'function')
-            ? notifications.SMS.LOBBY_NOTIFICATION(apptTime, name)
-            : Messages.SMS.LOBBY_NOTIFICATION(apptTime, name);
+            ? notifications.SMS.LOBBY_NOTIFICATION(apptTime, name, notes)
+            : Messages.SMS.LOBBY_NOTIFICATION(apptTime, name, notes);
 
         const message = await this.twilioClient.messages.create({
             body: lobbyMessage,
@@ -99,17 +99,25 @@ async sendEmail(person, checkinData) {
             const notifications = await this.getNotificationMessages();
             
             // Extract dynamic fields from checkinData
-            const { name, apptTime } = checkinData || {};
-
-            console.log("Name is ", name);
-            console.log("Appt time is ", apptTime);
+            const { name, apptTime, notes } = checkinData || {}; 
 
             // Use the dynamic SUBJECT function if available.
+            // const emailSubject = (notifications.EMAIL && typeof notifications.EMAIL.SUBJECT === 'function')
+            //     ? notifications.EMAIL.SUBJECT(apptTime, name, notes)
+            //     : Messages.EMAIL.SUBJECT(apptTime, name, notes);
+            
             const emailSubject = (notifications.EMAIL && typeof notifications.EMAIL.SUBJECT === 'function')
-                ? notifications.EMAIL.SUBJECT(apptTime, name)
-                : Messages.EMAIL.SUBJECT(apptTime, name);
-            const emailText = notifications.EMAIL?.TEXT || Messages.EMAIL.TEXT;
-            const emailHtml = notifications.EMAIL?.HTML || Messages.EMAIL.HTML;
+            ? notifications.EMAIL.SUBJECT(apptTime, name, notes)
+            : Messages.EMAIL.SUBJECT(apptTime, name, notes);
+            
+            const emailText = (notifications.EMAIL && typeof notifications.EMAIL.TEXT === 'function')
+            ? notifications.EMAIL.TEXT(apptTime, name, notes)
+                : Messages.EMAIL.TEXT(apptTime, name, notes);
+            
+            const emailHtml = (notifications.EMAIL && typeof notifications.EMAIL.HTML === 'function')
+            ? notifications.EMAIL.HTML(apptTime, name, notes)
+            : Messages.EMAIL.HTML(apptTime, name, notes);
+
             const msg = {
                 to: person.email,
                 from: "matt@intensivehope.com",

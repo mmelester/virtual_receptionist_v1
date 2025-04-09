@@ -310,6 +310,10 @@ module.exports = {
             const checkinData = req.session.checkinData || null;
             // Remove the check-in data so it's not reused
             delete req.session.checkinData;
+
+            if(checkinData.notes === undefined || checkinData.notes === null) {
+                checkinData.notes = "No message provided.";
+            }
     
             // Pass the check-in data to the notification service methods
             await Promise.all([

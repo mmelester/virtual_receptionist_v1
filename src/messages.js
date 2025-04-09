@@ -22,7 +22,7 @@ const Messages = {
     SMS: {
       LOBBY_NOTIFICATION: (apptTime, name, notes) => {
         const formattedTime = formatApptTime(apptTime);
-        return `🙂‍ Hello! It's your Virtual Receptionist. Your ${formattedTime} appointment with ${name} has checked in.\n\nReply STOP if you no longer wish to receive notifications from this number.`;
+        return `🙂‍ Hello! It's your Virtual Receptionist. Your ${formattedTime} appointment with ${name} has checked in.\n\n Message: ${notes} \n\nReply STOP if you no longer wish to receive notifications from this number.`;
       },
       CONSENT_GRANTED: '✅ Consent granted! You will now receive notifications.',
       CONSENT_NOT_FOUND: "❌ Could not find your record. Please contact support.",
@@ -36,7 +36,7 @@ const Messages = {
         return `Your ${formattedTime} appointment with ${name} has checked in!`;
       },
       TEXT: 'This is an email sent using SendGrid!',
-      HTML: '<strong>Your Virtual Receptionist is hard at work!</strong>',
+      HTML: 'Message: ${name}',
     }
   };
   
