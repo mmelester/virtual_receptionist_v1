@@ -46,7 +46,7 @@ User.prototype.cleanUp = function() {
 
     // Remove bogus properties
     this.data = {
-        username: this.data.username.trim().toLowerCase(),
+        username: this.data.username,
         email: this.data.email.trim().toLowerCase(),
         password: this.data.password,
     };
@@ -79,6 +79,9 @@ User.prototype.login = async function() {
         usersCollection
             .findOne({ username: this.data.username })
             .then((attemptedUser) => {
+
+                console.log("Attempted user:", attemptedUser);
+
                 if (attemptedUser && attemptedUser.password === this.data.password) {
                     resolve(attemptedUser.role || 'user'); // Default role is 'user' if not defined
                 } else {
