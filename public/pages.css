@@ -161,16 +161,34 @@ section.people-section {
 }
 
 .canvas-container {
+  position: relative
   display: block;
   width: 80%;
   height: auto;
   margin: auto;
+
+  button.delete {
+    position: absolute;
+    top: 400px;   /* adjust the value as needed */
+    right: 10px; /* adjust the value as needed */
+    z-index: 100; /* ensure it is higher than the canvas */
+    background: rgba(255,255,255,0.8); 
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+  }
 }
 
 .canvas-container.hidden,
 .form-container.hidden,
 button.delete.hidden {
   display: none;
+}
+
+.canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .file-select {
